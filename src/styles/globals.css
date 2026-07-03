@@ -1,3 +1,36 @@
+@import "tailwindcss";
+
+/* Dark Mode */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Theme Tokens */
+@theme {
+  /* Font */
+  --font-sans: "Montserrat", sans-serif;
+
+  /* Racing Red */
+  --color-racing-red-50: #fee7e8;
+  --color-racing-red-100: #fdced0;
+  --color-racing-red-200: #fb9da2;
+  --color-racing-red-300: #f96c73;
+  --color-racing-red-400: #f73b45;
+  --color-racing-red-500: #f50a16;
+  --color-racing-red-600: #c40812;
+  --color-racing-red-700: #93060d;
+  --color-racing-red-800: #620409;
+  --color-racing-red-900: #310204;
+  --color-racing-red-950: #220103;
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* Shadow */
+  --shadow-card: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
 html,
 body,
 #root {
@@ -7,4 +40,10 @@ body,
 
 body {
   margin: 0;
+  font-family: "Montserrat", sans-serif;
+  @apply bg-white text-gray-900;
+}
+
+.dark body {
+  @apply bg-neutral-950 text-white;
 }
