@@ -1,14 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { ConfigProvider } from "antd";
+
 import App from "./App";
 import "./styles/globals.css";
-import { antdTheme } from "./theme";
+
+import { AppProviders } from "@/app/providers";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ConfigProvider theme={antdTheme}>
+    <AppProviders>
       <App />
-    </ConfigProvider>
+    </AppProviders>
   </React.StrictMode>
 );
