@@ -43,16 +43,16 @@ export default function AppLogo({ size = "md", showText = true }: AppLogoProps) 
           shadow-lg
         `}
       >
-        <GraduationCap size={current.icon} className="text-white" />
+        <GraduationCap size={current.icon} className="text-white!" />
       </div>
 
       {showText && (
         <div>
-          <Title level={4} className={`mb-0! ${current.title}`}>
-            Teacher Student
+          <Title level={4} className={`mb-0! ${current.title} text-white!`}>
+            EduHub
           </Title>
 
-          <Text className={`text-gray-500 ${current.subtitle}`}>Learn • Teach • Grow</Text>
+          <Text className={`text-white! ${current.subtitle}`}>Learn • Teach • Grow</Text>
         </div>
       )}
     </div>

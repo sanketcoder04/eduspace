@@ -10,6 +10,10 @@ import NotFoundPage from "@/pages/Error/NotFoundPage";
 import { ROUTES } from "./routes";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
+import ForgotPasswordPage from "@/pages/Auth/ForgotPasswordPage";
+import VerifyOtpPage from "@/pages/Auth/VerifyOtpPage";
+import VerifyEmailPage from "@/pages/Auth/VerifyEmailPage";
+import ResetPasswordPage from "@/pages/Auth/ResetPasswordPage";
 
 export default function AppRouter() {
   return (
@@ -36,11 +40,55 @@ export default function AppRouter() {
         />
 
         <Route
+          path={ROUTES.FORGOT_PASSWORD}
+          element={
+            <PublicRoute>
+              <AuthLayout>
+                <ForgotPasswordPage />
+              </AuthLayout>
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path={ROUTES.VERIFY_OTP}
+          element={
+            <PublicRoute>
+              <AuthLayout>
+                <VerifyOtpPage />
+              </AuthLayout>
+            </PublicRoute>
+          }
+        />
+
+        <Route
           path={ROUTES.REGISTER}
           element={
             <PublicRoute>
               <AuthLayout>
                 <RegisterPage />
+              </AuthLayout>
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path={ROUTES.VERIFY_EMAIL}
+          element={
+            <PublicRoute>
+              <AuthLayout>
+                <VerifyEmailPage />
+              </AuthLayout>
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path={ROUTES.RESET_PASSWORD}
+          element={
+            <PublicRoute>
+              <AuthLayout>
+                <ResetPasswordPage />
               </AuthLayout>
             </PublicRoute>
           }
