@@ -32,5 +32,10 @@ export const antdTheme: ThemeConfig = {
     Card: {
       borderRadiusLG: 24,
     },
+
+    Typography: {
+      titleMarginBottom: 0,
+      fontSize: 14,
+    },
   },
 };

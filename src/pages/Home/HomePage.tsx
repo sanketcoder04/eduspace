@@ -9,7 +9,7 @@ export default function HomePage() {
         <Space orientation="vertical" size="middle">
           <Title level={2}>Teacher Student Platform</Title>
           <Text>Home Page</Text>
-          <Button type="primary" size="large">
+          <Button type="primary" size="small">
             Home Page
           </Button>
         </Space>
