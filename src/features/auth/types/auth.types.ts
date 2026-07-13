@@ -1,7 +1,35 @@
-import type { User } from "./user.types";
+export type UserRole = "STUDENT" | "TEACHER";
 
-export interface AuthState {
-  isAuthenticated: boolean;
-  user: User | null;
-  accessToken: string | null;
+export interface RegisterRequest {
+  name: string;
+  email: string;
+  password: string;
+  role: UserRole;
+}
+
+export interface RegisterResponse {
+  success: boolean;
+  message: string;
+  data: {
+    message: string;
+  };
+}
+
+export interface VerifyEmailRequest {
+  email: string;
+  otp: string;
+}
+
+export interface VerifyEmailResponse {
+  success: boolean;
+  message: string;
+}
+
+export interface ResendOtpRequest {
+  email: string;
+}
+
+export interface ResendOtpResponse {
+  success: boolean;
+  message: string;
 }
