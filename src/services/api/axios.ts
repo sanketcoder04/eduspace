@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ENV } from "@/config/env";
+import { tokenService } from "@/features/auth/services/token.service";
 
 const api = axios.create({
   baseURL: ENV.API_BASE_URL,
@@ -11,7 +12,11 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    // JWT will be added later
+    const token = tokenService.getAccessToken();
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
 
     return config;
   },

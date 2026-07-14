@@ -1,14 +1,51 @@
-import { Link } from "react-router-dom";
-import { Button, Checkbox, Divider, Form, Input, Typography } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { Button, Checkbox, Divider, Form, Input, message, Typography } from "antd";
 import { LockKeyhole, Mail } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { FiLogIn } from "react-icons/fi";
 import AppLogo from "@/components/ui/AppLogo/AppLogo";
+import { useLogin } from "@/features/auth/hooks/useLogin";
+import { loginSchema, type LoginFormValues } from "@/schemas/auth/login.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import { ROUTES } from "@/router/routes";
+import { tokenService } from "@/features/auth/services/token.service";
 
 const { Title, Text } = Typography;
 
 export default function LoginPage() {
-  const [form] = Form.useForm();
+  const navigate = useNavigate();
+
+  const loginMutation = useLogin();
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const onSubmit = async (values: LoginFormValues) => {
+    try {
+      const response = await loginMutation.mutateAsync(values);
+
+      tokenService.setAccessToken(response.data.token.accessToken);
+      tokenService.setRefreshToken(response.data.token.refreshToken);
+
+      message.success(response.message);
+
+      navigate(ROUTES.DASHBOARD, {
+        replace: true,
+      });
+    } catch (error: any) {
+      message.error(error?.response?.data?.message ?? "Login failed. Please try again.");
+    }
+  };
 
   return (
     <div className="mt-8 space-y-8 pb-4.5">
@@ -27,44 +64,50 @@ export default function LoginPage() {
       </div>
 
       {/* Form */}
-      <Form form={form} layout="vertical" requiredMark={false} autoComplete="off" size="medium">
+      <Form
+        onFinish={handleSubmit(onSubmit)}
+        layout="vertical"
+        requiredMark={false}
+        autoComplete="off"
+        size="medium"
+      >
         {/* Email */}
         <Form.Item
           label="Email Address"
-          name="email"
-          rules={[
-            {
-              required: true,
-              message: "Please enter your email",
-            },
-            {
-              type: "email",
-              message: "Enter a valid email",
-            },
-          ]}
+          validateStatus={errors.email ? "error" : ""}
+          help={errors.email?.message}
         >
-          <Input
-            placeholder="Enter your email"
-            prefix={<Mail size={18} className="text-gray-400" />}
-            className="rounded-xl"
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                placeholder="Enter your email"
+                prefix={<Mail size={18} className="text-gray-400" />}
+                className="rounded-xl"
+              />
+            )}
           />
         </Form.Item>
 
         {/* Password */}
         <Form.Item
           label="Password"
-          name="password"
-          rules={[
-            {
-              required: true,
-              message: "Please enter your password",
-            },
-          ]}
+          validateStatus={errors.password ? "error" : ""}
+          help={errors.password?.message}
         >
-          <Input.Password
-            placeholder="Enter your password"
-            prefix={<LockKeyhole size={18} className="text-gray-400" />}
-            className=" rounded-xl"
+          <Controller
+            name="password"
+            control={control}
+            render={({ field }) => (
+              <Input.Password
+                {...field}
+                prefix={<LockKeyhole size={18} className="text-gray-400" />}
+                placeholder="Enter your password"
+                className="rounded-xl"
+              />
+            )}
           />
         </Form.Item>
 
@@ -85,6 +128,7 @@ export default function LoginPage() {
           htmlType="submit"
           type="primary"
           block
+          loading={loginMutation.isPending}
           size="medium"
           className="rounded-xl font-semibold "
         >

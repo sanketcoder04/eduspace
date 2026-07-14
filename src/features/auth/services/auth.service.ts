@@ -7,6 +7,8 @@ import type {
   VerifyEmailResponse,
   ResendOtpRequest,
   ResendOtpResponse,
+  LoginRequest,
+  LoginResponse,
 } from "../types/auth.types";
 
 export async function register(payload: RegisterRequest): Promise<RegisterResponse> {
@@ -21,5 +23,10 @@ export async function verifyEmail(payload: VerifyEmailRequest): Promise<VerifyEm
 
 export async function resendOtp(payload: ResendOtpRequest): Promise<ResendOtpResponse> {
   const { data } = await api.post<ResendOtpResponse>(API_ENDPOINTS.AUTH.RESEND_OTP, payload);
+  return data;
+}
+
+export async function login(payload: LoginRequest): Promise<LoginResponse> {
+  const { data } = await api.post<LoginResponse>(API_ENDPOINTS.AUTH.LOGIN, payload);
   return data;
 }
