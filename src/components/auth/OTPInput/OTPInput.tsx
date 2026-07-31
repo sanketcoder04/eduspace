@@ -61,7 +61,7 @@ export default function OTPInput({ length = 6, value, onChange, disabled = false
   };
 
   return (
-    <div className="flex justify-center gap-3">
+    <div className="flex w-full justify-center gap-2 px-1 sm:gap-3 sm:px-2 md:gap-4">
       {otp.map((digit, index) => (
         <input
           key={index}
@@ -79,15 +79,18 @@ export default function OTPInput({ length = 6, value, onChange, disabled = false
           onChange={(event) => handleChange(event.target.value, index)}
           onFocus={(event) => event.target.select()}
           className="
-            h-14
-            w-14
+            h-12
+            w-10
+            flex-1
+            max-w-12
             rounded-xl
             border
             border-gray-300
             bg-white
             text-center
-            text-xl
+            text-lg
             font-bold
+            shadow-sm
             transition-all
             duration-200
             outline-none
@@ -96,6 +99,11 @@ export default function OTPInput({ length = 6, value, onChange, disabled = false
             focus:ring-racing-red-200
             disabled:bg-gray-100
             disabled:text-gray-400
+            sm:h-13
+            sm:max-w-12
+            sm:text-xl
+            md:h-14
+            md:max-w-14
           "
         />
       ))}

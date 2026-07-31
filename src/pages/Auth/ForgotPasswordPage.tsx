@@ -1,73 +1,108 @@
-import { Link } from "react-router-dom";
-import { Button, Form, Input, Typography } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { Button, Form, Input, Typography, message } from "antd";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail } from "lucide-react";
-import { FiArrowRight } from "react-icons/fi";
-import AppLogo from "@/components/ui/AppLogo/AppLogo";
+import { IoArrowBackOutline } from "react-icons/io5";
+import { MdOutlineMarkEmailRead } from "react-icons/md";
+import { ROUTES } from "@/router/routes";
+import {
+  forgotPasswordSchema,
+  type ForgotPasswordFormValues,
+} from "@/schemas/auth/forgotPassword.schema";
+import { useForgotPassword } from "@/features/auth/hooks/useForgotPassword";
 
 const { Title, Text } = Typography;
 
 export default function ForgotPasswordPage() {
-  const [form] = Form.useForm();
+  const navigate = useNavigate();
+
+  const forgotPasswordMutation = useForgotPassword();
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ForgotPasswordFormValues>({
+    resolver: zodResolver(forgotPasswordSchema),
+    defaultValues: {
+      email: "",
+    },
+  });
+
+  const onSubmit = async (values: ForgotPasswordFormValues) => {
+    try {
+      const response = await forgotPasswordMutation.mutateAsync(values);
+
+      message.success(response.message);
+
+      navigate(ROUTES.VERIFY_OTP, {
+        state: {
+          email: values.email,
+        },
+      });
+    } catch (error: any) {
+      message.error(error?.response?.data?.message ?? "Something went wrong. Please try again.");
+    }
+  };
 
   return (
-    <div className="mt-8 space-y-8 pb-10">
+    <div className="space-y-8">
       {/* Heading */}
-      <div className="space-y-2 text-center flex flex-col gap-4">
-        <Title
-          level={2}
-          className="mb-0! text-racing-red-500! flex items-center justify-center gap-2"
-        >
-          <AppLogo showText={false} size="sm" /> EduHub
+      <div className="mt-8 space-y-2 text-center">
+        <Title level={2} className="mb-0! text-racing-red-500!">
+          Forgot Password
         </Title>
 
-        <Text type="secondary" className="text-gray-800!">
-          Enter your registered Email Address and we'll send you a Verification Code.
+        <Text type="secondary">
+          Enter your registered email address. If an account exists, we'll send you a password reset
+          OTP.
         </Text>
       </div>
 
       {/* Form */}
-      <Form form={form} layout="vertical" requiredMark={false} autoComplete="off" size="middle">
+      <Form
+        layout="vertical"
+        requiredMark={false}
+        autoComplete="off"
+        onFinish={handleSubmit(onSubmit)}
+      >
         <Form.Item
           label="Email Address"
-          name="email"
-          rules={[
-            {
-              required: true,
-              message: "Please enter your email",
-            },
-            {
-              type: "email",
-              message: "Please enter a valid email",
-            },
-          ]}
+          validateStatus={errors.email ? "error" : ""}
+          help={errors.email?.message}
         >
-          <Input
-            placeholder="Enter your registered email"
-            prefix={<Mail size={18} className="text-gray-400" />}
-            className="rounded-xl"
+          <Controller
+            control={control}
+            name="email"
+            render={({ field }) => (
+              <Input
+                {...field}
+                placeholder="Enter your email"
+                prefix={<Mail size={18} className="text-gray-400" />}
+                className="rounded-xl"
+              />
+            )}
           />
         </Form.Item>
 
-        {/* Send OTP */}
         <Button
           htmlType="submit"
           type="primary"
           block
-          size="middle"
-          className="rounded-xl font-semibold mt-3"
+          loading={forgotPasswordMutation.isPending}
+          className="rounded-xl font-semibold"
         >
-          Send OTP
-          <FiArrowRight />
+          Send Reset OTP
+          <MdOutlineMarkEmailRead />
         </Button>
 
-        {/* Footer */}
         <div className="mt-6 text-center">
-          <Text type="secondary">Remember your password? </Text>
-
           <Link
-            to="/login"
-            className="font-semibold text-racing-red-600 transition hover:text-racing-red-700"
+            to={ROUTES.LOGIN}
+            className="inline-flex items-center gap-2 font-medium text-racing-red-600 transition hover:text-racing-red-700"
           >
+            <IoArrowBackOutline />
             Back to Login
           </Link>
         </div>

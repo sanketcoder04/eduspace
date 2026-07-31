@@ -1,4 +1,12 @@
+import type { User } from "./user.types";
+
 export type UserRole = "STUDENT" | "TEACHER";
+
+export interface AuthState {
+  isAuthenticated: boolean;
+  accessToken: string | null;
+  user: User | null;
+}
 
 export interface RegisterRequest {
   name: string;
@@ -64,4 +72,36 @@ export interface LoginResponse {
     user: UserResponse;
   };
   timestamp: string;
+}
+
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ForgotPasswordResponse {
+  success: boolean;
+  message: string;
+}
+
+export interface VerifyPasswordResetOtpRequest {
+  email: string;
+  otp: string;
+}
+
+export interface VerifyPasswordResetOtpResponse {
+  success: boolean;
+  message: string;
+  data: {
+    resetToken: string;
+  };
+}
+
+export interface ResetPasswordRequest {
+  resetToken: string;
+  newPassword: string;
+}
+
+export interface ResetPasswordResponse {
+  success: boolean;
+  message: string;
 }

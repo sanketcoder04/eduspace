@@ -4,7 +4,7 @@ import { MdOutlineMarkEmailRead } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import OTPInput from "@/components/auth/OTPInput/OTPInput";
 import { useVerifyEmail } from "@/features/auth/hooks/useVerifyEmail";
-import useCountdown from "@/features/auth/hooks/useCountDown";
+import useCountdown from "@/features/auth/hooks/useCountdown";
 import { useResendOtp } from "@/features/auth/hooks/useResendOtp";
 import { ROUTES } from "@/router/routes";
 
@@ -66,7 +66,7 @@ export default function VerifyEmailPage() {
   };
 
   return (
-    <div className="mt-8 space-y-8 pb-10">
+    <div className="mx-auto mt-8 w-full max-w-md space-y-6 px-4 pb-10 sm:px-5 sm:space-y-8">
       {/* Heading */}
       <div className="space-y-2 text-center">
         <Title level={2} className="mb-0! text-racing-red-500!">
@@ -76,7 +76,7 @@ export default function VerifyEmailPage() {
         <Text type="secondary">
           We've sent a 6-digit verification code to your registered email.
         </Text>
-        <Text className="font-medium text-racing-red-700! ml-2">{email}</Text>
+        <Text className="ml-2 block break-all font-medium text-racing-red-700!">{email}</Text>
       </div>
 
       {/* OTP */}
