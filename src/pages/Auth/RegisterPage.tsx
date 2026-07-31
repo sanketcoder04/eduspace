@@ -1,14 +1,56 @@
-import { Link } from "react-router-dom";
-import { Button, Checkbox, Divider, Form, Input, Radio, Typography } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { Button, Checkbox, Divider, Form, Input, Radio, Typography, message } from "antd";
 import { LockKeyhole, Mail, User } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { FiUserPlus } from "react-icons/fi";
 import AppLogo from "@/components/ui/AppLogo/AppLogo";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ROUTES } from "@/router/routes";
+import { registerSchema, type RegisterFormValues } from "@/schemas/auth/register.schema";
+import { useRegister } from "@/features/auth/hooks/useRegister";
 
 const { Title, Text } = Typography;
 
 export default function RegisterPage() {
-  const [form] = Form.useForm();
+  const navigate = useNavigate();
+
+  const registerMutation = useRegister();
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterFormValues>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      role: "STUDENT",
+    },
+  });
+
+  const onSubmit = async (values: RegisterFormValues) => {
+    try {
+      await registerMutation.mutateAsync({
+        name: values.name,
+        email: values.email,
+        password: values.password,
+        role: values.role,
+      });
+
+      message.success("Registration successful.");
+
+      navigate(ROUTES.VERIFY_EMAIL, {
+        state: {
+          email: values.email,
+        },
+      });
+    } catch (error: any) {
+      message.error(error?.response?.data?.message ?? "Registration failed. Please try again.");
+    }
+  };
 
   return (
     <div className="mt-8 space-y-8 pb-4.5">
@@ -27,80 +69,88 @@ export default function RegisterPage() {
       </div>
 
       {/* Form */}
-      <Form form={form} layout="vertical" requiredMark={false} autoComplete="off" size="middle">
+      <Form
+        onFinish={handleSubmit(onSubmit)}
+        layout="vertical"
+        requiredMark={false}
+        autoComplete="off"
+        size="middle"
+      >
         {/* Full Name */}
         <Form.Item
           label="Full Name"
-          name="fullName"
-          rules={[
-            {
-              required: true,
-              message: "Please enter your full name",
-            },
-          ]}
+          validateStatus={errors.name ? "error" : ""}
+          help={errors.name?.message}
         >
-          <Input
-            placeholder="Enter your full name"
-            prefix={<User size={18} className="text-gray-400" />}
-            className="rounded-xl"
+          <Controller
+            name="name"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                placeholder="Enter your full name"
+                prefix={<User size={18} className="text-gray-400" />}
+                className="rounded-xl"
+              />
+            )}
           />
         </Form.Item>
 
         {/* Email */}
         <Form.Item
           label="Email Address"
-          name="email"
-          rules={[
-            {
-              required: true,
-              message: "Please enter your email",
-            },
-            {
-              type: "email",
-              message: "Please enter a valid email",
-            },
-          ]}
+          validateStatus={errors.email ? "error" : ""}
+          help={errors.email?.message}
         >
-          <Input
-            placeholder="Enter your email"
-            prefix={<Mail size={18} className="text-gray-400" />}
-            className="rounded-xl"
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                placeholder="Enter your email"
+                prefix={<Mail size={18} className="text-gray-400" />}
+                className="rounded-xl"
+              />
+            )}
           />
         </Form.Item>
 
         {/* Role */}
         <Form.Item
-          label="Register As"
-          name="role"
-          initialValue="student"
-          rules={[
-            {
-              required: true,
-              message: "Please select your role",
-            },
-          ]}
+          label="Register as"
+          validateStatus={errors.role ? "error" : ""}
+          help={errors.role?.message}
         >
-          <Radio.Group className="flex gap-6">
-            <Radio value="student">Student</Radio>
-            <Radio value="teacher">Teacher</Radio>
-          </Radio.Group>
+          <Controller
+            name="role"
+            control={control}
+            render={({ field }) => (
+              <Radio.Group {...field} optionType="button" buttonStyle="solid" className="w-full">
+                <Radio.Button value="STUDENT">Student</Radio.Button>
+                <Radio.Button value="TEACHER">Teacher</Radio.Button>
+              </Radio.Group>
+            )}
+          />
         </Form.Item>
 
         {/* Password */}
         <Form.Item
           label="Password"
-          name="password"
-          rules={[
-            {
-              required: true,
-              message: "Please enter your password",
-            },
-          ]}
+          validateStatus={errors.password ? "error" : ""}
+          help={errors.password?.message}
         >
-          <Input.Password
-            placeholder="Create a password"
-            prefix={<LockKeyhole size={18} className="text-gray-400" />}
-            className="rounded-xl"
+          <Controller
+            name="password"
+            control={control}
+            render={({ field }) => (
+              <Input.Password
+                {...field}
+                prefix={<LockKeyhole size={18} className="text-gray-400" />}
+                placeholder="Create a password"
+                className="rounded-xl"
+              />
+            )}
           />
         </Form.Item>
 
@@ -138,7 +188,7 @@ export default function RegisterPage() {
           htmlType="submit"
           type="primary"
           block
-          size="middle"
+          loading={registerMutation.isPending}
           className="rounded-xl font-semibold"
         >
           Create Account
@@ -166,7 +216,10 @@ export default function RegisterPage() {
         <div className="mt-4 text-center">
           <Text type="secondary">Already have an account? </Text>
 
-          <Link to="/login" className="font-semibold text-racing-red-600 hover:text-racing-red-700">
+          <Link
+            to={ROUTES.LOGIN}
+            className="font-semibold text-racing-red-600 hover:text-racing-red-700"
+          >
             Login
           </Link>
         </div>

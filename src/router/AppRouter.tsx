@@ -1,8 +1,6 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import MainLayout from "@/layouts/MainLayout";
+import { Routes, Route, Navigate } from "react-router-dom";
 import AuthLayout from "@/layouts/AuthLayout";
 import DashboardLayout from "@/layouts/DashboardLayout";
-import HomePage from "@/pages/Home/HomePage";
 import LoginPage from "@/pages/Auth/LoginPage";
 import RegisterPage from "@/pages/Auth/RegisterPage";
 import DashboardPage from "@/pages/Dashboard/DashboardPage";
@@ -17,96 +15,87 @@ import ResetPasswordPage from "@/pages/Auth/ResetPasswordPage";
 
 export default function AppRouter() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path={ROUTES.HOME}
-          element={
-            <MainLayout>
-              <HomePage />
-            </MainLayout>
-          }
-        />
+    <Routes>
+      <Route path={ROUTES.HOME} element={<Navigate to={ROUTES.LOGIN} replace />} />
 
-        <Route
-          path={ROUTES.LOGIN}
-          element={
-            <PublicRoute>
-              <AuthLayout>
-                <LoginPage />
-              </AuthLayout>
-            </PublicRoute>
-          }
-        />
+      <Route
+        path={ROUTES.LOGIN}
+        element={
+          <PublicRoute>
+            <AuthLayout>
+              <LoginPage />
+            </AuthLayout>
+          </PublicRoute>
+        }
+      />
 
-        <Route
-          path={ROUTES.FORGOT_PASSWORD}
-          element={
-            <PublicRoute>
-              <AuthLayout>
-                <ForgotPasswordPage />
-              </AuthLayout>
-            </PublicRoute>
-          }
-        />
+      <Route
+        path={ROUTES.FORGOT_PASSWORD}
+        element={
+          <PublicRoute>
+            <AuthLayout>
+              <ForgotPasswordPage />
+            </AuthLayout>
+          </PublicRoute>
+        }
+      />
 
-        <Route
-          path={ROUTES.VERIFY_OTP}
-          element={
-            <PublicRoute>
-              <AuthLayout>
-                <VerifyOtpPage />
-              </AuthLayout>
-            </PublicRoute>
-          }
-        />
+      <Route
+        path={ROUTES.VERIFY_OTP}
+        element={
+          <PublicRoute>
+            <AuthLayout>
+              <VerifyOtpPage />
+            </AuthLayout>
+          </PublicRoute>
+        }
+      />
 
-        <Route
-          path={ROUTES.REGISTER}
-          element={
-            <PublicRoute>
-              <AuthLayout>
-                <RegisterPage />
-              </AuthLayout>
-            </PublicRoute>
-          }
-        />
+      <Route
+        path={ROUTES.REGISTER}
+        element={
+          <PublicRoute>
+            <AuthLayout>
+              <RegisterPage />
+            </AuthLayout>
+          </PublicRoute>
+        }
+      />
 
-        <Route
-          path={ROUTES.VERIFY_EMAIL}
-          element={
-            <PublicRoute>
-              <AuthLayout>
-                <VerifyEmailPage />
-              </AuthLayout>
-            </PublicRoute>
-          }
-        />
+      <Route
+        path={ROUTES.VERIFY_EMAIL}
+        element={
+          <PublicRoute>
+            <AuthLayout>
+              <VerifyEmailPage />
+            </AuthLayout>
+          </PublicRoute>
+        }
+      />
 
-        <Route
-          path={ROUTES.RESET_PASSWORD}
-          element={
-            <PublicRoute>
-              <AuthLayout>
-                <ResetPasswordPage />
-              </AuthLayout>
-            </PublicRoute>
-          }
-        />
+      <Route
+        path={ROUTES.RESET_PASSWORD}
+        element={
+          <PublicRoute>
+            <AuthLayout>
+              <ResetPasswordPage />
+            </AuthLayout>
+          </PublicRoute>
+        }
+      />
 
-        <Route
-          path={ROUTES.DASHBOARD}
-          element={
-            <ProtectedRoute>
-              <DashboardLayout>
-                <DashboardPage />
-              </DashboardLayout>
-            </ProtectedRoute>
-          }
-        />
+      <Route
+        path={ROUTES.DASHBOARD}
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <DashboardPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
 
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </BrowserRouter>
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
   );
 }

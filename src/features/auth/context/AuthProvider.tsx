@@ -33,7 +33,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
   };
 
   const updateUser = (user: User) => {
-    setAuth((prev) => ({
+    setAuth((prev: AuthState) => ({
       ...prev,
       user,
     }));
