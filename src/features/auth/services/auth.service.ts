@@ -15,6 +15,8 @@ import type {
   VerifyPasswordResetOtpResponse,
   ResetPasswordRequest,
   ResetPasswordResponse,
+  UserResponse,
+  GenericMessageResponse,
 } from "../types/auth.types";
 
 export async function register(payload: RegisterRequest): Promise<RegisterResponse> {
@@ -62,5 +64,15 @@ export async function resetPassword(payload: ResetPasswordRequest): Promise<Rese
     API_ENDPOINTS.AUTH.RESET_PASSWORD,
     payload
   );
+  return data;
+}
+
+export async function getCurrentUser(): Promise<UserResponse> {
+  const { data } = await api.get<{ data: UserResponse }>(API_ENDPOINTS.AUTH.ME);
+  return data.data;
+}
+
+export async function logout(payload: { refreshToken: string }): Promise<GenericMessageResponse> {
+  const { data } = await api.post<GenericMessageResponse>(API_ENDPOINTS.AUTH.LOGOUT, payload);
   return data;
 }

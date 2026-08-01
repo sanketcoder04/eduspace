@@ -105,3 +105,7 @@ export interface ResetPasswordResponse {
   success: boolean;
   message: string;
 }
+
+export interface GenericMessageResponse {
+  message: string;
+}

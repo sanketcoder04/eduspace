@@ -5,16 +5,17 @@ import { FcGoogle } from "react-icons/fc";
 import { FiLogIn } from "react-icons/fi";
 import AppLogo from "@/components/ui/AppLogo/AppLogo";
 import { useLogin } from "@/features/auth/hooks/useLogin";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 import { loginSchema, type LoginFormValues } from "@/schemas/auth/login.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { ROUTES } from "@/router/routes";
-import { tokenService } from "@/features/auth/services/token.service";
 
 const { Title, Text } = Typography;
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const loginMutation = useLogin();
 
@@ -34,8 +35,11 @@ export default function LoginPage() {
     try {
       const response = await loginMutation.mutateAsync(values);
 
-      tokenService.setAccessToken(response.data.token.accessToken);
-      tokenService.setRefreshToken(response.data.token.refreshToken);
+      login(response.data.token.accessToken, response.data.token.refreshToken, {
+        id: response.data.user.id,
+        email: response.data.user.email,
+        role: response.data.user.role,
+      });
 
       message.success(response.message);
 
