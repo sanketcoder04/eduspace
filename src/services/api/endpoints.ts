@@ -2,7 +2,6 @@ export const API_ENDPOINTS = {
   AUTH: {
     LOGIN: "/auth/login",
     REGISTER: "/auth/register",
-    GOOGLE: "/auth/google",
     VERIFY_OTP: "/auth/verify-otp",
     FORGOT_PASSWORD: "/auth/forgot-password",
     VERIFY_PASSWORD_RESET_OTP: "/auth/verify-password-reset-otp",
@@ -12,5 +11,7 @@ export const API_ENDPOINTS = {
     REFRESH: "/auth/refresh",
     LOGOUT: "/auth/logout",
     ME: "/auth/me",
+    GOOGLE: "/auth/google",
+    GOOGLE_COMPLETE_REGISTRATION: "/auth/google/complete-registration",
   },
 } as const;

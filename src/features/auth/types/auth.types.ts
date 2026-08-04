@@ -109,3 +109,36 @@ export interface ResetPasswordResponse {
 export interface GenericMessageResponse {
   message: string;
 }
+
+// ------- Google Auth Types -------
+
+export interface GoogleAuthRequest {
+  idToken: string;
+}
+
+export type GoogleAuthStatus = "LOGIN_SUCCESS" | "REGISTRATION_REQUIRED";
+
+export interface GoogleAuthData {
+  status: GoogleAuthStatus;
+  auth: { token: TokenResponse; user: UserResponse } | null;
+  registrationToken: string | null;
+  email: string | null;
+  name: string | null;
+}
+
+export interface GoogleAuthResponse {
+  success: boolean;
+  message: string;
+  data: GoogleAuthData;
+}
+
+export interface CompleteGoogleRegistrationRequest {
+  registrationToken: string;
+  role: UserRole;
+}
+
+export interface CompleteGoogleRegistrationResponse {
+  success: boolean;
+  message: string;
+  data: { token: TokenResponse; user: UserResponse };
+}

@@ -1,7 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Checkbox, Divider, Form, Input, Radio, Typography, message } from "antd";
 import { LockKeyhole, Mail, User } from "lucide-react";
-import { FcGoogle } from "react-icons/fc";
 import { FiUserPlus } from "react-icons/fi";
 import AppLogo from "@/components/ui/AppLogo/AppLogo";
 import { Controller, useForm } from "react-hook-form";
@@ -9,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ROUTES } from "@/router/routes";
 import { registerSchema, type RegisterFormValues } from "@/schemas/auth/register.schema";
 import { useRegister } from "@/features/auth/hooks/useRegister";
+import GoogleAuthButton from "@/components/auth/GoogleAuthButton/GoogleAuthButton";
 
 const { Title, Text } = Typography;
 
@@ -203,14 +203,7 @@ export default function RegisterPage() {
         </Divider>
 
         {/* Google */}
-        <Button
-          block
-          size="middle"
-          icon={<FcGoogle size={20} />}
-          className="rounded-xl border-gray-300 font-medium"
-        >
-          Continue with Google
-        </Button>
+        <GoogleAuthButton />
 
         {/* Footer */}
         <div className="mt-4 text-center">

@@ -1,6 +1,11 @@
 import { useEffect, useRef } from "react";
 
-import type { OTPInputProps } from "./types";
+interface OTPInputProps {
+  length?: number;
+  value: string;
+  onChange: (value: string) => void;
+  disabled?: boolean;
+}
 
 export default function OTPInput({ length = 6, value, onChange, disabled = false }: OTPInputProps) {
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
