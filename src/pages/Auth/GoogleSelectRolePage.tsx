@@ -59,19 +59,20 @@ export default function GoogleSelectRolePage() {
         <Title level={2} className="mb-0! text-racing-red-500!">
           Almost there{name ? `, ${name}` : ""}!
         </Title>
-        <Text type="secondary">
-          {email ? `Signing up as ${email}. ` : ""}
-          Tell us how you'll be using EduHub.
-        </Text>
+        <Text type="secondary">{email ? `Signing up as ${email}. ` : ""}</Text>
       </div>
 
-      <div className="space-y-6">
+      <div className="mb-2">
+        <Text type="secondary">Register as</Text>
+      </div>
+
+      <div className="space-y-6 flex flex-col gap-5">
         <Radio.Group
           value={role}
           onChange={(event) => setRole(event.target.value)}
           optionType="button"
           buttonStyle="solid"
-          className="w-full flex"
+          className="w-full flex mb-5"
         >
           <Radio.Button value="STUDENT" className="flex-1 text-center">
             Student
