@@ -17,6 +17,10 @@ import type {
   ResetPasswordResponse,
   UserResponse,
   GenericMessageResponse,
+  CompleteGoogleRegistrationResponse,
+  CompleteGoogleRegistrationRequest,
+  GoogleAuthResponse,
+  GoogleAuthRequest,
 } from "../types/auth.types";
 
 export async function register(payload: RegisterRequest): Promise<RegisterResponse> {
@@ -74,5 +78,20 @@ export async function getCurrentUser(): Promise<UserResponse> {
 
 export async function logout(payload: { refreshToken: string }): Promise<GenericMessageResponse> {
   const { data } = await api.post<GenericMessageResponse>(API_ENDPOINTS.AUTH.LOGOUT, payload);
+  return data;
+}
+
+export async function googleAuth(payload: GoogleAuthRequest): Promise<GoogleAuthResponse> {
+  const { data } = await api.post<GoogleAuthResponse>(API_ENDPOINTS.AUTH.GOOGLE, payload);
+  return data;
+}
+
+export async function completeGoogleRegistration(
+  payload: CompleteGoogleRegistrationRequest
+): Promise<CompleteGoogleRegistrationResponse> {
+  const { data } = await api.post<CompleteGoogleRegistrationResponse>(
+    API_ENDPOINTS.AUTH.GOOGLE_COMPLETE_REGISTRATION,
+    payload
+  );
   return data;
 }

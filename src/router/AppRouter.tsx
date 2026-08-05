@@ -12,6 +12,7 @@ import ForgotPasswordPage from "@/pages/Auth/ForgotPasswordPage";
 import VerifyOtpPage from "@/pages/Auth/VerifyOtpPage";
 import VerifyEmailPage from "@/pages/Auth/VerifyEmailPage";
 import ResetPasswordPage from "@/pages/Auth/ResetPasswordPage";
+import GoogleSelectRolePage from "@/pages/Auth/GoogleSelectRolePage";
 
 export default function AppRouter() {
   return (
@@ -92,6 +93,17 @@ export default function AppRouter() {
               <DashboardPage />
             </DashboardLayout>
           </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path={ROUTES.GOOGLE_SELECT_ROLE}
+        element={
+          <PublicRoute>
+            <AuthLayout>
+              <GoogleSelectRolePage />
+            </AuthLayout>
+          </PublicRoute>
         }
       />
 

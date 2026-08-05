@@ -8,6 +8,8 @@ export const ROUTES = {
   FORGOT_PASSWORD: "/forgot-password",
   RESET_PASSWORD: "/reset-password",
 
+  GOOGLE_SELECT_ROLE: "/google/select-role",
+
   DASHBOARD: "/dashboard",
 
   PROFILE: "/profile",

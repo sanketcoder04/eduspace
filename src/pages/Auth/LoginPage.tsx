@@ -1,7 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Checkbox, Divider, Form, Input, message, Typography } from "antd";
 import { LockKeyhole, Mail } from "lucide-react";
-import { FcGoogle } from "react-icons/fc";
 import { FiLogIn } from "react-icons/fi";
 import AppLogo from "@/components/ui/AppLogo/AppLogo";
 import { useLogin } from "@/features/auth/hooks/useLogin";
@@ -10,6 +9,7 @@ import { loginSchema, type LoginFormValues } from "@/schemas/auth/login.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { ROUTES } from "@/router/routes";
+import GoogleAuthButton from "@/components/auth/GoogleAuthButton/GoogleAuthButton";
 
 const { Title, Text } = Typography;
 
@@ -148,14 +148,7 @@ export default function LoginPage() {
         </Divider>
 
         {/* Google */}
-        <Button
-          block
-          size="medium"
-          icon={<FcGoogle size={20} />}
-          className="rounded-xl border-gray-300 font-medium"
-        >
-          Continue with Google
-        </Button>
+        <GoogleAuthButton />
 
         {/* Footer */}
         <div className="mt-4 text-center">
