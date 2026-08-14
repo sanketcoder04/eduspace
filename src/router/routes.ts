@@ -12,7 +12,9 @@ export const ROUTES = {
 
   DASHBOARD: "/dashboard",
 
+  COMPLETE_PROFILE: "/profile/complete",
   PROFILE: "/profile",
+  PROFILE_BY_ID: (userId: string) => `/profile/${userId}`,
 
   SEARCH: "/search",
 

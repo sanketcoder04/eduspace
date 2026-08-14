@@ -14,4 +14,27 @@ export const API_ENDPOINTS = {
     GOOGLE: "/auth/google",
     GOOGLE_COMPLETE_REGISTRATION: "/auth/google/complete-registration",
   },
+  PROFILE: {
+    TEACHER: {
+      ME: "/profile/teacher/me",
+      BASIC_INFO: "/profile/teacher/basic-info",
+      EDUCATION: "/profile/teacher/education",
+      SUBJECTS: "/profile/teacher/subjects",
+      SUBJECT_BY_ID: (subjectId: string) => `/profile/teacher/subjects/${subjectId}`,
+      VERIFICATION: "/profile/teacher/verification",
+      AVATAR: "/profile/teacher/avatar",
+      COVER: "/profile/teacher/cover",
+    },
+    STUDENT: {
+      ME: "/profile/student/me",
+      BASIC_INFO: "/profile/student/basic-info",
+      EDUCATION: "/profile/student/education",
+      VERIFICATION: "/profile/student/verification",
+      AVATAR: "/profile/student/avatar",
+      COVER: "/profile/student/cover",
+    },
+  },
+  MEDIA: {
+    UPLOAD: "/media/upload",
+  },
 } as const;
