@@ -29,6 +29,9 @@ export default function DashboardPage() {
           <Button type="primary" size="large" onClick={handleLogout}>
             Logout
           </Button>
+          <Button type="primary" size="medium" onClick={() => navigate(ROUTES.PROFILE)}>
+            Profile
+          </Button>
         </Space>
       </Card>
     </main>

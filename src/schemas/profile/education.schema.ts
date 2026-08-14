@@ -7,8 +7,11 @@ export const educationEntrySchema = z
     degree: z.string().trim().min(1, "Degree/qualification is required"),
     fieldOfStudy: z.string().trim().optional(),
     board: z.string().trim().optional(),
-    startYear: z.coerce.number().min(1950).max(new Date().getFullYear()),
-    endYear: z.coerce
+    startYear: z
+      .number({ message: "Start year is required" })
+      .min(1950)
+      .max(new Date().getFullYear()),
+    endYear: z
       .number()
       .min(1950)
       .max(new Date().getFullYear() + 10)

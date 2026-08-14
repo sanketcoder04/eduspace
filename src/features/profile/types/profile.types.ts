@@ -76,6 +76,7 @@ export interface StudentProfile {
   headline?: string;
   about?: string;
   avatarUrl?: string;
+  coverImageUrl?: string;
   education: Education[];
   verification: Verification;
   profileCompleted: boolean;
@@ -120,6 +121,10 @@ export type UpdateSubjectOfferingRequest = AddSubjectOfferingRequest;
 export interface SubmitVerificationRequest {
   selfieUrl: string;
   address: Address;
+}
+
+export interface UpdateImageRequest {
+  url: string;
 }
 
 export type MediaFolder = "AVATAR" | "COVER" | "RESUME" | "CERTIFICATE" | "SELFIE";

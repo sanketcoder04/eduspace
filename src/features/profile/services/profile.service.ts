@@ -82,6 +82,26 @@ export async function submitTeacherVerification(
   return data.data;
 }
 
+export async function updateTeacherAvatar(url: string): Promise<TeacherProfile> {
+  const { data } = await api.patch<ApiEnvelope<TeacherProfile>>(
+    API_ENDPOINTS.PROFILE.TEACHER.AVATAR,
+    {
+      url,
+    }
+  );
+  return data.data;
+}
+
+export async function updateTeacherCover(url: string): Promise<TeacherProfile> {
+  const { data } = await api.patch<ApiEnvelope<TeacherProfile>>(
+    API_ENDPOINTS.PROFILE.TEACHER.COVER,
+    {
+      url,
+    }
+  );
+  return data.data;
+}
+
 // ---- Student ----
 
 export async function getMyStudentProfile(): Promise<StudentProfile> {
@@ -115,6 +135,26 @@ export async function submitStudentVerification(
   const { data } = await api.post<ApiEnvelope<StudentProfile>>(
     API_ENDPOINTS.PROFILE.STUDENT.VERIFICATION,
     payload
+  );
+  return data.data;
+}
+
+export async function updateStudentAvatar(url: string): Promise<StudentProfile> {
+  const { data } = await api.patch<ApiEnvelope<StudentProfile>>(
+    API_ENDPOINTS.PROFILE.STUDENT.AVATAR,
+    {
+      url,
+    }
+  );
+  return data.data;
+}
+
+export async function updateStudentCover(url: string): Promise<StudentProfile> {
+  const { data } = await api.patch<ApiEnvelope<StudentProfile>>(
+    API_ENDPOINTS.PROFILE.STUDENT.COVER,
+    {
+      url,
+    }
   );
   return data.data;
 }

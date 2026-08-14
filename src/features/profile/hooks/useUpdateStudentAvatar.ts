@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateStudentEducation } from "../services/profile.service";
+import { updateStudentAvatar } from "../services/profile.service";
 
-export function useUpdateStudentEducation() {
+export function useUpdateStudentAvatar() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: updateStudentEducation,
+    mutationFn: updateStudentAvatar,
     onSuccess: (profile) => {
       queryClient.setQueryData(["profile", "student", "me"], profile);
     },

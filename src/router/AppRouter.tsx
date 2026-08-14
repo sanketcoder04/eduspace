@@ -13,6 +13,8 @@ import VerifyOtpPage from "@/pages/Auth/VerifyOtpPage";
 import VerifyEmailPage from "@/pages/Auth/VerifyEmailPage";
 import ResetPasswordPage from "@/pages/Auth/ResetPasswordPage";
 import GoogleSelectRolePage from "@/pages/Auth/GoogleSelectRolePage";
+import ProfilePage from "@/pages/Profile/ProfilePage";
+import CompleteProfilePage from "@/pages/Profile/CompleteProfilePage";
 
 export default function AppRouter() {
   return (
@@ -104,6 +106,24 @@ export default function AppRouter() {
               <GoogleSelectRolePage />
             </AuthLayout>
           </PublicRoute>
+        }
+      />
+
+      <Route
+        path={ROUTES.COMPLETE_PROFILE}
+        element={
+          <ProtectedRoute>
+            <CompleteProfilePage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path={ROUTES.PROFILE}
+        element={
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
         }
       />
 
