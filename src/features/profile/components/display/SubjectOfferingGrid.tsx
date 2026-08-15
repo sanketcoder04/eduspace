@@ -59,21 +59,7 @@ export default function SubjectOfferingGrid({
                 {offering.qualificationLevel}
               </Text>
 
-              <div className="mt-2 flex flex-wrap items-center gap-2">
-                {offering.resumeUrl && (
-                  <a
-                    href={offering.resumeUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1 text-xs text-racing-red-600 hover:underline"
-                  >
-                    <Paperclip size={12} /> Resume
-                  </a>
-                )}
-                {offering.certificateUrls.length > 0 && (
-                  <Tag>{offering.certificateUrls.length} certificate(s)</Tag>
-                )}
-              </div>
+              {/* Resume and certificates are profile-level; shown separately on the profile page */}
             </div>
           ))}
         </div>

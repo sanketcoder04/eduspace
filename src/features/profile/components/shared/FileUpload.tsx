@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import type { ChangeEvent } from "react";
 import { Button, message } from "antd";
 import { Paperclip, X, Loader2 } from "lucide-react";
@@ -20,6 +21,7 @@ export default function FileUpload({
   accept = ".pdf,image/*",
 }: FileUploadProps) {
   const uploadMutation = useUploadMedia();
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleSelect = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -32,7 +34,8 @@ export default function FileUpload({
         onError: () => message.error(`Couldn't upload ${label.toLowerCase()}. Please try again.`),
       }
     );
-    e.target.value = "";
+    // clear the input so the same file can be selected again
+    if (inputRef.current) inputRef.current.value = "";
   };
 
   return (
@@ -53,9 +56,16 @@ export default function FileUpload({
           </button>
         </div>
       ) : (
-        <label>
-          <input type="file" accept={accept} className="hidden" onChange={handleSelect} />
+        <>
+          <input
+            ref={inputRef}
+            type="file"
+            accept={accept}
+            className="hidden"
+            onChange={handleSelect}
+          />
           <Button
+            onClick={() => inputRef.current?.click()}
             icon={
               uploadMutation.isPending ? (
                 <Loader2 size={14} className="animate-spin" />
@@ -67,7 +77,7 @@ export default function FileUpload({
           >
             {uploadMutation.isPending ? "Uploading..." : `Upload ${label}`}
           </Button>
-        </label>
+        </>
       )}
     </div>
   );

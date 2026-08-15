@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Modal, message } from "antd";
-import MainLayout from "@/layouts/MainLayout";
+import ProfilePageLayout from "@/layouts/ProfilePageLayout";
 import AppLoader from "@/components/ui/AppLoader/AppLoader";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useMyTeacherProfile } from "@/features/profile/hooks/useMyTeacherProfile";
@@ -11,17 +11,21 @@ import { useUpdateTeacherEducation } from "@/features/profile/hooks/useUpdateTea
 import { useUpdateStudentEducation } from "@/features/profile/hooks/useUpdateStudentEducation";
 import { useUpdateTeacherAvatar } from "@/features/profile/hooks/useUpdateTeacherAvatar";
 import { useUpdateTeacherCover } from "@/features/profile/hooks/useUpdateTeacherCover";
+import { useUpdateStudentAvatar } from "@/features/profile/hooks/useUpdateStudentAvatar";
 import { useDeleteSubjectOffering } from "@/features/profile/hooks/useDeleteSubjectOffering";
-import { useUpdateStudentCover } from "@/features/profile/hooks/useUpdateStudentCover";
 import ProfileHeader from "@/features/profile/components/display/ProfileHeader";
 import AboutCard from "@/features/profile/components/display/AboutCard";
 import EducationTimeline from "@/features/profile/components/display/EducationTimeline";
 import SubjectOfferingGrid from "@/features/profile/components/display/SubjectOfferingGrid";
+import BasicInfoCard from "@/features/profile/components/display/BasicInfoCard";
+import ActivityStatsCard from "@/features/profile/components/display/ActivityStatsCard";
 import TeacherBasicInfoStep from "@/features/profile/components/wizard/steps/TeacherBasicInfoStep";
 import StudentBasicInfoStep from "@/features/profile/components/wizard/steps/StudentBasicInfoStep";
 import EducationStep from "@/features/profile/components/wizard/steps/EducationStep";
 import SubjectOfferingsStep from "@/features/profile/components/wizard/steps/SubjectOfferingsStep";
-import { useUpdateStudentAvatar } from "@/features/profile/hooks/useUpdateStudentAvatar";
+import ProfileDocumentsCard from "@/features/profile/components/display/ProfileDocumentsCard";
+import ProfileDocumentsModal from "@/features/profile/components/display/ProfileDocumentsModal";
+import { useUpdateStudentCover } from "@/features/profile/hooks/useUpdateStudentCover";
 
 type EditModal = "basic" | "education" | "subjects" | null;
 
@@ -33,7 +37,10 @@ export default function ProfilePage() {
   const isTeacher = auth.user?.role === "TEACHER";
 
   const [editModal, setEditModal] = useState<EditModal>(null);
+  const [showDocumentsModal, setShowDocumentsModal] = useState(false);
   const closeModal = () => setEditModal(null);
+
+  const closeDocumentsModal = () => setShowDocumentsModal(false);
 
   const teacherQuery = useMyTeacherProfile(isTeacher);
   const studentQuery = useMyStudentProfile(!isTeacher);
@@ -56,8 +63,31 @@ export default function ProfilePage() {
     }
 
     return (
-      <MainLayout>
-        <div className="mx-auto max-w-3xl space-y-4 px-4 py-6 sm:px-6 sm:py-8">
+      <>
+        <ProfilePageLayout
+          sidebar={
+            <>
+              <BasicInfoCard
+                isOwner
+                email={profile.email}
+                phoneNumber={profile.phoneNumber}
+                gender={profile.gender}
+                createdAt={profile.createdAt}
+                updatedAt={profile.updatedAt}
+                lastLoginAt={profile.lastLoginAt}
+                profileViews={profile.profileViews}
+              />
+            </>
+          }
+          recommendations={
+            <>
+              <ActivityStatsCard />
+              <div className="rounded-2xl border border-dashed border-gray-200 mt-5 p-5 text-sm text-gray-400 dark:border-neutral-700">
+                Recommended profiles to follow — coming soon.
+              </div>
+            </>
+          }
+        >
           <ProfileHeader
             name={profile.name}
             headline={profile.headline}
@@ -97,7 +127,21 @@ export default function ProfilePage() {
               })
             }
           />
-        </div>
+          <div className="mt-5">
+            <ProfileDocumentsCard
+              resumeUrl={profile.resumeUrl}
+              certificateUrls={profile.certificateUrls}
+              isOwner
+              onManage={() => setShowDocumentsModal(true)}
+            />
+            <ProfileDocumentsModal
+              open={showDocumentsModal}
+              onClose={closeDocumentsModal}
+              profile={profile}
+              isTeacher={true}
+            />
+          </div>
+        </ProfilePageLayout>
 
         <Modal
           open={editModal === "basic"}
@@ -168,7 +212,7 @@ export default function ProfilePage() {
             onContinue={closeModal}
           />
         </Modal>
-      </MainLayout>
+      </>
     );
   }
 
@@ -179,16 +223,40 @@ export default function ProfilePage() {
   }
 
   return (
-    <MainLayout>
-      <div className="mx-auto max-w-3xl space-y-4 px-4 py-6 sm:px-6 sm:py-8">
+    <>
+      <ProfilePageLayout
+        sidebar={
+          <>
+            <BasicInfoCard
+              isOwner
+              email={profile.email}
+              phoneNumber={profile.phoneNumber}
+              gender={profile.gender}
+              createdAt={profile.createdAt}
+              updatedAt={profile.updatedAt}
+              lastLoginAt={profile.lastLoginAt}
+              profileViews={profile.profileViews}
+            />
+          </>
+        }
+        recommendations={
+          <>
+            <ActivityStatsCard />
+            <div className="rounded-2xl border border-dashed border-gray-200 mt-5 p-5 text-sm text-gray-400 dark:border-neutral-700">
+              Recommended profiles to follow — coming soon.
+            </div>
+          </>
+        }
+      >
         <ProfileHeader
           name={profile.name}
           headline={profile.headline}
           avatarUrl={profile.avatarUrl}
-          address={profile.address}
           coverImageUrl={profile.coverImageUrl}
+          address={profile.address}
           verificationStatus={profile.verification.status}
           isOwner
+          showCover={true}
           onAvatarChange={(url) =>
             updateStudentAvatar.mutate(url, {
               onError: () => message.error("Couldn't update profile photo."),
@@ -209,7 +277,22 @@ export default function ProfilePage() {
           isOwner
           onEdit={() => setEditModal("education")}
         />
-      </div>
+        {/* Profile-level resume & certificates for student */}
+        <div className="mt-5">
+          <ProfileDocumentsCard
+            resumeUrl={profile.resumeUrl}
+            certificateUrls={profile.certificateUrls}
+            isOwner
+            onManage={() => setShowDocumentsModal(true)}
+          />
+          <ProfileDocumentsModal
+            open={showDocumentsModal}
+            onClose={closeDocumentsModal}
+            profile={profile}
+            isTeacher={false}
+          />
+        </div>
+      </ProfilePageLayout>
 
       <Modal
         open={editModal === "basic"}
@@ -230,7 +313,6 @@ export default function ProfilePage() {
             about: profile.about,
           }}
           avatarUrl={profile.avatarUrl}
-          coverImageUrl={profile.coverImageUrl}
           loading={updateStudentBasicInfo.isPending}
           onSubmit={(values) =>
             updateStudentBasicInfo.mutate(values, {
@@ -268,6 +350,6 @@ export default function ProfilePage() {
           }
         />
       </Modal>
-    </MainLayout>
+    </>
   );
 }

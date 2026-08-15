@@ -92,6 +92,22 @@ export async function updateTeacherAvatar(url: string): Promise<TeacherProfile> 
   return data.data;
 }
 
+export async function updateTeacherResume(url: string): Promise<TeacherProfile> {
+  const { data } = await api.patch<ApiEnvelope<TeacherProfile>>(
+    API_ENDPOINTS.PROFILE.TEACHER.RESUME,
+    { url }
+  );
+  return data.data;
+}
+
+export async function updateTeacherCertificates(urls: string[]): Promise<TeacherProfile> {
+  const { data } = await api.patch<ApiEnvelope<TeacherProfile>>(
+    API_ENDPOINTS.PROFILE.TEACHER.CERTIFICATES,
+    { urls }
+  );
+  return data.data;
+}
+
 export async function updateTeacherCover(url: string): Promise<TeacherProfile> {
   const { data } = await api.patch<ApiEnvelope<TeacherProfile>>(
     API_ENDPOINTS.PROFILE.TEACHER.COVER,
@@ -145,6 +161,22 @@ export async function updateStudentAvatar(url: string): Promise<StudentProfile> 
     {
       url,
     }
+  );
+  return data.data;
+}
+
+export async function updateStudentResume(url: string): Promise<StudentProfile> {
+  const { data } = await api.patch<ApiEnvelope<StudentProfile>>(
+    API_ENDPOINTS.PROFILE.STUDENT.RESUME,
+    { url }
+  );
+  return data.data;
+}
+
+export async function updateStudentCertificates(urls: string[]): Promise<StudentProfile> {
+  const { data } = await api.patch<ApiEnvelope<StudentProfile>>(
+    API_ENDPOINTS.PROFILE.STUDENT.CERTIFICATES,
+    { urls }
   );
   return data.data;
 }

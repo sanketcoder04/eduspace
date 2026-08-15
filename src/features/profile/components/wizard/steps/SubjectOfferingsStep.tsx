@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Form, Input, Button, message, Tag, Empty } from "antd";
+import { Form, Input, Button, message, Empty } from "antd";
 import { BookOpen, Plus, Trash2 } from "lucide-react";
-import FileUpload from "../../shared/FileUpload";
 import WizardStepFooter from "../../shared/WizardStepFooter";
 import { useAddSubjectOffering } from "../../../hooks/useAddSubjectOffering";
 import { useDeleteSubjectOffering } from "../../../hooks/useDeleteSubjectOffering";
@@ -23,8 +22,7 @@ export default function SubjectOfferingsStep({
 }: SubjectOfferingsStepProps) {
   const [subjectName, setSubjectName] = useState("");
   const [qualificationLevel, setQualificationLevel] = useState("");
-  const [resumeUrl, setResumeUrl] = useState<string | undefined>();
-  const [certificateUrls, setCertificateUrls] = useState<string[]>([]);
+  // Resume and certificates moved to profile-level; subject offering draft does not hold them
 
   const addMutation = useAddSubjectOffering();
   const deleteMutation = useDeleteSubjectOffering();
@@ -32,8 +30,6 @@ export default function SubjectOfferingsStep({
   const resetDraft = () => {
     setSubjectName("");
     setQualificationLevel("");
-    setResumeUrl(undefined);
-    setCertificateUrls([]);
   };
 
   const handleAdd = () => {
@@ -43,7 +39,7 @@ export default function SubjectOfferingsStep({
     }
 
     addMutation.mutate(
-      { subjectName, qualificationLevel, resumeUrl, certificateUrls },
+      { subjectName, qualificationLevel },
       {
         onSuccess: () => {
           message.success(`Added ${subjectName}`);
@@ -54,9 +50,7 @@ export default function SubjectOfferingsStep({
     );
   };
 
-  const handleAddCertificate = (url: string | undefined) => {
-    if (url) setCertificateUrls((prev) => [...prev, url]);
-  };
+  // certificate handling removed from subject offering
 
   const handleContinue = () => {
     if (existingOfferings.length === 0) {
@@ -78,9 +72,6 @@ export default function SubjectOfferingsStep({
               <div>
                 <p className="font-semibold">{offering.subjectName}</p>
                 <p className="text-xs text-gray-500">{offering.qualificationLevel}</p>
-                {offering.certificateUrls.length > 0 && (
-                  <Tag className="mt-1">{offering.certificateUrls.length} certificate(s)</Tag>
-                )}
               </div>
               <button
                 type="button"
@@ -118,21 +109,7 @@ export default function SubjectOfferingsStep({
             className="rounded-xl"
           />
 
-          <div className="flex flex-wrap gap-2">
-            <FileUpload label="Resume" folder="RESUME" value={resumeUrl} onChange={setResumeUrl} />
-            <FileUpload
-              label="Certificate"
-              folder="CERTIFICATE"
-              value={undefined}
-              onChange={handleAddCertificate}
-            />
-          </div>
-
-          {certificateUrls.length > 0 && (
-            <p className="text-xs text-gray-500">
-              {certificateUrls.length} certificate(s) attached
-            </p>
-          )}
+          {/* Resume & certificates are profile-level; upload them in profile edit */}
 
           <Button
             type="dashed"

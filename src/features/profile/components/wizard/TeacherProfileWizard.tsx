@@ -54,6 +54,8 @@ export default function TeacherProfileWizard() {
             headline: profile.headline,
             about: profile.about,
           }}
+          avatarUrl={profile.avatarUrl}
+          coverImageUrl={profile.coverImageUrl}
           loading={basicInfoMutation.isPending}
           onSubmit={(values) => basicInfoMutation.mutate(values, { onSuccess: goNext })}
         />

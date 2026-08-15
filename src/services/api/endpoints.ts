@@ -24,6 +24,8 @@ export const API_ENDPOINTS = {
       VERIFICATION: "/profile/teacher/verification",
       AVATAR: "/profile/teacher/avatar",
       COVER: "/profile/teacher/cover",
+      RESUME: "/profile/teacher/resume",
+      CERTIFICATES: "/profile/teacher/certificates",
     },
     STUDENT: {
       ME: "/profile/student/me",
@@ -32,6 +34,8 @@ export const API_ENDPOINTS = {
       VERIFICATION: "/profile/student/verification",
       AVATAR: "/profile/student/avatar",
       COVER: "/profile/student/cover",
+      RESUME: "/profile/student/resume",
+      CERTIFICATES: "/profile/student/certificates",
     },
   },
   MEDIA: {
