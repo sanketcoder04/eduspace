@@ -84,10 +84,12 @@ export default function ProfileHeader({
           )}
 
           {address && (
-            <Text type="secondary" className="flex items-center gap-1 text-sm">
-              <MapPin size={14} />
-              {address.city}, {address.state}
-            </Text>
+            <div className="flex items-center gap-1">
+              <MapPin size={14} className="text-racing-red-500 dark:text-racing-red-300" />
+              <Text type="secondary" className="flex items-center gap-1 text-sm">
+                {address.city}, {address.state}, {address.country}
+              </Text>
+            </div>
           )}
         </div>
       </div>

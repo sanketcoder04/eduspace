@@ -27,10 +27,15 @@ export interface SubjectOffering {
   id: string;
   subjectName: string;
   qualificationLevel: string;
-  resumeUrl?: string;
-  certificateUrls: string[];
   addedAt: string;
   updatedAt?: string;
+}
+
+export interface Certificate {
+  id: string;
+  title: string;
+  url: string;
+  uploadedAt: string;
 }
 
 export interface Verification {
@@ -58,9 +63,15 @@ export interface TeacherProfile {
   coverImageUrl?: string;
   education: Education[];
   subjectOfferings: SubjectOffering[];
+  resumeUrl?: string;
+  certificates: Certificate[];
   verification: Verification;
   profileCompleted: boolean;
   profileCompletionPercent: number;
+  profileViews: number;
+  createdAt: string;
+  updatedAt: string;
+  lastLoginAt?: string;
 }
 
 export interface StudentProfile {
@@ -78,7 +89,12 @@ export interface StudentProfile {
   avatarUrl?: string;
   coverImageUrl?: string;
   education: Education[];
+  certificates: Certificate[];
   verification: Verification;
+  profileViews: number;
+  createdAt: string;
+  updatedAt: string;
+  lastLoginAt?: string;
   profileCompleted: boolean;
   profileCompletionPercent: number;
 }
@@ -112,11 +128,16 @@ export interface UpdateEducationListRequest {
 export interface AddSubjectOfferingRequest {
   subjectName: string;
   qualificationLevel: string;
-  resumeUrl?: string;
-  certificateUrls: string[];
 }
 
 export type UpdateSubjectOfferingRequest = AddSubjectOfferingRequest;
+
+export interface AddCertificateRequest {
+  title: string;
+  url: string;
+}
+
+export type UpdateCertificateRequest = AddCertificateRequest;
 
 export interface SubmitVerificationRequest {
   selfieUrl: string;

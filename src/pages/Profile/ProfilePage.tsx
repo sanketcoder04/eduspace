@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Modal, message } from "antd";
-import MainLayout from "@/layouts/MainLayout";
+import ProfilePageLayout from "@/layouts/ProfilePageLayout";
 import AppLoader from "@/components/ui/AppLoader/AppLoader";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { useMyTeacherProfile } from "@/features/profile/hooks/useMyTeacherProfile";
@@ -11,23 +11,26 @@ import { useUpdateTeacherEducation } from "@/features/profile/hooks/useUpdateTea
 import { useUpdateStudentEducation } from "@/features/profile/hooks/useUpdateStudentEducation";
 import { useUpdateTeacherAvatar } from "@/features/profile/hooks/useUpdateTeacherAvatar";
 import { useUpdateTeacherCover } from "@/features/profile/hooks/useUpdateTeacherCover";
+import { useUpdateStudentAvatar } from "@/features/profile/hooks/useUpdateStudentAvatar";
 import { useDeleteSubjectOffering } from "@/features/profile/hooks/useDeleteSubjectOffering";
-import { useUpdateStudentCover } from "@/features/profile/hooks/useUpdateStudentCover";
 import ProfileHeader from "@/features/profile/components/display/ProfileHeader";
 import AboutCard from "@/features/profile/components/display/AboutCard";
 import EducationTimeline from "@/features/profile/components/display/EducationTimeline";
 import SubjectOfferingGrid from "@/features/profile/components/display/SubjectOfferingGrid";
+import BasicInfoCard from "@/features/profile/components/display/BasicInfoCard";
+import ActivityStatsCard from "@/features/profile/components/display/ActivityStatsCard";
 import TeacherBasicInfoStep from "@/features/profile/components/wizard/steps/TeacherBasicInfoStep";
 import StudentBasicInfoStep from "@/features/profile/components/wizard/steps/StudentBasicInfoStep";
 import EducationStep from "@/features/profile/components/wizard/steps/EducationStep";
 import SubjectOfferingsStep from "@/features/profile/components/wizard/steps/SubjectOfferingsStep";
-import { useUpdateStudentAvatar } from "@/features/profile/hooks/useUpdateStudentAvatar";
+import { useUpdateStudentCover } from "@/features/profile/hooks/useUpdateStudentCover";
+import CredentialsCard from "@/features/profile/components/display/CredentialsCard";
+import CredentialsStep from "@/features/profile/components/wizard/steps/CredentialsStep";
+import StudentCertificatesStep from "@/features/profile/components/wizard/steps/StudentCertificatesStep";
+import { MODAL_BODY_SCROLL_STYLE } from "@/constants/modal";
 
-type EditModal = "basic" | "education" | "subjects" | null;
+type EditModal = "basic" | "education" | "subjects" | "credentials" | null;
 
-// LinkedIn-style read view. Branches into two fully-separate render paths
-// (teacher vs student) rather than merging TeacherProfile | StudentProfile
-// into one variable — keeps everything properly typed with no `any` casts.
 export default function ProfilePage() {
   const { auth } = useAuth();
   const isTeacher = auth.user?.role === "TEACHER";
@@ -56,8 +59,31 @@ export default function ProfilePage() {
     }
 
     return (
-      <MainLayout>
-        <div className="mx-auto max-w-3xl space-y-4 px-4 py-6 sm:px-6 sm:py-8">
+      <div className="bg-mist-50">
+        <ProfilePageLayout
+          sidebar={
+            <>
+              <BasicInfoCard
+                isOwner
+                email={profile.email}
+                phoneNumber={profile.phoneNumber}
+                gender={profile.gender}
+                createdAt={profile.createdAt}
+                updatedAt={profile.updatedAt}
+                lastLoginAt={profile.lastLoginAt}
+                profileViews={profile.profileViews}
+              />
+            </>
+          }
+          recommendations={
+            <>
+              <ActivityStatsCard />
+              <div className="rounded-2xl border border-dashed border-gray-200 mt-5 p-5 text-sm text-gray-400 dark:border-neutral-700">
+                Recommended profiles to follow — coming soon.
+              </div>
+            </>
+          }
+        >
           <ProfileHeader
             name={profile.name}
             headline={profile.headline}
@@ -97,14 +123,23 @@ export default function ProfilePage() {
               })
             }
           />
-        </div>
+
+          <CredentialsCard
+            resumeUrl={profile.resumeUrl}
+            certificates={profile.certificates}
+            isOwner
+            onManage={() => setEditModal("credentials")}
+          />
+        </ProfilePageLayout>
 
         <Modal
           open={editModal === "basic"}
           onCancel={closeModal}
           footer={null}
-          title="Edit basic info"
-          destroyOnClose
+          title="Edit Your Information"
+          destroyOnHidden
+          centered
+          styles={MODAL_BODY_SCROLL_STYLE}
         >
           <TeacherBasicInfoStep
             defaultValues={{
@@ -133,8 +168,10 @@ export default function ProfilePage() {
           open={editModal === "education"}
           onCancel={closeModal}
           footer={null}
-          title="Edit education"
-          destroyOnClose
+          title="Edit Education"
+          destroyOnHidden
+          centered
+          styles={MODAL_BODY_SCROLL_STYLE}
         >
           <EducationStep
             defaultValues={profile.education}
@@ -159,16 +196,26 @@ export default function ProfilePage() {
           open={editModal === "subjects"}
           onCancel={closeModal}
           footer={null}
-          title="Manage subjects offered"
-          destroyOnClose
+          title="Manage Subjects"
+          destroyOnHidden
+          centered
+          styles={MODAL_BODY_SCROLL_STYLE}
         >
-          <SubjectOfferingsStep
-            existingOfferings={profile.subjectOfferings}
-            onBack={closeModal}
-            onContinue={closeModal}
-          />
+          <SubjectOfferingsStep existingOfferings={profile.subjectOfferings} />
         </Modal>
-      </MainLayout>
+
+        <Modal
+          open={editModal === "credentials"}
+          onCancel={closeModal}
+          footer={null}
+          title="Manage Resume & Certificates"
+          destroyOnHidden
+          centered
+          styles={MODAL_BODY_SCROLL_STYLE}
+        >
+          <CredentialsStep resumeUrl={profile.resumeUrl} certificates={profile.certificates} />
+        </Modal>
+      </div>
     );
   }
 
@@ -179,16 +226,40 @@ export default function ProfilePage() {
   }
 
   return (
-    <MainLayout>
-      <div className="mx-auto max-w-3xl space-y-4 px-4 py-6 sm:px-6 sm:py-8">
+    <div className="bg-mist-50">
+      <ProfilePageLayout
+        sidebar={
+          <>
+            <BasicInfoCard
+              isOwner
+              email={profile.email}
+              phoneNumber={profile.phoneNumber}
+              gender={profile.gender}
+              createdAt={profile.createdAt}
+              updatedAt={profile.updatedAt}
+              lastLoginAt={profile.lastLoginAt}
+              profileViews={profile.profileViews}
+            />
+          </>
+        }
+        recommendations={
+          <>
+            <ActivityStatsCard />
+            <div className="rounded-2xl border border-dashed border-gray-200 mt-5 p-5 text-sm text-gray-400 dark:border-neutral-700">
+              Recommended profiles to follow — coming soon.
+            </div>
+          </>
+        }
+      >
         <ProfileHeader
           name={profile.name}
           headline={profile.headline}
           avatarUrl={profile.avatarUrl}
-          address={profile.address}
           coverImageUrl={profile.coverImageUrl}
+          address={profile.address}
           verificationStatus={profile.verification.status}
           isOwner
+          showCover={true}
           onAvatarChange={(url) =>
             updateStudentAvatar.mutate(url, {
               onError: () => message.error("Couldn't update profile photo."),
@@ -209,14 +280,22 @@ export default function ProfilePage() {
           isOwner
           onEdit={() => setEditModal("education")}
         />
-      </div>
+
+        <CredentialsCard
+          certificates={profile.certificates}
+          isOwner
+          onManage={() => setEditModal("credentials")}
+        />
+      </ProfilePageLayout>
 
       <Modal
         open={editModal === "basic"}
         onCancel={closeModal}
         footer={null}
-        title="Edit basic info"
-        destroyOnClose
+        title="Edit Your Information"
+        destroyOnHidden
+        centered
+        styles={MODAL_BODY_SCROLL_STYLE}
       >
         <StudentBasicInfoStep
           defaultValues={{
@@ -247,8 +326,10 @@ export default function ProfilePage() {
         open={editModal === "education"}
         onCancel={closeModal}
         footer={null}
-        title="Edit education"
-        destroyOnClose
+        title="Edit Education"
+        destroyOnHidden
+        centered
+        styles={MODAL_BODY_SCROLL_STYLE}
       >
         <EducationStep
           defaultValues={profile.education}
@@ -268,6 +349,18 @@ export default function ProfilePage() {
           }
         />
       </Modal>
-    </MainLayout>
+
+      <Modal
+        open={editModal === "credentials"}
+        onCancel={closeModal}
+        footer={null}
+        title="Manage Certificates"
+        destroyOnHidden
+        centered
+        styles={MODAL_BODY_SCROLL_STYLE}
+      >
+        <StudentCertificatesStep certificates={profile.certificates} />
+      </Modal>
+    </div>
   );
 }

@@ -19,7 +19,7 @@ export default function EducationTimeline({ education, isOwner, onEdit }: Educat
         </Title>
         {isOwner && (
           <button type="button" onClick={onEdit} aria-label="Edit education">
-            <Pencil size={14} className="text-gray-400 hover:text-racing-red-600" />
+            <Pencil size={14} className="text-gray-700 hover:text-racing-red-500 cursor-pointer" />
           </button>
         )}
       </div>
@@ -35,13 +35,14 @@ export default function EducationTimeline({ education, isOwner, onEdit }: Educat
               </div>
               <div>
                 <p className="font-semibold">{entry.institution}</p>
-                <Text type="secondary" className="block text-sm">
+                <Text type="secondary" className="block text-sm font-medium">
                   {entry.degree}
                   {entry.fieldOfStudy ? ` · ${entry.fieldOfStudy}` : ""}
+                  {entry.board ? ` · ${entry.board}` : ""}
                 </Text>
-                <Text type="secondary" className="text-xs">
+                <div className="text-sm text-racing-red-500 dark:text-racing-red-400">
                   {entry.startYear} – {entry.endYear ?? "Present"}
-                </Text>
+                </div>
               </div>
             </div>
           ))}
