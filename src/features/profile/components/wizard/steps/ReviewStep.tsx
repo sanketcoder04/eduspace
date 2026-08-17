@@ -95,6 +95,8 @@ export default function ReviewStep({
           </div>
         )}
 
+        {/* Resume and certificates are shown on the profile; not per-subject */}
+
         <div className="flex items-start gap-3 rounded-xl border border-gray-200 p-4 dark:border-neutral-700">
           <ShieldCheck size={18} className="mt-0.5 text-racing-red-500" />
           <div>
