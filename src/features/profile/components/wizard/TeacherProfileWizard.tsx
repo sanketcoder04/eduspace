@@ -9,14 +9,14 @@ import { useUpdateTeacherEducation } from "../../hooks/useUpdateTeacherEducation
 import { useSubmitTeacherVerification } from "../../hooks/useSubmitTeacherVerification";
 import TeacherBasicInfoStep from "./steps/TeacherBasicInfoStep";
 import EducationStep from "./steps/EducationStep";
-import SubjectOfferingsStep from "./steps/SubjectOfferingsStep";
 import VerificationStep from "./steps/VerificationStep";
 import ReviewStep from "./steps/ReviewStep";
+import SubjectsAndCredentialsStep from "./steps/SubjectsAndCredentialsStep";
 
 const STEPS = [
   { title: "Basic Info" },
   { title: "Education" },
-  { title: "Subjects Offered" },
+  { title: "Subjects & Credentials" },
   { title: "Verification" },
   { title: "Review & Submit" },
 ];
@@ -71,8 +71,10 @@ export default function TeacherProfileWizard() {
       )}
 
       {step === 2 && (
-        <SubjectOfferingsStep
+        <SubjectsAndCredentialsStep
           existingOfferings={profile.subjectOfferings}
+          resumeUrl={profile.resumeUrl}
+          certificates={profile.certificates}
           onBack={goBack}
           onContinue={goNext}
         />

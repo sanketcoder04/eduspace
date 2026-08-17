@@ -179,7 +179,7 @@ export default function EducationStep({
         icon={<Plus size={16} />}
         onClick={() => append(emptyEntry)}
       >
-        Add another education entry
+        Add another Education
       </Button>
 
       <WizardStepFooter onBack={onBack} loading={loading} isLastStep={isLastStep} />

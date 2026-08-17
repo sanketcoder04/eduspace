@@ -9,6 +9,8 @@ import type {
   AddSubjectOfferingRequest,
   UpdateSubjectOfferingRequest,
   SubmitVerificationRequest,
+  UpdateCertificateRequest,
+  AddCertificateRequest,
 } from "../types/profile.types";
 
 interface ApiEnvelope<T> {
@@ -95,15 +97,44 @@ export async function updateTeacherAvatar(url: string): Promise<TeacherProfile> 
 export async function updateTeacherResume(url: string): Promise<TeacherProfile> {
   const { data } = await api.patch<ApiEnvelope<TeacherProfile>>(
     API_ENDPOINTS.PROFILE.TEACHER.RESUME,
-    { url }
+    {
+      url,
+    }
   );
   return data.data;
 }
 
-export async function updateTeacherCertificates(urls: string[]): Promise<TeacherProfile> {
-  const { data } = await api.patch<ApiEnvelope<TeacherProfile>>(
+export async function deleteTeacherResume(): Promise<TeacherProfile> {
+  const { data } = await api.delete<ApiEnvelope<TeacherProfile>>(
+    API_ENDPOINTS.PROFILE.TEACHER.RESUME
+  );
+  return data.data;
+}
+
+export async function addTeacherCertificate(
+  payload: AddCertificateRequest
+): Promise<TeacherProfile> {
+  const { data } = await api.post<ApiEnvelope<TeacherProfile>>(
     API_ENDPOINTS.PROFILE.TEACHER.CERTIFICATES,
-    { urls }
+    payload
+  );
+  return data.data;
+}
+
+export async function updateTeacherCertificate(
+  certificateId: string,
+  payload: UpdateCertificateRequest
+): Promise<TeacherProfile> {
+  const { data } = await api.put<ApiEnvelope<TeacherProfile>>(
+    API_ENDPOINTS.PROFILE.TEACHER.CERTIFICATE_BY_ID(certificateId),
+    payload
+  );
+  return data.data;
+}
+
+export async function deleteTeacherCertificate(certificateId: string): Promise<TeacherProfile> {
+  const { data } = await api.delete<ApiEnvelope<TeacherProfile>>(
+    API_ENDPOINTS.PROFILE.TEACHER.CERTIFICATE_BY_ID(certificateId)
   );
   return data.data;
 }
@@ -165,18 +196,30 @@ export async function updateStudentAvatar(url: string): Promise<StudentProfile> 
   return data.data;
 }
 
-export async function updateStudentResume(url: string): Promise<StudentProfile> {
-  const { data } = await api.patch<ApiEnvelope<StudentProfile>>(
-    API_ENDPOINTS.PROFILE.STUDENT.RESUME,
-    { url }
+export async function addStudentCertificate(
+  payload: AddCertificateRequest
+): Promise<StudentProfile> {
+  const { data } = await api.post<ApiEnvelope<StudentProfile>>(
+    API_ENDPOINTS.PROFILE.STUDENT.CERTIFICATES,
+    payload
   );
   return data.data;
 }
 
-export async function updateStudentCertificates(urls: string[]): Promise<StudentProfile> {
-  const { data } = await api.patch<ApiEnvelope<StudentProfile>>(
-    API_ENDPOINTS.PROFILE.STUDENT.CERTIFICATES,
-    { urls }
+export async function updateStudentCertificate(
+  certificateId: string,
+  payload: UpdateCertificateRequest
+): Promise<StudentProfile> {
+  const { data } = await api.put<ApiEnvelope<StudentProfile>>(
+    API_ENDPOINTS.PROFILE.STUDENT.CERTIFICATE_BY_ID(certificateId),
+    payload
+  );
+  return data.data;
+}
+
+export async function deleteStudentCertificate(certificateId: string): Promise<StudentProfile> {
+  const { data } = await api.delete<ApiEnvelope<StudentProfile>>(
+    API_ENDPOINTS.PROFILE.STUDENT.CERTIFICATE_BY_ID(certificateId)
   );
   return data.data;
 }

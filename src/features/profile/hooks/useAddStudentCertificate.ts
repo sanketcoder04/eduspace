@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateStudentCertificates } from "../services/profile.service";
+import { addStudentCertificate } from "../services/profile.service";
 
-export function useUpdateStudentCertificates() {
+export function useAddStudentCertificate() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: updateStudentCertificates,
+    mutationFn: addStudentCertificate,
     onSuccess: (profile) => {
       queryClient.setQueryData(["profile", "student", "me"], profile);
     },

@@ -17,9 +17,6 @@ interface ActivityStatsCardProps {
   followingCount?: number;
 }
 
-// Posts, reviews, and follow are all future modules with no data model yet —
-// shown honestly as a dashed "0 · coming soon" state rather than fabricated
-// numbers, so the layout doesn't shift once they're wired up for real.
 export default function ActivityStatsCard({
   postsCount = 0,
   reviewsCount = 0,
@@ -42,7 +39,7 @@ export default function ActivityStatsCard({
       <div className="flex flex-col gap-2">
         {stats.map((stat) => (
           <Tooltip key={stat.label} title="Coming soon">
-            <div className="flex p-2 items-baseline justify-between">
+            <div className="flex py-2 items-baseline justify-between">
               <div className="flex items-center gap-2">
                 <div className="flex text-racing-red-500">{stat.icon}</div>
                 <Text type="secondary" className="text-xs">
@@ -59,12 +56,4 @@ export default function ActivityStatsCard({
       </div>
     </div>
   );
-}
-
-{
-  /* 
-              <Text type="secondary" className="text-xs">
-                {stat.label}
-                
-              </Text> */
 }

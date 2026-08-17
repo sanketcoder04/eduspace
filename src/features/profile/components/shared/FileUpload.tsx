@@ -39,7 +39,7 @@ export default function FileUpload({
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 mt-2">
       {value ? (
         <div className="flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-800">
           <Paperclip size={14} className="text-racing-red-500" />
