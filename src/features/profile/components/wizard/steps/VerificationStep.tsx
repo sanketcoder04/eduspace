@@ -21,9 +21,6 @@ interface VerificationStepProps {
   isLastStep?: boolean;
 }
 
-// Shared between the Teacher and Student wizards — same selfie + address
-// capture, same submit shape, just wired to a different mutation by the
-// parent wizard.
 export default function VerificationStep({
   defaultAddress,
   onSubmit,

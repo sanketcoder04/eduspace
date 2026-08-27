@@ -1,7 +1,7 @@
 import { Form, Input, Radio, message } from "antd";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User, Phone, Users } from "lucide-react";
+import { User, Phone, Users, Mail } from "lucide-react";
 import {
   studentBasicInfoSchema,
   type StudentBasicInfoFormValues,
@@ -131,7 +131,7 @@ export default function StudentBasicInfoStep({
 
       <div className="mt-4 rounded-xl border border-dashed border-gray-300 p-4 dark:border-neutral-700">
         <Form.Item
-          label="Parent/guardian name"
+          label="Parent/Guardian name"
           validateStatus={errors.parentName ? "error" : ""}
           help={errors.parentName?.message}
         >
@@ -141,7 +141,7 @@ export default function StudentBasicInfoStep({
             render={({ field }) => (
               <Input
                 {...field}
-                placeholder="Parent or guardian's name"
+                placeholder="Parent or Guardian's name"
                 prefix={<Users size={16} className="text-gray-400" />}
                 className="rounded-xl"
               />
@@ -150,7 +150,7 @@ export default function StudentBasicInfoStep({
         </Form.Item>
 
         <Form.Item
-          label="Parent/guardian phone (optional)"
+          label="Parent/Guardian phone"
           validateStatus={errors.parentPhoneNumber ? "error" : ""}
           help={errors.parentPhoneNumber?.message}
         >
@@ -162,6 +162,25 @@ export default function StudentBasicInfoStep({
                 {...field}
                 placeholder="Contact number"
                 prefix={<Phone size={16} className="text-gray-400" />}
+                className="rounded-xl"
+              />
+            )}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Parent/Guardian email"
+          validateStatus={errors.parentEmail ? "error" : ""}
+          help={errors.parentEmail?.message}
+        >
+          <Controller
+            name="parentEmail"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                placeholder="Email address"
+                prefix={<Mail size={16} className="text-gray-400" />}
                 className="rounded-xl"
               />
             )}
@@ -193,6 +212,7 @@ export default function StudentBasicInfoStep({
               rows={4}
               placeholder="A little about your learning goals"
               className="rounded-xl"
+              showCount
             />
           )}
         />
