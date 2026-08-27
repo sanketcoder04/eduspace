@@ -14,6 +14,7 @@ export const API_ENDPOINTS = {
     GOOGLE: "/auth/google",
     GOOGLE_COMPLETE_REGISTRATION: "/auth/google/complete-registration",
   },
+
   PROFILE: {
     TEACHER: {
       ME: "/profile/teacher/me",
@@ -29,6 +30,7 @@ export const API_ENDPOINTS = {
       CERTIFICATE_BY_ID: (certificateId: string) =>
         `/profile/teacher/certificates/${certificateId}`,
     },
+
     STUDENT: {
       ME: "/profile/student/me",
       BASIC_INFO: "/profile/student/basic-info",
@@ -41,7 +43,39 @@ export const API_ENDPOINTS = {
         `/profile/student/certificates/${certificateId}`,
     },
   },
+
   MEDIA: {
     UPLOAD: "/media/upload",
+  },
+
+  OPPORTUNITY: {
+    TEACHING_OPENINGS: "/opportunities/teaching-openings",
+    TUITION_REQUIREMENTS: "/opportunities/tuition-requirements",
+    SEARCH: "/opportunities/search",
+    BY_ID: (id: string) => `/opportunities/${id}`,
+    CLOSE: (id: string) => `/opportunities/${id}/close`,
+    REOPEN: (id: string) => `/opportunities/${id}/reopen`,
+  },
+
+  APPLICATION: {
+    BASE: "/applications",
+    SENT: "/applications/sent",
+    RECEIVED: "/applications/received",
+    APPROVE: (id: string) => `/applications/${id}/approve`,
+    REJECT: (id: string) => `/applications/${id}/reject`,
+    WITHDRAW: (id: string) => `/applications/${id}/withdraw`,
+    CONTACT_CONSENT: (id: string) => `/applications/${id}/contact-consent`,
+  },
+
+  CONVERSATION: {
+    BASE: "/conversations",
+    MESSAGES: (id: string) => `/conversations/${id}/messages`,
+  },
+
+  NOTIFICATION: {
+    BASE: "/notifications",
+    UNREAD_COUNT: "/notifications/unread-count",
+    READ: (id: string) => `/notifications/${id}/read`,
+    READ_ALL: "/notifications/read-all",
   },
 } as const;
