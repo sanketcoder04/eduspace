@@ -1,6 +1,6 @@
-// src/features/auth/context/AuthProvider.tsx
 import type { PropsWithChildren } from "react";
 import { useEffect, useMemo, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { AuthContext } from "./AuthContext";
 import { tokenService } from "../services/token.service";
 import { authEvents } from "../services/authEvents";
@@ -14,6 +14,8 @@ function toUser(response: UserResponse): User {
 }
 
 export function AuthProvider({ children }: PropsWithChildren) {
+  const queryClient = useQueryClient();
+
   const [auth, setAuth] = useState<AuthState>({
     isAuthenticated: !!tokenService.getAccessToken(),
     accessToken: tokenService.getAccessToken(),
@@ -21,29 +23,35 @@ export function AuthProvider({ children }: PropsWithChildren) {
   });
 
   const hasToken = !!auth.accessToken;
-  const { data: currentUser, isFetched, isError } = useCurrentUser(hasToken);
+  const {
+    data: currentUser,
+    isFetched,
+    isError,
+    error: currentUserError,
+  } = useCurrentUser(hasToken);
 
-  // Hydrate auth.user once /me resolves (covers page reload)
   useEffect(() => {
     if (!hasToken) return;
 
     if (currentUser) {
-      setAuth((prev) => ({
-        ...prev,
-        isAuthenticated: true,
-        user: toUser(currentUser),
-      }));
+      setAuth((prev) => ({ ...prev, isAuthenticated: true, user: toUser(currentUser) }));
     } else if (isFetched && isError) {
-      // token invalid/expired and refresh already failed upstream
-      tokenService.removeAccessToken();
-      tokenService.removeRefreshToken();
-      setAuth({ isAuthenticated: false, accessToken: null, user: null });
-    }
-  }, [currentUser, isFetched, isError, hasToken]);
+      const status = (currentUserError as { response?: { status?: number } })?.response?.status;
 
-  // Stay in sync with silent refreshes / forced logouts from the axios interceptor
+      if (status === 401) {
+        tokenService.removeAccessToken();
+        tokenService.removeRefreshToken();
+        queryClient.clear();
+        setAuth({ isAuthenticated: false, accessToken: null, user: null });
+      }
+    }
+  }, [currentUser, isFetched, isError, currentUserError, hasToken, queryClient]);
+
   useEffect(() => {
     return authEvents.subscribe((accessToken) => {
+      if (!accessToken) {
+        queryClient.clear();
+      }
       setAuth((prev) => ({
         ...prev,
         accessToken,
@@ -51,9 +59,10 @@ export function AuthProvider({ children }: PropsWithChildren) {
         user: accessToken ? prev.user : null,
       }));
     });
-  }, []);
+  }, [queryClient]);
 
   const login = (accessToken: string, refreshToken: string, user: User) => {
+    queryClient.clear();
     tokenService.setAccessToken(accessToken);
     tokenService.setRefreshToken(refreshToken);
     setAuth({ isAuthenticated: true, accessToken, user });
@@ -63,17 +72,13 @@ export function AuthProvider({ children }: PropsWithChildren) {
     tokenService.removeAccessToken();
     tokenService.removeRefreshToken();
     setAuth({ isAuthenticated: false, accessToken: null, user: null });
+    queryClient.clear();
   };
 
-  const updateUser = (user: User) => {
-    setAuth((prev) => ({ ...prev, user }));
-  };
-
-  const syncAccessToken = (accessToken: string | null) => {
+  const updateUser = (user: User) => setAuth((prev) => ({ ...prev, user }));
+  const syncAccessToken = (accessToken: string | null) =>
     setAuth((prev) => ({ ...prev, accessToken, isAuthenticated: !!accessToken }));
-  };
 
-  // Bootstrapping = we have a token but haven't confirmed the user yet
   const isBootstrapping = hasToken && !isFetched;
 
   const value = useMemo(

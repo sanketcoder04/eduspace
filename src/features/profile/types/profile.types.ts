@@ -83,6 +83,7 @@ export interface StudentProfile {
   address?: Address;
   parentName?: string;
   parentPhoneNumber?: string;
+  parentEmail?: string;
   gender?: Gender;
   headline?: string;
   about?: string;
@@ -116,6 +117,7 @@ export interface UpdateStudentBasicInfoRequest {
   address: Address;
   parentName: string;
   parentPhoneNumber?: string;
+  parentEmail?: string;
   gender?: Gender;
   headline?: string;
   about?: string;

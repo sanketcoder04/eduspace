@@ -65,6 +65,7 @@ export default function ProfilePage() {
             <>
               <BasicInfoCard
                 isOwner
+                role="TEACHER"
                 email={profile.email}
                 phoneNumber={profile.phoneNumber}
                 gender={profile.gender}
@@ -232,6 +233,7 @@ export default function ProfilePage() {
           <>
             <BasicInfoCard
               isOwner
+              role="STUDENT"
               email={profile.email}
               phoneNumber={profile.phoneNumber}
               gender={profile.gender}
@@ -304,6 +306,7 @@ export default function ProfilePage() {
             address: profile.address,
             parentName: profile.parentName,
             parentPhoneNumber: profile.parentPhoneNumber,
+            parentEmail: profile.parentEmail,
             gender: profile.gender,
             headline: profile.headline,
             about: profile.about,

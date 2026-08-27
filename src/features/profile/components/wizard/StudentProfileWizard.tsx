@@ -50,6 +50,7 @@ export default function StudentProfileWizard() {
             address: profile.address,
             parentName: profile.parentName,
             parentPhoneNumber: profile.parentPhoneNumber,
+            parentEmail: profile.parentEmail,
             gender: profile.gender,
             headline: profile.headline,
             about: profile.about,
