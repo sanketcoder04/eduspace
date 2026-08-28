@@ -16,6 +16,11 @@ export const ROUTES = {
   PROFILE: "/profile",
   PROFILE_BY_ID: (userId: string) => `/profile/${userId}`,
 
+  OPPORTUNITIES: "/opportunities",
+  OPPORTUNITY_DETAIL: (id: string) => `/opportunities/${id}`,
+  CREATE_TEACHING_OPENING: "/opportunities/new/teaching-opening",
+  CREATE_TUITION_REQUIREMENT: "/opportunities/new/tuition-requirement",
+
   SEARCH: "/search",
 
   SETTINGS: "/settings",

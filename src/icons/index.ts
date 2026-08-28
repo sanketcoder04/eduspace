@@ -40,4 +40,10 @@ export {
   CircleCheck,
   CircleX,
   Loader2,
+  Video,
+  Wifi,
+  Building2,
+  Briefcase,
+  Repeat,
+  SlidersHorizontal,
 } from "lucide-react";
