@@ -21,6 +21,9 @@ export const ROUTES = {
   CREATE_TEACHING_OPENING: "/opportunities/new/teaching-opening",
   CREATE_TUITION_REQUIREMENT: "/opportunities/new/tuition-requirement",
 
+  APPLICATIONS: "/applications",
+  CONVERSATION_FOR_APPLICATION: (applicationId: string) => `/chat/by-application/${applicationId}`,
+
   SEARCH: "/search",
 
   SETTINGS: "/settings",
