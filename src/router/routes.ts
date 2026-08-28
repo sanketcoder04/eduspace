@@ -24,6 +24,9 @@ export const ROUTES = {
   APPLICATIONS: "/applications",
   CONVERSATION_FOR_APPLICATION: (applicationId: string) => `/chat/by-application/${applicationId}`,
 
+  CONVERSATIONS: "/chat",
+  CONVERSATION_DETAIL: (conversationId: string) => `/chat/${conversationId}`,
+
   SEARCH: "/search",
 
   SETTINGS: "/settings",

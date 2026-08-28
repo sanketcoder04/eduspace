@@ -8,6 +8,7 @@ import {
   DATE_POSTED_OPTIONS,
 } from "../constants/opportunityOptions";
 import type { OpportunityFilterRequest } from "../types/opportunity.types";
+import { STICKY_CONTENT_TOP_CLASS } from "@/constants/layout";
 
 interface OpportunityFilterBarProps {
   value: OpportunityFilterRequest;
@@ -162,7 +163,9 @@ function FilterControls({ value, onChange, cityOptions }: OpportunityFilterBarPr
 /** Desktop: sticky left sidebar. */
 export function OpportunityFilterSidebar(props: OpportunityFilterBarProps) {
   return (
-    <aside className="hidden lg:block lg:sticky lg:top-6 lg:h-fit lg:w-72 lg:shrink-0">
+    <aside
+      className={`hidden lg:block lg:h-fit lg:w-72 lg:shrink-0 lg:sticky ${STICKY_CONTENT_TOP_CLASS}`}
+    >
       <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
         <h3 className="mb-4 text-sm font-semibold text-gray-900 dark:text-white">Filters</h3>
         <FilterControls {...props} />
@@ -183,9 +186,7 @@ export function OpportunityFilterMobileTrigger(props: OpportunityFilterBarProps)
           icon={<SlidersHorizontal size={16} />}
           onClick={() => setOpen(true)}
           className="rounded-xl"
-        >
-          Filters
-        </Button>
+        />
       </Badge>
 
       <Drawer

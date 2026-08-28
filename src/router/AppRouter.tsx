@@ -16,14 +16,16 @@ import GoogleSelectRolePage from "@/pages/Auth/GoogleSelectRolePage";
 import ProfilePage from "@/pages/Profile/ProfilePage";
 import CompleteProfilePage from "@/pages/Profile/CompleteProfilePage";
 import OpportunitiesFeedPage from "@/pages/Opportunities/OpportunitiesFeedPage";
-import CreateTuitionRequirementPage from "@/pages/Opportunities/CreateTuitionRequirementPage";
 import CreateTeachingOpeningPage from "@/pages/Opportunities/CreateTeachingOpeningPage";
+import CreateTuitionRequirementPage from "@/pages/Opportunities/CreateTuitionRequirementPage";
+import ApplicationsPage from "@/pages/Applications/ApplicationsPage";
 
 export default function AppRouter() {
   return (
     <Routes>
       <Route path={ROUTES.HOME} element={<Navigate to={ROUTES.LOGIN} replace />} />
 
+      {/* ---- Public / Auth routes (unchanged) ---- */}
       <Route
         path={ROUTES.LOGIN}
         element={
@@ -34,7 +36,6 @@ export default function AppRouter() {
           </PublicRoute>
         }
       />
-
       <Route
         path={ROUTES.FORGOT_PASSWORD}
         element={
@@ -45,7 +46,6 @@ export default function AppRouter() {
           </PublicRoute>
         }
       />
-
       <Route
         path={ROUTES.VERIFY_OTP}
         element={
@@ -56,7 +56,6 @@ export default function AppRouter() {
           </PublicRoute>
         }
       />
-
       <Route
         path={ROUTES.REGISTER}
         element={
@@ -67,7 +66,6 @@ export default function AppRouter() {
           </PublicRoute>
         }
       />
-
       <Route
         path={ROUTES.VERIFY_EMAIL}
         element={
@@ -78,7 +76,6 @@ export default function AppRouter() {
           </PublicRoute>
         }
       />
-
       <Route
         path={ROUTES.RESET_PASSWORD}
         element={
@@ -89,18 +86,6 @@ export default function AppRouter() {
           </PublicRoute>
         }
       />
-
-      <Route
-        path={ROUTES.DASHBOARD}
-        element={
-          <ProtectedRoute>
-            <DashboardLayout>
-              <DashboardPage />
-            </DashboardLayout>
-          </ProtectedRoute>
-        }
-      />
-
       <Route
         path={ROUTES.GOOGLE_SELECT_ROLE}
         element={
@@ -109,6 +94,18 @@ export default function AppRouter() {
               <GoogleSelectRolePage />
             </AuthLayout>
           </PublicRoute>
+        }
+      />
+
+      {/* ---- Protected routes — now wrapped in DashboardLayout for the navbar ---- */}
+      <Route
+        path={ROUTES.DASHBOARD}
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <DashboardPage />
+            </DashboardLayout>
+          </ProtectedRoute>
         }
       />
 
@@ -125,7 +122,9 @@ export default function AppRouter() {
         path={ROUTES.PROFILE}
         element={
           <ProtectedRoute>
-            <ProfilePage />
+            <DashboardLayout>
+              <ProfilePage />
+            </DashboardLayout>
           </ProtectedRoute>
         }
       />
@@ -134,16 +133,9 @@ export default function AppRouter() {
         path={ROUTES.OPPORTUNITIES}
         element={
           <ProtectedRoute>
-            <OpportunitiesFeedPage />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path={ROUTES.CREATE_TUITION_REQUIREMENT}
-        element={
-          <ProtectedRoute>
-            <CreateTuitionRequirementPage />
+            <DashboardLayout>
+              <OpportunitiesFeedPage />
+            </DashboardLayout>
           </ProtectedRoute>
         }
       />
@@ -152,10 +144,37 @@ export default function AppRouter() {
         path={ROUTES.CREATE_TEACHING_OPENING}
         element={
           <ProtectedRoute>
-            <CreateTeachingOpeningPage />
+            <DashboardLayout>
+              <CreateTeachingOpeningPage />
+            </DashboardLayout>
           </ProtectedRoute>
         }
       />
+
+      <Route
+        path={ROUTES.CREATE_TUITION_REQUIREMENT}
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <CreateTuitionRequirementPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path={ROUTES.APPLICATIONS}
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <ApplicationsPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      {/* ROUTES.CONVERSATIONS / CONVERSATION_DETAIL / OPPORTUNITY_DETAIL routes
+          are added in Part 6/7 once those pages exist. */}
 
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
