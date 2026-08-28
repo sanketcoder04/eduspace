@@ -8,17 +8,14 @@ import {
   OpportunityFilterMobileTrigger,
 } from "@/features/opportunity/components/OpportunityFilterBar";
 import OpportunityList from "@/features/opportunity/components/OpportunityList";
+import { useOpportunitySearch } from "@/features/opportunity/hooks/useOpportunitySearch";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import type {
   OpportunityFilterRequest,
   PostType,
 } from "@/features/opportunity/types/opportunity.types";
 import { ROUTES } from "@/router/routes";
-import { useOpportunitySearch } from "@/features/opportunity/hooks/useOpportunitySearch";
 
-// Static starter list until a "distinct cities in active postings" endpoint
-// exists — swap for a real lookup once that's available without touching
-// the filter bar component itself.
 const CITY_OPTIONS = [
   "Mumbai",
   "Delhi",
@@ -34,9 +31,6 @@ export default function OpportunitiesFeedPage() {
   const { auth } = useAuth();
   const isTeacher = auth.user?.role === "TEACHER";
 
-  // Teachers primarily browse Tuition Requirements (to find students to teach);
-  // Students primarily browse Teaching Openings (to find a teacher). Default
-  // the tab accordingly, but let either role switch freely.
   const [postType, setPostType] = useState<PostType>(
     isTeacher ? "TUITION_REQUIREMENT" : "TEACHING_OPENING"
   );
@@ -45,7 +39,7 @@ export default function OpportunitiesFeedPage() {
 
   const handleTabChange = (next: PostType) => {
     setPostType(next);
-    setFilters({ postType: next }); // reset filters when switching context
+    setFilters({ postType: next });
     setPage(0);
   };
 
@@ -60,18 +54,41 @@ export default function OpportunitiesFeedPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
-      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <Segmented
-          value={postType}
-          onChange={(v) => handleTabChange(v as PostType)}
-          options={[
-            { label: "Teaching Openings", value: "TEACHING_OPENING" },
-            { label: "Tuition Requirements", value: "TUITION_REQUIREMENT" },
-          ]}
-          className="rounded-xl"
-        />
+      {/* Header — deliberately two independent rows on mobile (tabs, then
+          actions) rather than one row that overflows. The Segmented itself
+          sits in an overflow-x-auto wrapper as a last-resort escape hatch:
+          if labels are ever too wide for the viewport, THIS scrolls, not
+          the whole page. */}
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="overflow-x-auto">
+          <Segmented
+            value={postType}
+            onChange={(v) => handleTabChange(v as PostType)}
+            options={[
+              {
+                label: (
+                  <>
+                    <span className="sm:hidden">Openings</span>
+                    <span className="hidden sm:inline">Teaching Openings</span>
+                  </>
+                ),
+                value: "TEACHING_OPENING",
+              },
+              {
+                label: (
+                  <>
+                    <span className="sm:hidden">Requirements</span>
+                    <span className="hidden sm:inline">Tuition Requirements</span>
+                  </>
+                ),
+                value: "TUITION_REQUIREMENT",
+              },
+            ]}
+            className="rounded-xl"
+          />
+        </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <OpportunityFilterMobileTrigger
             value={filters}
             onChange={handleFilterChange}
@@ -79,7 +96,11 @@ export default function OpportunitiesFeedPage() {
           />
 
           <Link to={createHref}>
-            <Button type="primary" icon={<Plus size={16} />} className="rounded-xl font-semibold">
+            <Button
+              type="primary"
+              icon={<Plus size={16} />}
+              className="rounded-xl font-semibold whitespace-nowrap"
+            >
               {isTeacher ? "Post an Opening" : "Post a Requirement"}
             </Button>
           </Link>

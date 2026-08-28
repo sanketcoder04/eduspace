@@ -131,19 +131,28 @@ export default function OpportunityCard({ opportunity }: OpportunityCardProps) {
       </div>
 
       {/* Footer: fee + apply */}
-      <div className="flex items-center justify-between border-t border-gray-100 px-5 py-3 dark:border-neutral-800">
-        <div>
-          <span className="text-lg font-bold text-gray-900 dark:text-white">
-            ₹{feeRange.min}
-            {feeRange.max !== feeRange.min ? `–${feeRange.max}` : ""}
-          </span>
-          <span className="ml-1 text-xs text-gray-500">{FEE_UNIT_LABEL[feeRange.unit]}</span>
+      <div className="flex flex-col gap-3 border-t border-gray-100 px-4 py-3 dark:border-neutral-800 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+        <div className="flex items-center justify-between sm:block">
+          <div>
+            <span className="text-lg font-bold text-gray-900 dark:text-white">
+              ₹{feeRange.min}
+              {feeRange.max !== feeRange.min ? `–${feeRange.max}` : ""}
+            </span>
+            <span className="ml-1 text-xs text-gray-500">{FEE_UNIT_LABEL[feeRange.unit]}</span>
+          </div>
+          <span className="text-xs text-gray-400 sm:hidden">{applicationsCount} applied</span>
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-gray-400">{applicationsCount} applied</span>
-          <Link to={ROUTES.OPPORTUNITY_DETAIL(id)}>
-            <Button type="primary" size="small" className="rounded-lg font-semibold">
+        <div className="flex items-center gap-2 sm:justify-end">
+          <span className="hidden text-xs text-gray-400 sm:inline">
+            {applicationsCount} applied
+          </span>
+          <Link to={ROUTES.OPPORTUNITY_DETAIL(id)} className="w-full sm:w-auto">
+            <Button
+              type="primary"
+              size="small"
+              className="w-full rounded-lg font-semibold sm:w-auto"
+            >
               View Details
             </Button>
           </Link>

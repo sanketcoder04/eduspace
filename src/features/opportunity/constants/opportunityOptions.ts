@@ -15,7 +15,7 @@ export const MODE_OPTIONS: { label: string; value: Mode }[] = [
 ];
 
 export const CLASS_FORMAT_OPTIONS: { label: string; value: ClassFormat }[] = [
-  { label: "Personalized (1-on-1)", value: "PERSONALIZED" },
+  { label: "Personalized", value: "PERSONALIZED" },
   { label: "Batch (Group)", value: "BATCH" },
 ];
 
