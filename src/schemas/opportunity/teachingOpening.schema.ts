@@ -14,12 +14,12 @@ export const teachingOpeningSchema = z
     feeRange: feeRangeSchema,
     sessionDurationHours: z.number().positive("Must be greater than 0").optional(),
     sessionsPerWeek: z.number().int().positive("Must be a whole number greater than 0").optional(),
-    preferredStartDate: z.string().optional(), // ISO date string from the AntD DatePicker
+    preferredStartDate: z.string().optional(),
 
     batchCapacity: z.number().int().positive().optional(),
     availableSlots: z.array(timeSlotSchema).optional(),
     languageOfInstruction: z.string().trim().optional(),
-    freeDemoAvailable: z.boolean().default(false),
+    freeDemoAvailable: z.boolean(),
     yearsOfExperienceInSubject: z.number().int().min(0).optional(),
   })
   .and(locationModeSchema)

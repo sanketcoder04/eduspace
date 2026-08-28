@@ -4,7 +4,7 @@ export const feeRangeSchema = z
   .object({
     min: z.number({ message: "Minimum fee is required" }).min(0, "Fee cannot be negative"),
     max: z.number({ message: "Maximum fee is required" }).min(0, "Fee cannot be negative"),
-    currency: z.string().default("INR"),
+    currency: z.string().min(1, "Currency is required"),
     unit: z.enum(["PER_HOUR", "PER_SESSION", "PER_MONTH", "FULL_COURSE"], {
       message: "Select a fee unit",
     }),

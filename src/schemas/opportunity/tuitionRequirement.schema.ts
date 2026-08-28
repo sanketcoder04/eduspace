@@ -15,11 +15,13 @@ export const tuitionRequirementSchema = z
     sessionsPerWeek: z.number().int().positive("Must be a whole number greater than 0").optional(),
     preferredStartDate: z.string().optional(),
 
-    preferredTutorGender: z.enum(["MALE", "FEMALE", "NO_PREFERENCE"]).default("NO_PREFERENCE"),
-    preferredTutorExperienceLevel: z
-      .enum(["PROFESSIONAL_TUTOR", "PART_TIME_TUTOR", "NO_PREFERENCE"])
-      .default("NO_PREFERENCE"),
-    numberOfStudents: z.number().int().min(1).default(1),
+    preferredTutorGender: z.enum(["MALE", "FEMALE", "NO_PREFERENCE"]),
+    preferredTutorExperienceLevel: z.enum([
+      "PROFESSIONAL_TUTOR",
+      "PART_TIME_TUTOR",
+      "NO_PREFERENCE",
+    ]),
+    numberOfStudents: z.number().int().min(1),
     additionalRequirements: z.string().trim().max(500).optional(),
   })
   .and(locationModeSchema);
