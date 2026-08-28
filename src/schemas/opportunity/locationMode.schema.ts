@@ -2,24 +2,26 @@ import { z } from "zod";
 import { addressSchema } from "@/schemas/profile/address.schema";
 
 /**
- * Shared refinement used by both post types: location is only required when
- * mode isn't fully ONLINE, mirroring the backend's validateLocation check in
- * OpportunityService — keeping both sides in sync prevents a submission that
- * passes client validation but gets rejected server-side.
+ * Shared refinement used by both post types: address is only required when
+ * mode isn't fully ONLINE, mirroring OpportunityService#validateLocation on
+ * the backend. Field is named `address` (not `location`) so it can be
+ * rendered directly by the existing AddressFields component, which hardcodes
+ * "address.*" paths — the API payload maps address -> location once, at
+ * submit time, in each page.
  */
 export const locationModeSchema = z
   .object({
     mode: z.enum(["ONLINE", "OFFLINE", "HYBRID"], { message: "Select a mode" }),
     classFormat: z.enum(["PERSONALIZED", "BATCH"], { message: "Select a class format" }),
-    location: addressSchema.optional(),
+    address: addressSchema.optional(),
     tuitionLocationType: z.enum(["HOME_TUITION", "CENTER_BASED"]).optional(),
   })
   .superRefine((data, ctx) => {
-    if (data.mode !== "ONLINE" && !data.location) {
+    if (data.mode !== "ONLINE" && !data.address) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        path: ["location"],
-        message: "Location is required for offline or hybrid postings",
+        path: ["address"],
+        message: "Address is required for offline or hybrid postings",
       });
     }
     if (data.mode !== "ONLINE" && !data.tuitionLocationType) {
@@ -30,3 +32,5 @@ export const locationModeSchema = z
       });
     }
   });
+
+export type LocationModeFormValues = z.infer<typeof locationModeSchema>;

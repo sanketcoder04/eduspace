@@ -9,12 +9,12 @@ import {
 import { MapPin } from "lucide-react";
 import type { AddressFormValues } from "@/schemas/profile/address.schema";
 
-interface AddressFieldsProps<T extends FieldValues & { address: AddressFormValues }> {
+interface AddressFieldsProps<T extends FieldValues & { address?: AddressFormValues }> {
   control: Control<T>;
   errors: FieldErrors<T>;
 }
 
-export default function AddressFields<T extends FieldValues & { address: AddressFormValues }>({
+export default function AddressFields<T extends FieldValues & { address?: AddressFormValues }>({
   control,
   errors,
 }: AddressFieldsProps<T>) {

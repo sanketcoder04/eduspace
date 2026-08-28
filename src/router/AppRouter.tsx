@@ -15,6 +15,9 @@ import ResetPasswordPage from "@/pages/Auth/ResetPasswordPage";
 import GoogleSelectRolePage from "@/pages/Auth/GoogleSelectRolePage";
 import ProfilePage from "@/pages/Profile/ProfilePage";
 import CompleteProfilePage from "@/pages/Profile/CompleteProfilePage";
+import OpportunitiesFeedPage from "@/pages/Opportunities/OpportunitiesFeedPage";
+import CreateTuitionRequirementPage from "@/pages/Opportunities/CreateTuitionRequirementPage";
+import CreateTeachingOpeningPage from "@/pages/Opportunities/CreateTeachingOpeningPage";
 
 export default function AppRouter() {
   return (
@@ -123,6 +126,33 @@ export default function AppRouter() {
         element={
           <ProtectedRoute>
             <ProfilePage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path={ROUTES.OPPORTUNITIES}
+        element={
+          <ProtectedRoute>
+            <OpportunitiesFeedPage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path={ROUTES.CREATE_TUITION_REQUIREMENT}
+        element={
+          <ProtectedRoute>
+            <CreateTuitionRequirementPage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path={ROUTES.CREATE_TEACHING_OPENING}
+        element={
+          <ProtectedRoute>
+            <CreateTeachingOpeningPage />
           </ProtectedRoute>
         }
       />

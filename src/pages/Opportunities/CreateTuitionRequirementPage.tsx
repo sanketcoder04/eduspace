@@ -19,6 +19,7 @@ import {
 import FeeRangeFields from "@/features/opportunity/components/FeeRangeFields";
 import LocationModeFields from "@/features/opportunity/components/LocationModeFields";
 import { useCreateTuitionRequirement } from "@/features/opportunity/hooks/useCreateTuitionRequirement";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 import { ROUTES } from "@/router/routes";
 
 const { Title, Text } = Typography;
@@ -48,13 +49,12 @@ export default function CreateTuitionRequirementPage() {
 
   const onSubmit = async (values: TuitionRequirementFormValues) => {
     try {
-      await createMutation.mutateAsync(values);
+      const { address, ...rest } = values;
+      await createMutation.mutateAsync({ ...rest, location: address });
       message.success("Tuition requirement posted.");
       navigate(ROUTES.OPPORTUNITIES);
-    } catch (error: any) {
-      message.error(
-        error?.response?.data?.message ?? "Couldn't post this requirement. Please try again."
-      );
+    } catch (error) {
+      message.error(getErrorMessage(error, "Couldn't post this requirement. Please try again."));
     }
   };
 
@@ -89,11 +89,10 @@ export default function CreateTuitionRequirementPage() {
           />
         </Form.Item>
 
-        {/* Students keep free-tagging — no ownership constraint like the teacher's list. */}
         <Form.Item
           label="Subjects"
           validateStatus={errors.subjects ? "error" : ""}
-          help={errors.subjects?.message as string | undefined}
+          help={errors.subjects?.message}
         >
           <Controller
             name="subjects"

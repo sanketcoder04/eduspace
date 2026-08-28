@@ -1,16 +1,29 @@
 import { Form, InputNumber, Select, Row, Col } from "antd";
-import { Controller, type Control, type FieldErrors } from "react-hook-form";
+import {
+  Controller,
+  type Control,
+  type FieldErrors,
+  type FieldValues,
+  type Path,
+} from "react-hook-form";
 import { FEE_UNIT_OPTIONS } from "../constants/opportunityOptions";
+import type { FeeRangeFormValues } from "@/schemas/opportunity/feeRange.schema";
+import type { FeeUnit } from "../types/opportunity.types";
 
-interface FeeRangeFieldsProps {
-  control: Control<any>;
-  errors: FieldErrors<any>;
+export interface FeeRangeFieldValues {
+  feeRange: FeeRangeFormValues;
 }
 
-export default function FeeRangeFields({ control, errors }: FeeRangeFieldsProps) {
-  const feeErrors = errors.feeRange as
-    | { min?: { message?: string }; max?: { message?: string }; unit?: { message?: string } }
-    | undefined;
+interface FeeRangeFieldsProps<T extends FieldValues & FeeRangeFieldValues> {
+  control: Control<T>;
+  errors: FieldErrors<T>;
+}
+
+export default function FeeRangeFields<T extends FieldValues & FeeRangeFieldValues>({
+  control,
+  errors,
+}: FeeRangeFieldsProps<T>) {
+  const feeErrors = errors.feeRange as FieldErrors<FeeRangeFormValues> | undefined;
 
   return (
     <div>
@@ -25,10 +38,16 @@ export default function FeeRangeFields({ control, errors }: FeeRangeFieldsProps)
             className="mb-0"
           >
             <Controller
-              name="feeRange.min"
+              name={"feeRange.min" as Path<T>}
               control={control}
               render={({ field }) => (
-                <InputNumber {...field} placeholder="Min ₹" min={0} className="w-full rounded-xl" />
+                <InputNumber
+                  {...field}
+                  value={field.value as number}
+                  placeholder="Min ₹"
+                  min={0}
+                  className="w-full rounded-xl"
+                />
               )}
             />
           </Form.Item>
@@ -40,10 +59,16 @@ export default function FeeRangeFields({ control, errors }: FeeRangeFieldsProps)
             className="mb-0"
           >
             <Controller
-              name="feeRange.max"
+              name={"feeRange.max" as Path<T>}
               control={control}
               render={({ field }) => (
-                <InputNumber {...field} placeholder="Max ₹" min={0} className="w-full rounded-xl" />
+                <InputNumber
+                  {...field}
+                  value={field.value as number}
+                  placeholder="Max ₹"
+                  min={0}
+                  className="w-full rounded-xl"
+                />
               )}
             />
           </Form.Item>
@@ -55,11 +80,12 @@ export default function FeeRangeFields({ control, errors }: FeeRangeFieldsProps)
             className="mb-0"
           >
             <Controller
-              name="feeRange.unit"
+              name={"feeRange.unit" as Path<T>}
               control={control}
               render={({ field }) => (
                 <Select
                   {...field}
+                  value={field.value as FeeUnit}
                   placeholder="Per..."
                   options={FEE_UNIT_OPTIONS}
                   className="w-full"

@@ -1,5 +1,5 @@
-import { Form, Input, InputNumber, Switch, DatePicker, Typography, message } from "antd";
-import { Controller, useForm } from "react-hook-form";
+import { Form, Input, InputNumber, Switch, DatePicker, Typography, message, Select } from "antd";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
@@ -13,8 +13,8 @@ import FeeRangeFields from "@/features/opportunity/components/FeeRangeFields";
 import LocationModeFields from "@/features/opportunity/components/LocationModeFields";
 import TimeSlotFields from "@/features/opportunity/components/TimeSlotFields";
 import { useCreateTeachingOpening } from "@/features/opportunity/hooks/useCreateTeachingOpening";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 import { ROUTES } from "@/router/routes";
-import { Select } from "antd";
 
 const { Title, Text } = Typography;
 
@@ -25,7 +25,6 @@ export default function CreateTeachingOpeningPage() {
   const {
     control,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<TeachingOpeningFormValues>({
     resolver: zodResolver(teachingOpeningSchema),
@@ -41,20 +40,16 @@ export default function CreateTeachingOpeningPage() {
     },
   });
 
-  const classFormat = watch("classFormat");
+  const classFormat = useWatch({ control, name: "classFormat" });
 
   const onSubmit = async (values: TeachingOpeningFormValues) => {
     try {
-      await createMutation.mutateAsync({
-        ...values,
-        preferredStartDate: values.preferredStartDate,
-      });
+      const { address, ...rest } = values;
+      await createMutation.mutateAsync({ ...rest, location: address });
       message.success("Teaching opening posted.");
       navigate(ROUTES.OPPORTUNITIES);
-    } catch (error: any) {
-      message.error(
-        error?.response?.data?.message ?? "Couldn't post this opening. Please try again."
-      );
+    } catch (error) {
+      message.error(getErrorMessage(error, "Couldn't post this opening. Please try again."));
     }
   };
 
@@ -89,7 +84,6 @@ export default function CreateTeachingOpeningPage() {
           />
         </Form.Item>
 
-        {/* Subjects — restricted to the teacher's own profile offerings (Part 3.5) */}
         <Controller
           name="subjects"
           control={control}
@@ -97,7 +91,7 @@ export default function CreateTeachingOpeningPage() {
             <TeacherSubjectSelect
               value={field.value}
               onChange={field.onChange}
-              error={errors.subjects?.message as string | undefined}
+              error={errors.subjects?.message}
             />
           )}
         />
