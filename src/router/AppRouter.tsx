@@ -19,6 +19,7 @@ import OpportunitiesFeedPage from "@/pages/Opportunities/OpportunitiesFeedPage";
 import CreateTeachingOpeningPage from "@/pages/Opportunities/CreateTeachingOpeningPage";
 import CreateTuitionRequirementPage from "@/pages/Opportunities/CreateTuitionRequirementPage";
 import ApplicationsPage from "@/pages/Applications/ApplicationsPage";
+import OpportunityDetailPage from "@/pages/Opportunities/OpportunityDetailPage";
 
 export default function AppRouter() {
   return (
@@ -135,6 +136,17 @@ export default function AppRouter() {
           <ProtectedRoute>
             <DashboardLayout>
               <OpportunitiesFeedPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path={ROUTES.OPPORTUNITIES + "/:id"}
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <OpportunityDetailPage />
             </DashboardLayout>
           </ProtectedRoute>
         }

@@ -48,7 +48,7 @@ export default function ReceivedApplicationCard({ application }: ReceivedApplica
   };
 
   return (
-    <Card className="rounded-2xl shadow-sm" bodyStyle={{ padding: 20 }}>
+    <Card className="rounded-md! shadow-sm" styles={{ body: { padding: 20 } }}>
       <div className="flex items-start gap-3">
         <Avatar
           size={44}
@@ -77,14 +77,14 @@ export default function ReceivedApplicationCard({ application }: ReceivedApplica
           </div>
 
           {application.message && (
-            <Paragraph className="mt-2 mb-0! rounded-xl bg-gray-50 p-3 text-sm text-gray-600 dark:bg-neutral-800 dark:text-gray-300">
-              {application.message}
+            <Paragraph className="mt-2 mb-0! text-xs! text-gray-600 dark:text-gray-300">
+              <span className="font-medium text-racing-red-600">Note:</span> {application.message}
             </Paragraph>
           )}
 
           {application.status === "REJECTED" && application.decisionReason && (
             <Text type="secondary" className="mt-2 block text-xs italic">
-              Your reason: "{application.decisionReason}"
+              Reason: "{application.decisionReason}"
             </Text>
           )}
 
