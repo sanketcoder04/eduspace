@@ -84,7 +84,7 @@ export default function OpportunitiesFeedPage() {
                 value: "TUITION_REQUIREMENT",
               },
             ]}
-            className="rounded-xl"
+            className="rounded-md!"
           />
         </div>
 

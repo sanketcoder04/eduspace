@@ -1,6 +1,6 @@
 import { Card, Button, Popconfirm, message, Typography } from "antd";
 import { Link } from "react-router-dom";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, Trash2 } from "lucide-react";
 import ApplicationStatusTag from "./ApplicationStatusTag";
 import ContactConsentPanel from "./ContactConsentPanel";
 import { useWithdrawApplication } from "../hooks/useWithdrawApplication";
@@ -30,7 +30,7 @@ export default function SentApplicationCard({ application }: SentApplicationCard
   const canWithdraw = application.status === "PENDING" || application.status === "APPROVED";
 
   return (
-    <Card className="rounded-2xl shadow-sm" bodyStyle={{ padding: 20 }}>
+    <Card className="rounded-md! shadow-sm" styles={{ body: { padding: 20 } }}>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <Link
@@ -44,14 +44,15 @@ export default function SentApplicationCard({ application }: SentApplicationCard
           </p>
 
           {application.message && (
-            <Paragraph className="mt-2 mb-0! rounded-xl bg-gray-50 p-3 text-sm text-gray-600 dark:bg-neutral-800 dark:text-gray-300">
-              {application.message}
+            <Paragraph className="mt-2 mb-0! text-xs! text-gray-600 dark:text-gray-300">
+              <span className="font-medium text-racing-red-600">Note:</span> {application.message}
             </Paragraph>
           )}
 
           {application.status === "REJECTED" && application.decisionReason && (
             <Text type="secondary" className="mt-2 block text-xs italic">
-              Reason given: "{application.decisionReason}"
+              <span className="font-medium text-racing-red-600">Reason:</span>
+              {application.decisionReason}
             </Text>
           )}
 
@@ -70,10 +71,6 @@ export default function SentApplicationCard({ application }: SentApplicationCard
               <ContactConsentPanel application={application} isAuthor={false} />
             </div>
           )}
-        </div>
-
-        <div className="flex flex-col items-end gap-2">
-          <ApplicationStatusTag status={application.status} />
 
           {canWithdraw && (
             <Popconfirm
@@ -87,11 +84,15 @@ export default function SentApplicationCard({ application }: SentApplicationCard
               okButtonProps={{ danger: true, loading: withdrawMutation.isPending }}
               onConfirm={handleWithdraw}
             >
-              <Button size="small" className="rounded-lg">
+              <Button danger size="small" className="mt-3 rounded-lg" icon={<Trash2 size={14} />}>
                 Withdraw
               </Button>
             </Popconfirm>
           )}
+        </div>
+
+        <div className="flex flex-col items-end gap-2">
+          <ApplicationStatusTag status={application.status} />
         </div>
       </div>
     </Card>

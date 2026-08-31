@@ -33,7 +33,7 @@ export default function ApplicationsPage() {
             { label: "Received", value: "RECEIVED" },
             { label: "Sent", value: "SENT" },
           ]}
-          className="rounded-xl"
+          className="rounded-md!"
         />
       </div>
 
@@ -56,7 +56,7 @@ export default function ApplicationsPage() {
           />
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-4 flex flex-col gap-2">
           {tab === "SENT"
             ? data.content.map((application) => (
                 <SentApplicationCard key={application.id} application={application} />

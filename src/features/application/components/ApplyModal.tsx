@@ -66,7 +66,7 @@ export default function ApplyModal({
         showCount
       />
 
-      <p className="mt-3 flex items-center gap-1.5 text-xs text-gray-400">
+      <p className="mt-5 flex items-center gap-1.5 text-xs text-gray-400">
         <Send size={12} />
         The author will review your profile and respond via in-app notification.
       </p>
