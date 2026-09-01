@@ -20,6 +20,8 @@ import CreateTeachingOpeningPage from "@/pages/Opportunities/CreateTeachingOpeni
 import CreateTuitionRequirementPage from "@/pages/Opportunities/CreateTuitionRequirementPage";
 import ApplicationsPage from "@/pages/Applications/ApplicationsPage";
 import OpportunityDetailPage from "@/pages/Opportunities/OpportunityDetailPage";
+import ConversationByApplicationRedirectPage from "@/pages/Chat/ConversationByApplicationRedirectPage";
+import ConversationsLayout from "@/pages/Chat/ConversationsLayout";
 
 export default function AppRouter() {
   return (
@@ -185,8 +187,38 @@ export default function AppRouter() {
         }
       />
 
-      {/* ROUTES.CONVERSATIONS / CONVERSATION_DETAIL / OPPORTUNITY_DETAIL routes
-          are added in Part 6/7 once those pages exist. */}
+      <Route
+        path={ROUTES.CONVERSATIONS}
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <ConversationsLayout />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path={ROUTES.CONVERSATIONS + "/:id"}
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <ConversationsLayout />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/chat/by-application/:applicationId"
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <ConversationByApplicationRedirectPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
 
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
