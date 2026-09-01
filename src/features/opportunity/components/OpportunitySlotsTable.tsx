@@ -49,13 +49,13 @@ export default function OpportunitySlotsTable({ details }: OpportunitySlotsTable
         Weekly Schedule
       </h3>
 
-      <div className="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2 lg:grid-cols-2">
         {orderedDays.map((day) => (
           <div
             key={day}
             className="flex items-start justify-between gap-1 border-b border-gray-50 pb-2 dark:border-neutral-800"
           >
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-200 border-l-2 border-racing-red-500 pl-1.5">
               {DAY_LABEL[day]}
             </span>
             <div className="text-right">

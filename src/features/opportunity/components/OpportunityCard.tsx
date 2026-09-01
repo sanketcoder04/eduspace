@@ -53,7 +53,7 @@ export default function OpportunityCard({ opportunity }: OpportunityCardProps) {
 
   return (
     <Card
-      className="rounded-2xl shadow-sm hover:shadow-md transition-shadow"
+      className="rounded-xl! shadow-sm hover:shadow-md transition-shadow"
       bodyStyle={{ padding: 0 }}
     >
       <div className="p-5">
