@@ -6,7 +6,7 @@ const RECONNECT_DELAYS_MS = [1000, 2000, 5000, 10000, 15000]; // capped backoff,
 
 /**
  * Owns exactly one ChatSocket for the whole app — mount this once, high in
- * the tree (see ChatSocketProvider below), not per-conversation-page, so
+ * the tree (see ChatSocketProvider), not per-conversation-page, so
  * navigating between chat pages doesn't tear down and reopen the connection.
  */
 export function useChatSocket() {
@@ -35,27 +35,35 @@ export function useChatSocket() {
     }, delay);
   }, [clearReconnectTimer]);
 
+  // The ONLY place connectionState is ever set. Every setState call in this
+  // hook now happens inside this callback — reacting to an external event
+  // (the socket's own lifecycle), never as a bare statement in an effect
+  // body — which is exactly the distinction the lint rule is checking for.
+  const handleSocketStateChange = useCallback(
+    (state: ConnectionState) => {
+      setConnectionState(state);
+      if (state === "connected") {
+        reconnectAttemptRef.current = 0; // reset backoff on a successful connect
+        clearReconnectTimer();
+      } else if (state === "disconnected") {
+        scheduleReconnect();
+      }
+    },
+    [scheduleReconnect, clearReconnectTimer]
+  );
+
   useEffect(() => {
     if (!auth.isAuthenticated || !auth.accessToken) {
+      clearReconnectTimer();
+      // If a socket exists from a previous session, tearing it down here
+      // still only ever calls setState via handleSocketStateChange above —
+      // never a direct setConnectionState(...) statement in this effect.
       socketRef.current?.disconnect();
       socketRef.current = null;
-      setConnectionState("disconnected");
-      clearReconnectTimer();
       return;
     }
 
-    const socket = new ChatSocket({
-      onStateChange: (state) => {
-        setConnectionState(state);
-        if (state === "connected") {
-          reconnectAttemptRef.current = 0; // reset backoff on a successful connect
-          clearReconnectTimer();
-        } else if (state === "disconnected") {
-          scheduleReconnect();
-        }
-      },
-    });
-
+    const socket = new ChatSocket({ onStateChange: handleSocketStateChange });
     socketRef.current = socket;
     socket.connect();
 
@@ -66,7 +74,7 @@ export function useChatSocket() {
     };
     // Re-runs on token change too — e.g. after a silent refresh cycle, or
     // right after login, when the previous effect's socket had no token yet.
-  }, [auth.isAuthenticated, auth.accessToken, scheduleReconnect, clearReconnectTimer]);
+  }, [auth.isAuthenticated, auth.accessToken, clearReconnectTimer, handleSocketStateChange]);
 
   return {
     connectionState,

@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { useChatSocketContext } from "../context/ChatSocketContext";
 import type {
   MessageResponse,
   ConversationResponse,
@@ -8,6 +7,7 @@ import type {
   PresenceEvent,
   WsErrorEvent,
 } from "../types/chat.types";
+import { useChatSocketContext } from "./useChatSocketContext";
 
 interface ConversationSubscriptionHandlers {
   onMessage?: (message: MessageResponse) => void;
@@ -19,15 +19,22 @@ interface ConversationSubscriptionHandlers {
 }
 
 /**
- * Subscribes to the five /user/queue/* destinations described in the backend
- * WS design, using whatever ChatSocket the app-wide ChatSocketProvider
- * currently holds. Re-subscribes automatically whenever the connection
- * transitions to "connected" (covers both first mount and any reconnect).
+ * Subscribes to the five /user/queue/* destinations, using whatever
+ * ChatSocket the app-wide ChatSocketProvider currently holds. Re-subscribes
+ * automatically whenever the connection transitions to "connected" (covers
+ * both first mount and any reconnect).
  */
 export function useConversationSubscription(handlers: ConversationSubscriptionHandlers) {
   const { connectionState, getSocket } = useChatSocketContext();
+
   const handlersRef = useRef(handlers);
-  handlersRef.current = handlers; // always call the latest handlers without re-subscribing on every render
+
+  // Syncing a ref from props/state must happen inside an effect, not as a
+  // bare assignment during render — this keeps the "always call the latest
+  // handlers without re-subscribing" behavior while satisfying that rule.
+  useEffect(() => {
+    handlersRef.current = handlers;
+  });
 
   useEffect(() => {
     if (connectionState !== "connected") return;
