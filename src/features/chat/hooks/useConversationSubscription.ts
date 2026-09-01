@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useChatSocketContext } from "./useChatSocketContext";
 import type {
   MessageResponse,
   ConversationResponse,
@@ -7,7 +8,6 @@ import type {
   PresenceEvent,
   WsErrorEvent,
 } from "../types/chat.types";
-import { useChatSocketContext } from "./useChatSocketContext";
 
 interface ConversationSubscriptionHandlers {
   onMessage?: (message: MessageResponse) => void;
@@ -18,20 +18,11 @@ interface ConversationSubscriptionHandlers {
   onError?: (event: WsErrorEvent) => void;
 }
 
-/**
- * Subscribes to the five /user/queue/* destinations, using whatever
- * ChatSocket the app-wide ChatSocketProvider currently holds. Re-subscribes
- * automatically whenever the connection transitions to "connected" (covers
- * both first mount and any reconnect).
- */
 export function useConversationSubscription(handlers: ConversationSubscriptionHandlers) {
   const { connectionState, getSocket } = useChatSocketContext();
 
   const handlersRef = useRef(handlers);
 
-  // Syncing a ref from props/state must happen inside an effect, not as a
-  // bare assignment during render — this keeps the "always call the latest
-  // handlers without re-subscribing" behavior while satisfying that rule.
   useEffect(() => {
     handlersRef.current = handlers;
   });
@@ -62,6 +53,14 @@ export function useConversationSubscription(handlers: ConversationSubscriptionHa
         handlersRef.current.onError?.(msg)
       ),
     ];
+
+    // This effect runs on EVERY mount while already connected (e.g. opening
+    // the Chat page long after the socket first connected), and again on
+    // every reconnect — both cases the old connect-time-only snapshot
+    // missed. Requesting a fresh snapshot here means presence is always
+    // correct the moment something is actually listening for it, instead of
+    // depending on a connect event that may have happened minutes earlier.
+    socket.publish("/app/presence/refresh", {});
 
     return () => {
       subscriptions.forEach((sub) => sub?.unsubscribe());
