@@ -6,13 +6,16 @@ import { queryClient } from "./queryClient";
 import { antdTheme } from "@/theme";
 import { AuthProvider } from "@/features/auth/context/AuthProvider";
 import { ENV } from "@/config/env";
+import { ChatSocketProvider } from "@/features/chat/context/ChatSocketContext";
 
 export function AppProviders({ children }: PropsWithChildren) {
   return (
     <GoogleOAuthProvider clientId={ENV.GOOGLE_CLIENT_ID}>
       <ConfigProvider theme={antdTheme}>
         <QueryClientProvider client={queryClient}>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <ChatSocketProvider>{children}</ChatSocketProvider>
+          </AuthProvider>
         </QueryClientProvider>
       </ConfigProvider>
     </GoogleOAuthProvider>

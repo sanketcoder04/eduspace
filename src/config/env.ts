@@ -1,4 +1,5 @@
 export const ENV = {
   API_BASE_URL: import.meta.env.VITE_API_BASE_URL,
   GOOGLE_CLIENT_ID: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+  WS_BASE_URL: import.meta.env.VITE_WS_BASE_URL ?? import.meta.env.VITE_API_BASE_URL,
 } as const;

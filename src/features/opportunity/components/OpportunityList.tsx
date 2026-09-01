@@ -41,7 +41,9 @@ export default function OpportunityList({
   return (
     <div className="space-y-4">
       {page.content.map((opportunity) => (
-        <OpportunityCard key={opportunity.id} opportunity={opportunity} />
+        <div className="mb-2">
+          <OpportunityCard key={opportunity.id} opportunity={opportunity} />
+        </div>
       ))}
 
       {page.totalPages > 1 && (
