@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { ChatSocket, type ConnectionState } from "../services/chatSocket";
+import type { ConversationResponse } from "../types/chat.types";
 
 const RECONNECT_DELAYS_MS = [1000, 2000, 5000, 10000, 15000]; // capped backoff, last value repeats
 
@@ -11,6 +13,7 @@ const RECONNECT_DELAYS_MS = [1000, 2000, 5000, 10000, 15000]; // capped backoff,
  */
 export function useChatSocket() {
   const { auth } = useAuth();
+  const queryClient = useQueryClient();
   const socketRef = useRef<ChatSocket | null>(null);
   const reconnectAttemptRef = useRef(0);
   const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -74,7 +77,48 @@ export function useChatSocket() {
     };
     // Re-runs on token change too — e.g. after a silent refresh cycle, or
     // right after login, when the previous effect's socket had no token yet.
-  }, [auth.isAuthenticated, auth.accessToken, clearReconnectTimer, handleSocketStateChange]);
+  }, [
+    auth.isAuthenticated,
+    auth.accessToken,
+    clearReconnectTimer,
+    handleSocketStateChange,
+    queryClient,
+  ]);
+
+  useEffect(() => {
+    if (connectionState !== "connected") return;
+
+    const socket = socketRef.current;
+    if (!socket) return;
+
+    const conversationSubscription = socket.subscribe<ConversationResponse>(
+      "/user/queue/conversations",
+      (conversation) => {
+        queryClient.setQueryData<{ content: ConversationResponse[] } | undefined>(
+          ["conversations", "list", 0],
+          (old) => {
+            if (!old) return old;
+            const exists = old.content.some((item) => item.id === conversation.id);
+            const content = exists
+              ? old.content.map((item) => (item.id === conversation.id ? conversation : item))
+              : [conversation, ...old.content];
+            return { ...old, content };
+          }
+        );
+      }
+    );
+    const messageSubscription = socket.subscribe<{ conversationId: string }>(
+      "/user/queue/messages",
+      () => {
+        void queryClient.invalidateQueries({ queryKey: ["conversations", "list"] });
+      }
+    );
+
+    return () => {
+      conversationSubscription?.unsubscribe();
+      messageSubscription?.unsubscribe();
+    };
+  }, [connectionState, queryClient]);
 
   return {
     connectionState,

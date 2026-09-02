@@ -1,10 +1,15 @@
 import { NavLink } from "react-router-dom";
+import { Badge } from "antd";
 import AppLogo from "@/components/ui/AppLogo/AppLogo";
 import NotificationBellDesktop from "./NotificationBellDesktop";
 import UserMenu from "./UserMenu";
 import { NAV_LINKS } from "./NavLinks";
+import { useTotalUnreadMessages } from "@/features/chat/hooks/useTotalUnreadMessages";
+import { ROUTES } from "@/router/routes";
 
 export default function Navbar() {
+  const unreadMessages = useTotalUnreadMessages();
+
   return (
     <header className="sticky top-0 z-40 hidden h-16 border-b border-gray-200 bg-white/95 backdrop-blur dark:border-neutral-800 dark:bg-neutral-900/95 lg:block">
       <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-6">
@@ -24,7 +29,13 @@ export default function Navbar() {
                 }
               `}
             >
-              <Icon size={16} />
+              {to === ROUTES.CONVERSATIONS ? (
+                <Badge count={unreadMessages} size="small" offset={[4, -2]}>
+                  <Icon size={16} />
+                </Badge>
+              ) : (
+                <Icon size={16} />
+              )}
               {label}
             </NavLink>
           ))}

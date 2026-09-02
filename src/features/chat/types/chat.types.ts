@@ -19,6 +19,8 @@ export interface ConversationResponse {
   status: ConversationStatus;
 
   lastMessagePreview?: string;
+  unreadCount: number;
+
   lastMessageAt?: string;
 
   createdAt: string;

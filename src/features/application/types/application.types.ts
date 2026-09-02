@@ -4,6 +4,8 @@ export interface ContactShareConsent {
   phoneShared: boolean;
   emailShared: boolean;
   updatedAt?: string;
+  phoneNumber?: string;
+  email?: string;
 }
 
 export interface ApplicationResponse {

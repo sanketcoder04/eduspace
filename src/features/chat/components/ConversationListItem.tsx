@@ -1,4 +1,4 @@
-import { Avatar } from "antd";
+import { Avatar, Badge } from "antd";
 import { User as UserIcon } from "lucide-react";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { getOtherParty } from "../utils/chatHelpers";
@@ -45,15 +45,28 @@ export default function ConversationListItem({
           <p className="truncate text-sm font-semibold text-gray-900 dark:text-white">
             {otherParty.name}
           </p>
-          {conversation.lastMessageAt && (
-            <span className="shrink-0 text-[11px] text-gray-400">
-              {formatRelativeTime(conversation.lastMessageAt)}
-            </span>
-          )}
+          <div className="flex shrink-0 items-center gap-2">
+            {conversation.lastMessageAt && (
+              <span className="text-[11px] text-gray-400">
+                {formatRelativeTime(conversation.lastMessageAt)}
+              </span>
+            )}
+            {conversation.unreadCount > 0 && (
+              <Badge count={conversation.unreadCount} size="small" />
+            )}
+          </div>
         </div>
         <p className="truncate text-xs text-gray-500">{conversation.opportunityTitle}</p>
         {conversation.lastMessagePreview && (
-          <p className="truncate text-xs text-gray-400">{conversation.lastMessagePreview}</p>
+          <p
+            className={`truncate text-xs ${
+              conversation.unreadCount > 0
+                ? "font-semibold text-gray-700 dark:text-gray-200"
+                : "text-gray-400"
+            }`}
+          >
+            {conversation.lastMessagePreview}
+          </p>
         )}
         {conversation.status === "CLOSED" && (
           <span className="mt-0.5 inline-block rounded-full bg-gray-100 px-2 py-0.5 text-[10px] text-gray-500 dark:bg-neutral-800">

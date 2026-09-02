@@ -1,7 +1,12 @@
 import { NavLink } from "react-router-dom";
+import { Badge } from "antd";
 import { NAV_LINKS } from "./NavLinks";
+import { useTotalUnreadMessages } from "@/features/chat/hooks/useTotalUnreadMessages";
+import { ROUTES } from "@/router/routes";
 
 export default function MobileTabBar() {
+  const unreadMessages = useTotalUnreadMessages();
+
   return (
     <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-gray-200 bg-white/95 backdrop-blur dark:border-neutral-800 dark:bg-neutral-900/95 lg:hidden">
       <div className="flex items-center justify-around px-1 py-1.5">
@@ -14,7 +19,13 @@ export default function MobileTabBar() {
               ${isActive ? "text-racing-red-600 dark:text-racing-red-300" : "text-gray-500 dark:text-gray-400"}
             `}
           >
-            <Icon size={20} />
+            {to === ROUTES.CONVERSATIONS ? (
+              <Badge count={unreadMessages} size="small" offset={[2, 0]}>
+                <Icon size={20} />
+              </Badge>
+            ) : (
+              <Icon size={20} />
+            )}
             {label}
           </NavLink>
         ))}
