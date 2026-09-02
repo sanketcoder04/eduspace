@@ -29,7 +29,7 @@ export default function ContactConsentPanel({ application, isAuthor }: ContactCo
   };
 
   return (
-    <div className="rounded-xl border border-gray-200 p-4 dark:border-neutral-700">
+    <div className="rounded-md border border-gray-200 p-4 dark:border-neutral-700">
       <div className="mb-3 flex items-center gap-1.5">
         <ShieldCheck size={16} className="text-racing-red-500" />
         <Text strong className="text-sm">

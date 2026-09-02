@@ -31,7 +31,7 @@ export default function OpportunityApplyPanel({ opportunity }: OpportunityApplyP
       <Alert
         type="info"
         showIcon
-        message="This is your posting"
+        title="This is your posting"
         description={
           <span>
             Manage applications from the{" "}
@@ -74,8 +74,10 @@ export default function OpportunityApplyPanel({ opportunity }: OpportunityApplyP
           <p className="text-sm font-medium text-gray-700 dark:text-gray-200">Your application</p>
           <p className="text-xs text-gray-400">
             {existingApplication.status === "APPROVED"
-              ? "Approved — you can now chat with the author."
-              : "Waiting for the author to review."}
+              ? "Finalized — you can chat with the author."
+              : existingApplication.status === "IN_DISCUSSION"
+                ? "The author wants to discuss further — you can now chat."
+                : "Waiting for the author to review."}
           </p>
         </div>
         <ApplicationStatusTag status={existingApplication.status} />

@@ -1,14 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { approveApplication } from "../services/application.service";
+import { approveApplicationToChat } from "../services/application.service";
 
-export function useApproveApplication() {
+export function useApproveToChat() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: approveApplication,
+    mutationFn: approveApplicationToChat,
     onSuccess: () => {
-      // Approval also opens a Conversation server-side, so the chat list is
-      // stale the moment this succeeds too.
       queryClient.invalidateQueries({ queryKey: ["applications", "received"] });
       queryClient.invalidateQueries({ queryKey: ["conversations"] });
     },
