@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Badge, Drawer } from "antd";
 import { Bell } from "lucide-react";
 import { useNotificationPanel } from "./useNotificationPanel";
@@ -7,6 +7,10 @@ import NotificationList from "./NotificationList";
 export default function NotificationBellMobile() {
   const [open, setOpen] = useState(false);
   const panel = useNotificationPanel(() => setOpen(false));
+
+  useEffect(() => {
+    if (open) panel.refetch();
+  }, [open]);
 
   return (
     <>
@@ -28,7 +32,7 @@ export default function NotificationBellMobile() {
       <Drawer
         title="Notifications"
         placement="bottom"
-        height="70vh"
+        size="70vh"
         open={open}
         onClose={() => setOpen(false)}
         styles={{ body: { padding: 0 } }}
