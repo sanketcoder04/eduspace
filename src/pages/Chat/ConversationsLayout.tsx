@@ -6,15 +6,13 @@ import { useConversations } from "@/features/chat/hooks/useConversations";
 import { useConversationSubscription } from "@/features/chat/hooks/useConversationSubscription";
 import ConversationSidebar from "@/features/chat/components/ConversationSidebar";
 import ConversationThread from "@/features/chat/components/ConversationThread";
-import { useQueryClient } from "@tanstack/react-query";
-import type { MessageResponse, ConversationResponse } from "@/features/chat/types/chat.types";
+import type { MessageResponse, ReadReceiptEvent } from "@/features/chat/types/chat.types";
 import { ROUTES } from "@/router/routes";
 
 export default function ConversationsLayout() {
   const { id: activeConversationId } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { auth } = useAuth();
-  const queryClient = useQueryClient();
 
   const { data: conversationsPage, isLoading } = useConversations({ page: 0, size: 50 });
 
@@ -22,34 +20,17 @@ export default function ConversationsLayout() {
   const [typingByConversation, setTypingByConversation] = useState<Record<string, boolean>>({});
   const [liveMessage, setLiveMessage] = useState<MessageResponse | null>(null);
 
+  const [readReceiptEvent, setReadReceiptEvent] = useState<ReadReceiptEvent | null>(null);
+
   const { sendMessage, sendTyping, markRead, isConnected } = useConversationSubscription({
     onMessage: (message) => {
       setLiveMessage(message);
-
-      queryClient.setQueryData<{ content: ConversationResponse[] } | undefined>(
-        ["conversations", "list", 0],
-        (old) => {
-          if (!old) return old;
-          return {
-            ...old,
-            content: old.content.map((c) =>
-              c.id === message.conversationId
-                ? { ...c, lastMessagePreview: message.content, lastMessageAt: message.createdAt }
-                : c
-            ),
-          };
-        }
-      );
-    },
-    onConversationUpdate: () => {
-      queryClient.invalidateQueries({ queryKey: ["conversations", "list"] });
     },
     onTyping: (event) => {
       setTypingByConversation((prev) => ({ ...prev, [event.conversationId]: event.typing }));
     },
-    onReadReceipt: () => {
-      // Read state lives on individual messages; the next natural refetch
-      // or live message pick this up rather than hand-patching state here.
+    onReadReceipt: (event) => {
+      setReadReceiptEvent(event);
     },
     onPresence: (event) => {
       setOnlineUserIds((prev) => {
@@ -116,6 +97,7 @@ export default function ConversationsLayout() {
               isOtherPartyTyping={!!typingByConversation[activeConversation.id]}
               isSocketConnected={isConnected}
               liveMessage={liveMessage}
+              readReceiptEvent={readReceiptEvent}
               onSendViaSocket={(content) => sendMessage(activeConversation.id, content)}
               onTypingChange={(typing) => sendTyping(activeConversation.id, typing)}
               onMarkRead={() => markRead(activeConversation.id)}

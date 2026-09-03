@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { Card, Avatar, Button, Input, Popconfirm, message, Typography } from "antd";
 import { Link } from "react-router-dom";
-import { User as UserIcon, MessageCircle, Check, X } from "lucide-react";
+import { User as UserIcon, MessageCircle, Check, X, CircleCheckBig, CircleX } from "lucide-react";
 import ApplicationStatusTag from "./ApplicationStatusTag";
 import ContactConsentPanel from "./ContactConsentPanel";
-import { useApproveApplication } from "../hooks/useApproveApplication";
 import { useRejectApplication } from "../hooks/useRejectApplication";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import { formatRelativeTime } from "@/utils/formatDate";
 import type { ApplicationResponse } from "../types/application.types";
 import { ROUTES } from "@/router/routes";
+import { useFinalizeApplication } from "../hooks/useFinalizeApplication";
+import { useApproveToChat } from "../hooks/useApproveToChat";
 
 const { Text, Paragraph } = Typography;
 
@@ -21,15 +22,25 @@ export default function ReceivedApplicationCard({ application }: ReceivedApplica
   const [rejectReason, setRejectReason] = useState("");
   const [showRejectInput, setShowRejectInput] = useState(false);
 
-  const approveMutation = useApproveApplication();
+  const approveToChatMutation = useApproveToChat();
+  const finalizeMutation = useFinalizeApplication();
   const rejectMutation = useRejectApplication();
 
-  const handleApprove = async () => {
+  const handleApproveToChat = async () => {
     try {
-      await approveMutation.mutateAsync(application.id);
+      await approveToChatMutation.mutateAsync(application.id);
       message.success("Application approved — you can now chat.");
     } catch (error) {
       message.error(getErrorMessage(error, "Couldn't approve this application."));
+    }
+  };
+
+  const handleFinalize = async () => {
+    try {
+      await finalizeMutation.mutateAsync(application.id);
+      message.success("Application finalized.");
+    } catch (error) {
+      message.error(getErrorMessage(error, "Couldn't finalize this application."));
     }
   };
 
@@ -125,11 +136,11 @@ export default function ReceivedApplicationCard({ application }: ReceivedApplica
                     type="primary"
                     size="small"
                     icon={<Check size={14} />}
-                    loading={approveMutation.isPending}
-                    onClick={handleApprove}
+                    loading={approveToChatMutation.isPending}
+                    onClick={handleApproveToChat}
                     className="rounded-lg font-semibold"
                   >
-                    Approve
+                    Approve to Chat
                   </Button>
                   <Button
                     danger
@@ -145,30 +156,63 @@ export default function ReceivedApplicationCard({ application }: ReceivedApplica
             </div>
           )}
 
-          {application.status === "APPROVED" && (
+          {application.status === "IN_DISCUSSION" && (
             <div className="mt-3 space-y-3">
-              <Link to={ROUTES.CONVERSATION_FOR_APPLICATION(application.id)}>
+              <div className="flex flex-wrap gap-2">
+                <Link to={ROUTES.CONVERSATION_FOR_APPLICATION(application.id)}>
+                  <Button
+                    icon={<MessageCircle size={14} />}
+                    size="small"
+                    className="rounded-lg mb-2"
+                  >
+                    Open Chat
+                  </Button>
+                </Link>
                 <Button
-                  type="default"
+                  type="primary"
                   size="small"
-                  icon={<MessageCircle size={14} />}
-                  className="rounded-lg"
+                  loading={finalizeMutation.isPending}
+                  onClick={handleFinalize}
+                  className="rounded-lg font-semibold"
+                  icon={<CircleCheckBig size={14} />}
                 >
-                  Open Chat
+                  Finalize Applicant
                 </Button>
-              </Link>
+              </div>
 
               <ContactConsentPanel application={application} isAuthor />
 
               <Popconfirm
-                title="Reject this approved application?"
+                title="Reject this applicant?"
                 description="This will close the chat. The applicant will be notified."
                 okText="Reject"
                 okButtonProps={{ danger: true }}
                 onConfirm={handleReject}
               >
                 <Button danger size="small" className="rounded-lg">
-                  Reject Anyway
+                  Reject
+                </Button>
+              </Popconfirm>
+            </div>
+          )}
+
+          {application.status === "APPROVED" && (
+            <div className="mt-3 space-y-3">
+              <Link to={ROUTES.CONVERSATION_FOR_APPLICATION(application.id)}>
+                <Button icon={<MessageCircle size={14} />} size="small" className="rounded-lg mb-2">
+                  Open Chat
+                </Button>
+              </Link>
+              <ContactConsentPanel application={application} isAuthor />
+              <Popconfirm
+                title="Reject this finalized application?"
+                description="This will re-open the seat and close the chat. The applicant will be notified."
+                okText="Reject"
+                okButtonProps={{ danger: true }}
+                onConfirm={handleReject}
+              >
+                <Button danger size="small" className="rounded-lg" icon={<CircleX size={14} />}>
+                  Undo Finalization
                 </Button>
               </Popconfirm>
             </div>

@@ -1,4 +1,4 @@
-import { Switch, Typography, Tooltip } from "antd";
+import { Switch, Typography } from "antd";
 import { Phone, Mail, ShieldCheck } from "lucide-react";
 import { useUpdateContactConsent } from "../hooks/useUpdateContactConsent";
 import type { ApplicationResponse } from "../types/application.types";
@@ -29,7 +29,7 @@ export default function ContactConsentPanel({ application, isAuthor }: ContactCo
   };
 
   return (
-    <div className="rounded-xl border border-gray-200 p-4 dark:border-neutral-700">
+    <div className="rounded-md border border-gray-200 p-4 dark:border-neutral-700">
       <div className="mb-3 flex items-center gap-1.5">
         <ShieldCheck size={16} className="text-racing-red-500" />
         <Text strong className="text-sm">
@@ -73,18 +73,16 @@ export default function ContactConsentPanel({ application, isAuthor }: ContactCo
             </Text>
           )}
           {phoneShared && (
-            <Tooltip title="Shared by the author">
-              <span className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
-                <Phone size={14} className="text-green-600" /> Phone number shared
-              </span>
-            </Tooltip>
+            <span className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+              <Phone size={14} className="text-green-600" />
+              {application.contactShareConsent.phoneNumber ?? "Phone number shared"}
+            </span>
           )}
           {emailShared && (
-            <Tooltip title="Shared by the author">
-              <span className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
-                <Mail size={14} className="text-green-600" /> Email address shared
-              </span>
-            </Tooltip>
+            <span className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+              <Mail size={14} className="text-green-600" />
+              {application.contactShareConsent.email ?? "Email shared"}
+            </span>
           )}
         </div>
       )}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Badge, Dropdown } from "antd";
 import { Bell } from "lucide-react";
 import { useNotificationPanel } from "./useNotificationPanel";
@@ -7,6 +7,10 @@ import NotificationList from "./NotificationList";
 export default function NotificationBellDesktop() {
   const [open, setOpen] = useState(false);
   const panel = useNotificationPanel(() => setOpen(false));
+
+  useEffect(() => {
+    if (open) panel.refetch();
+  }, [open]);
 
   return (
     <Dropdown

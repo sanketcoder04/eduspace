@@ -52,9 +52,16 @@ export async function getReceivedApplications(
   return data.data;
 }
 
-export async function approveApplication(id: string): Promise<ApplicationResponse> {
+export async function approveApplicationToChat(id: string): Promise<ApplicationResponse> {
   const { data } = await api.patch<ApiEnvelope<ApplicationResponse>>(
-    API_ENDPOINTS.APPLICATION.APPROVE(id)
+    API_ENDPOINTS.APPLICATION.APPROVE_TO_CHAT(id)
+  );
+  return data.data;
+}
+
+export async function finalizeApplication(id: string): Promise<ApplicationResponse> {
+  const { data } = await api.patch<ApiEnvelope<ApplicationResponse>>(
+    API_ENDPOINTS.APPLICATION.FINALIZE(id)
   );
   return data.data;
 }

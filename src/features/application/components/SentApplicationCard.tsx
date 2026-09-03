@@ -1,6 +1,6 @@
 import { Card, Button, Popconfirm, message, Typography } from "antd";
 import { Link } from "react-router-dom";
-import { MessageCircle, Trash2 } from "lucide-react";
+import { CircleCheckBig, MessageCircle, Trash2 } from "lucide-react";
 import ApplicationStatusTag from "./ApplicationStatusTag";
 import ContactConsentPanel from "./ContactConsentPanel";
 import { useWithdrawApplication } from "../hooks/useWithdrawApplication";
@@ -27,7 +27,10 @@ export default function SentApplicationCard({ application }: SentApplicationCard
     }
   };
 
-  const canWithdraw = application.status === "PENDING" || application.status === "APPROVED";
+  const canWithdraw =
+    application.status === "PENDING" ||
+    application.status === "IN_DISCUSSION" ||
+    application.status === "APPROVED";
 
   return (
     <Card className="rounded-md! shadow-sm" styles={{ body: { padding: 20 } }}>
@@ -56,19 +59,24 @@ export default function SentApplicationCard({ application }: SentApplicationCard
             </Text>
           )}
 
-          {application.status === "APPROVED" && (
+          {(application.status === "IN_DISCUSSION" || application.status === "APPROVED") && (
             <div className="mt-3 space-y-3">
               <Link to={ROUTES.CONVERSATION_FOR_APPLICATION(application.id)}>
                 <Button
                   type="primary"
                   size="small"
                   icon={<MessageCircle size={14} />}
-                  className="rounded-lg font-semibold"
+                  className="rounded-lg font-semibold mb-2"
                 >
                   Open Chat
                 </Button>
               </Link>
               <ContactConsentPanel application={application} isAuthor={false} />
+              {application.status === "APPROVED" && (
+                <p className="text-xs font-semibold text-green-600 flex gap-1 items-center">
+                  This application has been finalized. <CircleCheckBig size={16} />
+                </p>
+              )}
             </div>
           )}
 

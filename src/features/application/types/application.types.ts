@@ -1,9 +1,11 @@
-export type ApplicationStatus = "PENDING" | "APPROVED" | "REJECTED" | "WITHDRAWN";
+export type ApplicationStatus = "PENDING" | "IN_DISCUSSION" | "APPROVED" | "REJECTED" | "WITHDRAWN";
 
 export interface ContactShareConsent {
   phoneShared: boolean;
   emailShared: boolean;
   updatedAt?: string;
+  phoneNumber?: string;
+  email?: string;
 }
 
 export interface ApplicationResponse {

@@ -10,7 +10,7 @@ import MessageComposer from "./MessageComposer";
 import TypingIndicator from "./TypingIndicator";
 import PresenceDot from "./PresenceDot";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import type { ConversationResponse, MessageResponse } from "../types/chat.types";
+import type { ConversationResponse, MessageResponse, ReadReceiptEvent } from "../types/chat.types";
 import { ROUTES } from "@/router/routes";
 
 interface ConversationThreadProps {
@@ -19,6 +19,7 @@ interface ConversationThreadProps {
   isOtherPartyTyping: boolean;
   isSocketConnected: boolean;
   liveMessage: MessageResponse | null;
+  readReceiptEvent: ReadReceiptEvent | null;
   onSendViaSocket: (content: string) => void;
   onTypingChange: (typing: boolean) => void;
   onMarkRead: () => void;
@@ -32,6 +33,7 @@ const PAGE_SIZE = 30;
  * synchronously in an effect can run before the new bubble's height is
  * reflected in scrollHeight, landing short of the true bottom. Two nested
  * rAFs (not one) reliably land after paint across browsers. */
+
 function scrollToBottomNextFrame(el: HTMLDivElement | null) {
   if (!el) return;
   requestAnimationFrame(() => {
@@ -47,6 +49,7 @@ export default function ConversationThread({
   isOtherPartyTyping,
   isSocketConnected,
   liveMessage,
+  readReceiptEvent,
   onSendViaSocket,
   onTypingChange,
   onMarkRead,
@@ -142,6 +145,21 @@ export default function ConversationThread({
     onMarkRead();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversation.id]);
+
+  // The OTHER party just told the server they've read up to now — flip
+  // every currently-unread message WE sent to read=true, so the tick
+  // updates live without needing a refresh or reopening the thread.
+  useEffect(() => {
+    if (!readReceiptEvent || readReceiptEvent.conversationId !== conversation.id) return;
+
+    setMessages((prev) =>
+      prev.map((m) =>
+        m.senderId === auth.user?.id && !m.read
+          ? { ...m, read: true, readAt: readReceiptEvent.readAt }
+          : m
+      )
+    );
+  }, [readReceiptEvent, conversation.id, auth.user?.id]);
 
   const loadOlder = async () => {
     setIsLoadingMore(true);

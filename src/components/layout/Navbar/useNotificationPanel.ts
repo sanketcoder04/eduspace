@@ -26,7 +26,7 @@ export function useNotificationPanel(onAfterSelect?: () => void) {
   const navigate = useNavigate();
 
   const { data: unreadCount } = useUnreadNotificationCount();
-  const { data: page, isLoading } = useNotifications({ page: 0, size: 8 });
+  const { data: page, isLoading, refetch } = useNotifications({ page: 0, size: 8 });
   const markReadMutation = useMarkNotificationRead();
   const markAllReadMutation = useMarkAllNotificationsRead();
 
@@ -41,6 +41,7 @@ export function useNotificationPanel(onAfterSelect?: () => void) {
     unreadCount: unreadCount ?? 0,
     page,
     isLoading,
+    refetch,
     handleSelect,
     markAllRead: () => markAllReadMutation.mutate(),
     markAllReadPending: markAllReadMutation.isPending,
