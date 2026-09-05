@@ -3,7 +3,7 @@ import { useMyTeacherProfile } from "./useMyTeacherProfile";
 import { useMyStudentProfile } from "./useMyStudentProfile";
 
 export function useMyProfile() {
-  const { auth } = useAuth();
+  const { auth, isBootstrapping } = useAuth();
   const role = auth.user?.role;
 
   const teacherQuery = useMyTeacherProfile(role === "TEACHER");
@@ -15,5 +15,10 @@ export function useMyProfile() {
   if (role === "STUDENT") {
     return { profile: studentQuery.data, ...studentQuery };
   }
-  return { profile: undefined, isLoading: false, isFetched: true, isError: false };
+  return {
+    profile: undefined,
+    isLoading: isBootstrapping,
+    isFetched: !isBootstrapping,
+    isError: false,
+  };
 }

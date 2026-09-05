@@ -8,11 +8,12 @@ import ConversationSidebar from "@/features/chat/components/ConversationSidebar"
 import ConversationThread from "@/features/chat/components/ConversationThread";
 import type { MessageResponse, ReadReceiptEvent } from "@/features/chat/types/chat.types";
 import { ROUTES } from "@/router/routes";
+import { Spin } from "antd";
 
 export default function ConversationsLayout() {
   const { id: activeConversationId } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { auth } = useAuth();
+  const { auth, isBootstrapping } = useAuth();
 
   const { data: conversationsPage, isLoading } = useConversations({ page: 0, size: 50 });
 
@@ -51,20 +52,17 @@ export default function ConversationsLayout() {
     navigate(ROUTES.CONVERSATION_DETAIL(conversationId));
   };
 
+  if (isBootstrapping || !auth.user?.id) {
+    return (
+      <div className="flex h-[calc(100vh-64px-56px)] items-center justify-center sm:h-[calc(100vh-88px)]">
+        <Spin />
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto max-w-6xl px-0 py-0 sm:px-6 sm:py-6">
-      {/*
-        h-[calc(...)] fixes the OUTER height, but that alone doesn't stop
-        a tall inner content list from growing this box past that height —
-        CSS grid/flex items default to min-height:auto, which means "grow to
-        fit my content" wins over "respect the row height" every time. Every
-        wrapper below needs min-h-0 to opt OUT of that default, or the fixed
-        height here is purely cosmetic and the page will grow/scroll instead
-        of the messages list scrolling internally.
-      */}
       <div className="grid h-[calc(100vh-64px-56px)] min-h-0 grid-cols-1 overflow-hidden rounded-none border-0 bg-white dark:bg-neutral-900 sm:h-[calc(100vh-88px)] sm:rounded-2xl sm:border sm:border-gray-200 lg:grid-cols-[320px_1fr] dark:sm:border-neutral-800">
-        {/* Sidebar column — h-full + min-h-0 + overflow-hidden so ITS content
-            (the conversation list) is the thing that scrolls, not this box growing. */}
         <div
           className={`
             h-full min-h-0 overflow-hidden border-gray-100 dark:border-neutral-800

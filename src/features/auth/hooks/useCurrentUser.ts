@@ -6,7 +6,10 @@ export function useCurrentUser(enabled: boolean) {
     queryKey: ["auth", "me"],
     queryFn: getCurrentUser,
     enabled,
-    retry: false,
+    retry: 3,
+    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 8000),
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
     staleTime: 1000 * 60 * 5,
   });
 }

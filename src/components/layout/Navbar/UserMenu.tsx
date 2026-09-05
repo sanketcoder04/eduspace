@@ -1,4 +1,4 @@
-import { Dropdown, Avatar } from "antd";
+import { Dropdown, Avatar, Skeleton } from "antd";
 import { useNavigate } from "react-router-dom";
 import { User as UserIcon, LogOut, Settings } from "lucide-react";
 import { useAuth } from "@/features/auth/hooks/useAuth";
@@ -9,10 +9,18 @@ import { ROUTES } from "@/router/routes";
 
 export default function UserMenu() {
   const navigate = useNavigate();
-  const { logout } = useAuth();
-  const { profile } = useMyProfile();
+  const { auth, logout } = useAuth();
+  const { profile, isLoading } = useMyProfile();
 
   const avatarUrl = profile && "avatarUrl" in profile ? profile.avatarUrl : undefined;
+
+  // Every read here is fully optional-chained end to end. The previous
+  // version — auth.user?.email.split("@")[0] — only guarded the `.email`
+  // property access, not the `.split()` CALL: if auth.user was ever
+  // undefined for a render (e.g. mid re-fetch after a token refresh), that
+  // line threw a real runtime error and silently broke this component until
+  // a full reload remounted everything cleanly. This can never throw.
+  const displayName = profile?.name ?? auth.user?.email?.split("@")[0] ?? "Account";
 
   const handleLogout = async () => {
     try {
@@ -47,15 +55,19 @@ export default function UserMenu() {
     },
   ];
 
+  if (isLoading) {
+    return <Skeleton.Avatar active size={32} shape="circle" />;
+  }
+
   return (
     <Dropdown menu={{ items }} trigger={["click"]} placement="bottomRight">
       <button
         type="button"
-        className="flex items-center gap-2 rounded-full p-1 transition hover:bg-gray-100 dark:hover:bg-neutral-800 cursor-pointer"
+        className="flex items-center gap-2 rounded-full p-1 transition hover:bg-gray-100 dark:hover:bg-neutral-800"
       >
         <Avatar size={32} src={avatarUrl} icon={!avatarUrl && <UserIcon size={16} />} />
         <span className="hidden pr-1 text-sm font-medium text-gray-700 dark:text-gray-200 sm:inline">
-          {profile?.name}
+          {displayName}
         </span>
       </button>
     </Dropdown>
