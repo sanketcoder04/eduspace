@@ -84,6 +84,8 @@ export default function ProfilePage() {
               <ActivityStatsCard
                 followersCount={followStats?.followersCount}
                 followingCount={followStats?.followingCount}
+                interactive
+                userId={auth.user?.id}
               />
               <div className="rounded-2xl border border-dashed border-gray-200 mt-5 p-5 text-sm text-gray-400 dark:border-neutral-700">
                 Recommended profiles to follow — coming soon.
@@ -255,6 +257,8 @@ export default function ProfilePage() {
             <ActivityStatsCard
               followersCount={followStats?.followersCount}
               followingCount={followStats?.followingCount}
+              interactive
+              userId={auth.user?.id}
             />
             <div className="rounded-2xl border border-dashed border-gray-200 mt-5 p-5 text-sm text-gray-400 dark:border-neutral-700">
               Recommended profiles to follow — coming soon.

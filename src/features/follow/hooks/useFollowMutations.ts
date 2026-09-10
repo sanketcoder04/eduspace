@@ -8,7 +8,9 @@ export function useFollowUser() {
     mutationFn: followUser,
     onSuccess: (_data, userId) => {
       queryClient.invalidateQueries({ queryKey: ["follows", "status", userId] });
-      queryClient.invalidateQueries({ queryKey: ["follows", "stats", userId] });
+      queryClient.invalidateQueries({ queryKey: ["follows", "stats"] });
+      queryClient.invalidateQueries({ queryKey: ["follows", "followers"] });
+      queryClient.invalidateQueries({ queryKey: ["follows", "following"] });
     },
   });
 }
@@ -20,7 +22,9 @@ export function useUnfollowUser() {
     mutationFn: unfollowUser,
     onSuccess: (_data, userId) => {
       queryClient.invalidateQueries({ queryKey: ["follows", "status", userId] });
-      queryClient.invalidateQueries({ queryKey: ["follows", "stats", userId] });
+      queryClient.invalidateQueries({ queryKey: ["follows", "stats"] });
+      queryClient.invalidateQueries({ queryKey: ["follows", "followers"] });
+      queryClient.invalidateQueries({ queryKey: ["follows", "following"] });
     },
   });
 }

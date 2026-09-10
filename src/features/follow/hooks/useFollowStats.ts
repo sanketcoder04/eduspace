@@ -6,5 +6,7 @@ export function useFollowStats(userId: string | undefined) {
     queryKey: ["follows", "stats", userId],
     queryFn: () => getFollowStats(userId as string),
     enabled: !!userId,
+    staleTime: 0,
+    refetchOnMount: "always",
   });
 }
