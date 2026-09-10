@@ -41,6 +41,7 @@ export default function OpportunityCard({ opportunity }: OpportunityCardProps) {
     sessionDurationHours,
     sessionsPerWeek,
     status,
+    authorId,
     authorName,
     authorAvatarUrl,
     authorRole,
@@ -66,7 +67,11 @@ export default function OpportunityCard({ opportunity }: OpportunityCardProps) {
               icon={!authorAvatarUrl && <UserIcon size={20} />}
             />
             <div>
-              <p className="text-sm font-semibold text-gray-900 dark:text-white">{authorName}</p>
+              <Link to={ROUTES.PROFILE_BY_ID(authorId)}>
+                <span className="text-sm font-semibold text-gray-900 hover:text-racing-red-600 dark:text-white">
+                  {authorName}
+                </span>
+              </Link>
               <p className="text-xs text-gray-500">
                 {authorRole === "TEACHER" ? "Teacher" : "Student"} · {formatRelativeTime(createdAt)}
               </p>

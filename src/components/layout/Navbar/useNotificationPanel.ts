@@ -16,12 +16,13 @@ function resolveNotificationRoute(notification: NotificationResponse): string | 
         : ROUTES.CONVERSATIONS;
     case "OPPORTUNITY":
       return notification.referenceId ? ROUTES.OPPORTUNITY_DETAIL(notification.referenceId) : null;
+    case "FOLLOW":
+      return notification.referenceId ? ROUTES.PROFILE_BY_ID(notification.referenceId) : null;
     default:
       return null;
   }
 }
 
-/** Shared by both the desktop Dropdown panel and the mobile Drawer panel — one source of truth for data + selection behavior. */
 export function useNotificationPanel(onAfterSelect?: () => void) {
   const navigate = useNavigate();
 

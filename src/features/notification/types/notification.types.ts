@@ -5,14 +5,15 @@ export type NotificationType =
   | "APPLICATION_REJECTED"
   | "APPLICATION_WITHDRAWN"
   | "NEW_MESSAGE"
-  | "CONTACT_SHARED";
+  | "CONTACT_SHARED"
+  | "NEW_FOLLOWER";
 
 export interface NotificationResponse {
   id: string;
   type: NotificationType;
   title: string;
   body: string;
-  referenceType?: "OPPORTUNITY" | "APPLICATION" | "CONVERSATION";
+  referenceType?: "OPPORTUNITY" | "APPLICATION" | "CONVERSATION" | "FOLLOW";
   referenceId?: string;
   read: boolean;
   readAt?: string;

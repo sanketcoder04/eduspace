@@ -28,6 +28,7 @@ import CredentialsCard from "@/features/profile/components/display/CredentialsCa
 import CredentialsStep from "@/features/profile/components/wizard/steps/CredentialsStep";
 import StudentCertificatesStep from "@/features/profile/components/wizard/steps/StudentCertificatesStep";
 import { MODAL_BODY_SCROLL_STYLE } from "@/constants/modal";
+import { useFollowStats } from "@/features/follow/hooks/useFollowStats";
 
 type EditModal = "basic" | "education" | "subjects" | "credentials" | null;
 
@@ -50,6 +51,8 @@ export default function ProfilePage() {
   const updateStudentAvatar = useUpdateStudentAvatar();
   const updateStudentCover = useUpdateStudentCover();
   const deleteSubjectOffering = useDeleteSubjectOffering();
+
+  const { data: followStats } = useFollowStats(auth.user?.id);
 
   if (isTeacher) {
     const profile = teacherQuery.data;
@@ -78,7 +81,12 @@ export default function ProfilePage() {
           }
           recommendations={
             <>
-              <ActivityStatsCard />
+              <ActivityStatsCard
+                followersCount={followStats?.followersCount}
+                followingCount={followStats?.followingCount}
+                interactive
+                userId={auth.user?.id}
+              />
               <div className="rounded-2xl border border-dashed border-gray-200 mt-5 p-5 text-sm text-gray-400 dark:border-neutral-700">
                 Recommended profiles to follow — coming soon.
               </div>
@@ -246,7 +254,12 @@ export default function ProfilePage() {
         }
         recommendations={
           <>
-            <ActivityStatsCard />
+            <ActivityStatsCard
+              followersCount={followStats?.followersCount}
+              followingCount={followStats?.followingCount}
+              interactive
+              userId={auth.user?.id}
+            />
             <div className="rounded-2xl border border-dashed border-gray-200 mt-5 p-5 text-sm text-gray-400 dark:border-neutral-700">
               Recommended profiles to follow — coming soon.
             </div>

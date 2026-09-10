@@ -18,6 +18,7 @@ export const API_ENDPOINTS = {
   PROFILE: {
     TEACHER: {
       ME: "/profile/teacher/me",
+      VIEW: (userId: string) => `/profile/teacher/view/${userId}`,
       BASIC_INFO: "/profile/teacher/basic-info",
       EDUCATION: "/profile/teacher/education",
       SUBJECTS: "/profile/teacher/subjects",
@@ -33,6 +34,7 @@ export const API_ENDPOINTS = {
 
     STUDENT: {
       ME: "/profile/student/me",
+      VIEW: (userId: string) => `/profile/student/view/${userId}`,
       BASIC_INFO: "/profile/student/basic-info",
       EDUCATION: "/profile/student/education",
       VERIFICATION: "/profile/student/verification",

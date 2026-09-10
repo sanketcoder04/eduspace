@@ -151,3 +151,12 @@ export interface UpdateImageRequest {
 }
 
 export type MediaFolder = "AVATAR" | "COVER" | "RESUME" | "CERTIFICATE" | "SELFIE";
+
+export type UserRole = "TEACHER" | "STUDENT";
+
+export interface UserSummary {
+  id: string;
+  name: string;
+  role: UserRole;
+  lastLoginAt: string;
+}

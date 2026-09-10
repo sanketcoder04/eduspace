@@ -117,15 +117,11 @@ export default function BasicInfoCard({
         />
 
         {isOwner && (
-          <Tooltip title="Activates once profile search & discovery is live">
-            <div>
-              <InfoRow
-                icon={<Eye size={16} />}
-                label="Profile views"
-                value={String(profileViews ?? 0)}
-              />
-            </div>
-          </Tooltip>
+          <InfoRow
+            icon={<Eye size={16} />}
+            label="Profile views"
+            value={String(profileViews ?? 0)}
+          />
         )}
       </div>
     </div>
