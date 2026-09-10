@@ -22,6 +22,7 @@ import ApplicationsPage from "@/pages/Applications/ApplicationsPage";
 import OpportunityDetailPage from "@/pages/Opportunities/OpportunityDetailPage";
 import ConversationByApplicationRedirectPage from "@/pages/Chat/ConversationByApplicationRedirectPage";
 import ConversationsLayout from "@/pages/Chat/ConversationsLayout";
+import ProfileByIdPage from "@/pages/Profile/ProfileByIdPage";
 
 export default function AppRouter() {
   return (
@@ -215,6 +216,17 @@ export default function AppRouter() {
           <ProtectedRoute>
             <DashboardLayout>
               <ConversationByApplicationRedirectPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/profile/:userId"
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <ProfileByIdPage />
             </DashboardLayout>
           </ProtectedRoute>
         }

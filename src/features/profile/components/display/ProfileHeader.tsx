@@ -4,6 +4,7 @@ import VerificationBadge from "./VerificationBadge";
 import AvatarUpload from "../shared/AvatarUpload";
 import type { Address, VerificationStatus } from "../../types/profile.types";
 import CoverPhotoUpload from "../shared/CoverPhotoUpload";
+import FollowButton from "@/features/follow/components/FollowButton";
 
 const { Title, Text } = Typography;
 
@@ -19,6 +20,7 @@ interface ProfileHeaderProps {
   onCoverChange?: (url: string) => void;
   onEditProfile?: () => void;
   showCover?: boolean;
+  userId?: string; // Add userId prop to pass to FollowButton
 }
 
 export default function ProfileHeader({
@@ -33,6 +35,7 @@ export default function ProfileHeader({
   onCoverChange,
   onEditProfile,
   showCover = true,
+  userId,
 }: ProfileHeaderProps) {
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
@@ -55,7 +58,7 @@ export default function ProfileHeader({
           {isOwner ? (
             <AvatarUpload value={avatarUrl} onChange={(url) => onAvatarChange?.(url)} size={96} />
           ) : (
-            <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-gray-200 text-2xl font-semibold text-gray-500 shadow-md dark:border-neutral-900">
+            <div className="relative z-10 flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-gray-200 text-2xl font-semibold text-gray-500 shadow-md dark:border-neutral-900">
               {avatarUrl ? (
                 <img src={avatarUrl} alt={name} className="h-full w-full object-cover" />
               ) : (
@@ -69,6 +72,7 @@ export default function ProfileHeader({
               <span className="hidden sm:inline">Edit profile</span>
             </Button>
           )}
+          {!isOwner && <FollowButton targetUserId={userId as string} />}
         </div>
 
         <div className="mt-4 space-y-1">

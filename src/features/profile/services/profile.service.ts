@@ -11,6 +11,7 @@ import type {
   SubmitVerificationRequest,
   UpdateCertificateRequest,
   AddCertificateRequest,
+  UserSummary,
 } from "../types/profile.types";
 
 interface ApiEnvelope<T> {
@@ -230,6 +231,25 @@ export async function updateStudentCover(url: string): Promise<StudentProfile> {
     {
       url,
     }
+  );
+  return data.data;
+}
+
+export async function getUserSummary(userId: string): Promise<UserSummary> {
+  const { data } = await api.get<ApiEnvelope<UserSummary>>(`/users/${userId}/summary`);
+  return data.data;
+}
+
+export async function getTeacherProfileByUserId(userId: string): Promise<TeacherProfile> {
+  const { data } = await api.get<ApiEnvelope<TeacherProfile>>(
+    API_ENDPOINTS.PROFILE.TEACHER.VIEW(userId)
+  );
+  return data.data;
+}
+
+export async function getStudentProfileByUserId(userId: string): Promise<StudentProfile> {
+  const { data } = await api.get<ApiEnvelope<StudentProfile>>(
+    API_ENDPOINTS.PROFILE.STUDENT.VIEW(userId)
   );
   return data.data;
 }
