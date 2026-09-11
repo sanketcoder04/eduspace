@@ -81,4 +81,24 @@ export const API_ENDPOINTS = {
     READ: (id: string) => `/notifications/${id}/read`,
     READ_ALL: "/notifications/read-all",
   },
+
+  POST: {
+    BASE: "/posts",
+    FEED: "/posts/feed",
+    BY_USER: (userId: string) => `/posts/user/${userId}`,
+    BY_ID: (id: string) => `/posts/${id}`,
+    LIKE: (id: string) => `/posts/${id}/like`,
+    VOTE: (id: string) => `/posts/${id}/vote`,
+    COMMENTS: (postId: string) => `/posts/${postId}/comments`,
+  },
+
+  COMMENT: {
+    REPLIES: (commentId: string) => `/comments/${commentId}/replies`,
+    BY_ID: (id: string) => `/comments/${id}`,
+    LIKE: (id: string) => `/comments/${id}/like`,
+  },
+
+  USER: {
+    SEARCH: "/users/search",
+  },
 } as const;
