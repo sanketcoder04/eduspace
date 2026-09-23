@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import AuthLayout from "@/layouts/AuthLayout";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import LoginPage from "@/pages/Auth/LoginPage";
@@ -23,12 +23,11 @@ import OpportunityDetailPage from "@/pages/Opportunities/OpportunityDetailPage";
 import ConversationByApplicationRedirectPage from "@/pages/Chat/ConversationByApplicationRedirectPage";
 import ConversationsLayout from "@/pages/Chat/ConversationsLayout";
 import ProfileByIdPage from "@/pages/Profile/ProfileByIdPage";
+import HomePage from "@/pages/Home/HomePage";
 
 export default function AppRouter() {
   return (
     <Routes>
-      <Route path={ROUTES.HOME} element={<Navigate to={ROUTES.LOGIN} replace />} />
-
       {/* ---- Public / Auth routes (unchanged) ---- */}
       <Route
         path={ROUTES.LOGIN}
@@ -102,6 +101,17 @@ export default function AppRouter() {
       />
 
       {/* ---- Protected routes — now wrapped in DashboardLayout for the navbar ---- */}
+      <Route
+        path={ROUTES.HOME}
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <HomePage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
       <Route
         path={ROUTES.DASHBOARD}
         element={
