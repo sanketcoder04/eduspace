@@ -10,7 +10,7 @@ export default function MobileTabBar() {
   return (
     <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-gray-200 bg-white/95 backdrop-blur dark:border-neutral-800 dark:bg-neutral-900/95 lg:hidden">
       <div className="flex items-center justify-around px-1 py-1.5">
-        {NAV_LINKS.map(({ label, to, icon: Icon }) => (
+        {NAV_LINKS.map(({ to, icon: Icon }) => (
           <NavLink
             key={to}
             to={to}
@@ -26,7 +26,6 @@ export default function MobileTabBar() {
             ) : (
               <Icon size={20} />
             )}
-            {label}
           </NavLink>
         ))}
       </div>

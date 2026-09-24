@@ -150,7 +150,15 @@ export interface UpdateImageRequest {
   url: string;
 }
 
-export type MediaFolder = "AVATAR" | "COVER" | "RESUME" | "CERTIFICATE" | "SELFIE";
+export type MediaFolder =
+  | "AVATAR"
+  | "COVER"
+  | "RESUME"
+  | "CERTIFICATE"
+  | "SELFIE"
+  | "POST_IMAGE"
+  | "POST_VIDEO"
+  | "POST_DOCUMENT";
 
 export type UserRole = "TEACHER" | "STUDENT";
 

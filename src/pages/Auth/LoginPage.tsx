@@ -43,7 +43,7 @@ export default function LoginPage() {
 
       message.success(response.message);
 
-      navigate(ROUTES.DASHBOARD, {
+      navigate(ROUTES.HOME, {
         replace: true,
       });
     } catch (error: any) {

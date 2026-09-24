@@ -27,6 +27,8 @@ export const ROUTES = {
   CONVERSATIONS: "/chat",
   CONVERSATION_DETAIL: (conversationId: string) => `/chat/${conversationId}`,
 
+  POST_DETAIL: (id: string) => `/posts/${id}`,
+
   SEARCH: "/search",
 
   SETTINGS: "/settings",
