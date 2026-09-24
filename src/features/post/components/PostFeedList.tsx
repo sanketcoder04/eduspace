@@ -1,16 +1,11 @@
 import { useState } from "react";
 import { Pagination, Empty, Skeleton } from "antd";
 import PostCard from "./display/PostCard";
-import type { Page } from "@/types/api.types";
-import type { PostResponse } from "../types/post.types";
+import { useFeed } from "../hooks/useFeed";
 
-interface PostFeedListProps {
-  fetchPage: (page: number) => { data: Page<PostResponse> | undefined; isLoading: boolean };
-}
-
-export default function PostFeedList({ fetchPage }: PostFeedListProps) {
+export default function PostFeedList() {
   const [page, setPage] = useState(0);
-  const { data, isLoading } = fetchPage(page);
+  const { data, isLoading } = useFeed({ page, size: 10 });
 
   if (isLoading && !data) {
     return (

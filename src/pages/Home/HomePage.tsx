@@ -1,6 +1,5 @@
 import PostComposerTrigger from "@/features/post/components/composer/PostComposerTrigger";
 import PostFeedList from "@/features/post/components/PostFeedList";
-import { useFeed } from "@/features/post/hooks/useFeed";
 
 export default function HomePage() {
   return (
@@ -9,7 +8,7 @@ export default function HomePage() {
         <PostComposerTrigger />
       </div>
 
-      <PostFeedList fetchPage={(page) => useFeed({ page, size: 10 })} />
+      <PostFeedList />
     </div>
   );
 }
