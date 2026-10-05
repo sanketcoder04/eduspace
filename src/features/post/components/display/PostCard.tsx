@@ -45,7 +45,7 @@ export default function PostCard({ post }: PostCardProps) {
             icon={!post.authorAvatarUrl && <UserIcon size={18} />}
           />
           <div>
-            <p className="text-sm font-semibold text-gray-900 hover:underline dark:text-white">
+            <p className="text-sm font-semibold text-gray-900 hover:text-racing-red-600 dark:text-white">
               {post.authorName}
             </p>
             <p className="text-xs text-gray-400">
