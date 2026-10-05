@@ -1,6 +1,6 @@
 import AppLoader from "@/components/ui/AppLoader/AppLoader";
 import { useAuth } from "@/features/auth/hooks/useAuth";
-import SideProfile from "@/features/post/components/comments/SideProfile";
+import SideProfile from "@/features/post/components/SideProfile";
 import PostComposerTrigger from "@/features/post/components/composer/PostComposerTrigger";
 import PostFeedList from "@/features/post/components/PostFeedList";
 import { useMyStudentProfile } from "@/features/profile/hooks/useMyStudentProfile";

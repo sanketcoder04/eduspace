@@ -34,7 +34,7 @@ export default function SideProfile({
   showCover = true,
 }: SideProfileProps) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-neutral-800 dark:bg-neutral-900 md:none">
       {showCover && (
         <CoverPhotoUpload
           value={coverImageUrl}

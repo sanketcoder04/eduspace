@@ -12,7 +12,7 @@ export default function HomeLayout({ sideprofile, recommendations, children }: H
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[260px_minmax(0,1fr)_300px] lg:gap-6">
         {/* Left Sidebar */}
         <div
-          className={`order-2 min-w-0 space-y-4 lg:order-1 lg:h-fit lg:sticky ${STICKY_CONTENT_TOP_CLASS}`}
+          className={`order-2 hidden min-w-0 space-y-4 lg:order-1 lg:block lg:h-fit lg:sticky ${STICKY_CONTENT_TOP_CLASS}`}
         >
           {sideprofile}
         </div>
