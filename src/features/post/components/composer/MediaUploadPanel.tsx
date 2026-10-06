@@ -90,7 +90,7 @@ export default function MediaUploadPanel({ type, mediaUrls, onChange }: MediaUpl
             type="button"
             onClick={() => inputRef.current?.click()}
             disabled={uploadMutation.isPending}
-            className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-gray-300 py-6 text-sm text-gray-500 transition hover:border-racing-red-400 hover:text-racing-red-600 disabled:opacity-60 dark:border-neutral-700"
+            className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-gray-300 py-6 text-sm text-gray-500 transition hover:border-racing-red-400 hover:text-racing-red-600 disabled:opacity-60 dark:border-neutral-700 cursor-pointer"
           >
             {uploadMutation.isPending ? (
               <Loader2 size={16} className="animate-spin" />

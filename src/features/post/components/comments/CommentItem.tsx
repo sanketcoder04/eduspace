@@ -63,7 +63,7 @@ export default function CommentItem({ comment, postId }: CommentItemProps) {
           <button
             type="button"
             onClick={() => toggleLikeMutation.mutate(comment.id)}
-            className={`flex items-center gap-1 font-medium ${comment.likedByViewer ? "text-racing-red-600" : ""}`}
+            className={`flex items-center gap-1 font-medium ${comment.likedByViewer ? "text-racing-red-600" : ""} cursor-pointer`}
           >
             <Heart size={12} fill={comment.likedByViewer ? "currentColor" : "none"} />
             {comment.likesCount > 0 ? comment.likesCount : "Like"}
@@ -72,7 +72,7 @@ export default function CommentItem({ comment, postId }: CommentItemProps) {
             <button
               type="button"
               onClick={() => setReplyBoxOpen((prev) => !prev)}
-              className="font-medium"
+              className="font-medium cursor-pointer"
             >
               Reply
             </button>
@@ -86,7 +86,7 @@ export default function CommentItem({ comment, postId }: CommentItemProps) {
             >
               <button
                 type="button"
-                className="flex items-center gap-1 font-medium text-gray-400 hover:text-racing-red-600"
+                className="flex items-center gap-1 font-medium text-gray-400 hover:text-racing-red-600 cursor-pointer"
               >
                 <Trash2 size={12} />
               </button>
@@ -111,7 +111,7 @@ export default function CommentItem({ comment, postId }: CommentItemProps) {
           <button
             type="button"
             onClick={() => setRepliesOpen((prev) => !prev)}
-            className="mt-1 pl-3 text-xs font-medium text-racing-red-600 hover:underline"
+            className="mt-1 pl-3 text-xs font-medium text-racing-red-600 hover:underline cursor-pointer"
           >
             {repliesOpen
               ? "Hide replies"

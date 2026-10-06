@@ -7,9 +7,10 @@ import { getErrorMessage } from "@/utils/getErrorMessage";
 
 interface FollowButtonProps {
   targetUserId: string;
+  compact?: boolean;
 }
 
-export default function FollowButton({ targetUserId }: FollowButtonProps) {
+export default function FollowButton({ targetUserId, compact = false }: FollowButtonProps) {
   const { auth } = useAuth();
   const { data: isFollowing, isLoading } = useFollowStatus(targetUserId);
   const followMutation = useFollowUser();
@@ -38,7 +39,7 @@ export default function FollowButton({ targetUserId }: FollowButtonProps) {
       onClick={handleClick}
       className="rounded-xl font-semibold"
     >
-      {isFollowing ? "Following" : "Follow"}
+      {isFollowing ? (compact ? "" : "Following") : compact ? "" : "Follow"}
     </Button>
   );
 }

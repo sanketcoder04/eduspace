@@ -52,7 +52,7 @@ export default function PollBuilder({
         <button
           type="button"
           onClick={() => onOptionsChange([...options, ""])}
-          className="flex items-center gap-1.5 text-sm font-medium text-racing-red-600 hover:underline"
+          className="flex items-center gap-1.5 text-sm font-medium text-racing-red-600 hover:underline cursor-pointer"
         >
           <Plus size={14} /> Add option
         </button>

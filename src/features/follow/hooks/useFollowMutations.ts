@@ -11,6 +11,7 @@ export function useFollowUser() {
       queryClient.invalidateQueries({ queryKey: ["follows", "stats"] });
       queryClient.invalidateQueries({ queryKey: ["follows", "followers"] });
       queryClient.invalidateQueries({ queryKey: ["follows", "following"] });
+      queryClient.invalidateQueries({ queryKey: ["follows", "recommendations"] });
     },
   });
 }
@@ -25,6 +26,7 @@ export function useUnfollowUser() {
       queryClient.invalidateQueries({ queryKey: ["follows", "stats"] });
       queryClient.invalidateQueries({ queryKey: ["follows", "followers"] });
       queryClient.invalidateQueries({ queryKey: ["follows", "following"] });
+      queryClient.invalidateQueries({ queryKey: ["follows", "recommendations"] });
     },
   });
 }

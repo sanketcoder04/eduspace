@@ -1,6 +1,6 @@
 import api from "@/services/api/axios";
 import type { Page, PageableParams } from "@/types/api.types";
-import type { FollowedUser } from "../types/follow.types";
+import type { FollowedUser, RecommendedProfile } from "../types/follow.types";
 
 interface ApiEnvelope<T> {
   success: boolean;
@@ -50,6 +50,13 @@ export async function getFollowing(
 ): Promise<Page<FollowedUser>> {
   const { data } = await api.get<ApiEnvelope<Page<FollowedUser>>>(`/follows/${userId}/following`, {
     params: toPageParams(pageable),
+  });
+  return data.data;
+}
+
+export async function getRecommendedProfiles(limit = 5): Promise<RecommendedProfile[]> {
+  const { data } = await api.get<ApiEnvelope<RecommendedProfile[]>>("/follows/recommendations", {
+    params: { limit },
   });
   return data.data;
 }

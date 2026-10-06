@@ -17,11 +17,12 @@ import CommentSection from "../comments/CommentSection";
 
 interface PostCardProps {
   post: PostResponse;
+  defaultCommentsOpen?: boolean;
 }
 
-export default function PostCard({ post }: PostCardProps) {
+export default function PostCard({ post, defaultCommentsOpen = false }: PostCardProps) {
   const { auth } = useAuth();
-  const [commentsOpen, setCommentsOpen] = useState(false);
+  const [commentsOpen, setCommentsOpen] = useState(defaultCommentsOpen);
   const deleteMutation = useDeletePost();
 
   const isOwner = auth.user?.id === post.authorId;
@@ -82,7 +83,7 @@ export default function PostCard({ post }: PostCardProps) {
             <button
               type="button"
               aria-label="Post options"
-              className="text-gray-400 hover:text-gray-600"
+              className="text-gray-400 hover:text-gray-600 cursor-pointer"
             >
               <MoreVertical size={18} />
             </button>
