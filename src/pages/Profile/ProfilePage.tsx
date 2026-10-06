@@ -79,7 +79,7 @@ export default function ProfilePage() {
               />
             </>
           }
-          recommendations={
+          analytics={
             <>
               <ActivityStatsCard
                 followersCount={followStats?.followersCount}
@@ -87,9 +87,6 @@ export default function ProfilePage() {
                 interactive
                 userId={auth.user?.id}
               />
-              <div className="rounded-2xl border border-dashed border-gray-200 mt-5 p-5 text-sm text-gray-400 dark:border-neutral-700">
-                Recommended profiles to follow — coming soon.
-              </div>
             </>
           }
         >
@@ -252,7 +249,7 @@ export default function ProfilePage() {
             />
           </>
         }
-        recommendations={
+        analytics={
           <>
             <ActivityStatsCard
               followersCount={followStats?.followersCount}
@@ -260,9 +257,6 @@ export default function ProfilePage() {
               interactive
               userId={auth.user?.id}
             />
-            <div className="rounded-2xl border border-dashed border-gray-200 mt-5 p-5 text-sm text-gray-400 dark:border-neutral-700">
-              Recommended profiles to follow — coming soon.
-            </div>
           </>
         }
       >

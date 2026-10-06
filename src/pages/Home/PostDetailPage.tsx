@@ -1,14 +1,19 @@
-import AppLoader from "@/components/ui/AppLoader/AppLoader";
-import { useAuth } from "@/features/auth/hooks/useAuth";
+import { useParams } from "react-router-dom";
+import { Skeleton, Result } from "antd";
+import PostCard from "@/features/post/components/display/PostCard";
+import HomeLayout from "@/layouts/HomeLayout";
 import SideProfile from "@/features/post/components/SideProfile";
-import PostComposerTrigger from "@/features/post/components/composer/PostComposerTrigger";
-import PostFeedList from "@/features/post/components/PostFeedList";
+import AppLoader from "@/components/ui/AppLoader/AppLoader";
 import { useMyStudentProfile } from "@/features/profile/hooks/useMyStudentProfile";
 import { useMyTeacherProfile } from "@/features/profile/hooks/useMyTeacherProfile";
-import HomeLayout from "@/layouts/HomeLayout";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 import ProfileRecommendationsCard from "@/features/follow/components/ProfileRecommendationsCard";
+import { usePost } from "@/features/post/hooks/usePost";
 
-export default function HomePage() {
+export default function PostDetailPage() {
+  const { id } = useParams<{ id: string }>();
+  const { data: post, isLoading, isError } = usePost(id);
+
   const { auth } = useAuth();
   const isTeacher = auth.user?.role === "TEACHER";
 
@@ -37,13 +42,17 @@ export default function HomePage() {
       }
       recommendations={<ProfileRecommendationsCard />}
     >
-      <div className="mx-auto max-w-2xl sm:pt-0 sm:py-8">
-        <div className="mb-4">
-          <PostComposerTrigger />
+      {isLoading ? (
+        <div className="rounded-2xl border border-gray-200 p-5 dark:border-neutral-800">
+          <Skeleton active avatar paragraph={{ rows: 4 }} />
         </div>
-
-        <PostFeedList />
-      </div>
+      ) : isError || !post ? (
+        <div className="py-16">
+          <Result status="404" title="Post not found" subTitle="This post may have been removed." />
+        </div>
+      ) : (
+        <PostCard post={post} defaultCommentsOpen />
+      )}
     </HomeLayout>
   );
 }

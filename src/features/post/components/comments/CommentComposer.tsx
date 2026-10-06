@@ -55,7 +55,7 @@ export default function CommentComposer({
         onClick={handleSubmit}
         disabled={createMutation.isPending}
         aria-label="Post"
-        className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-racing-red-500 text-white transition hover:bg-racing-red-600 disabled:opacity-40"
+        className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-racing-red-500 text-white transition hover:bg-racing-red-600 disabled:opacity-40 cursor-pointer"
       >
         <Send size={14} />
       </button>

@@ -28,7 +28,7 @@ export default function PostActionsBar({
       <button
         type="button"
         onClick={() => toggleLikeMutation.mutate(post.id)}
-        className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition ${
+        className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition cursor-pointer ${
           post.likedByViewer
             ? "text-racing-red-600"
             : "text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-neutral-800"
@@ -41,7 +41,7 @@ export default function PostActionsBar({
       <button
         type="button"
         onClick={onToggleComments}
-        className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition ${
+        className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition cursor-pointer ${
           commentsOpen
             ? "text-racing-red-600"
             : "text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-neutral-800"
@@ -54,7 +54,7 @@ export default function PostActionsBar({
       <button
         type="button"
         onClick={handleShare}
-        className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-gray-500 transition hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-neutral-800"
+        className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-gray-500 transition hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-neutral-800 cursor-pointer"
       >
         <Share2 size={16} />
         Share

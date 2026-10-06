@@ -11,3 +11,10 @@ export interface FollowedUser {
   role: "TEACHER" | "STUDENT";
   followedAt: string;
 }
+
+export interface RecommendedProfile {
+  userId: string;
+  name: string;
+  avatarUrl?: string;
+  role: "TEACHER" | "STUDENT";
+}

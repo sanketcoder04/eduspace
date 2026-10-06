@@ -24,6 +24,7 @@ import ConversationByApplicationRedirectPage from "@/pages/Chat/ConversationByAp
 import ConversationsLayout from "@/pages/Chat/ConversationsLayout";
 import ProfileByIdPage from "@/pages/Profile/ProfileByIdPage";
 import HomePage from "@/pages/Home/HomePage";
+import PostDetailPage from "@/pages/Home/PostDetailPage";
 
 export default function AppRouter() {
   return (
@@ -107,6 +108,17 @@ export default function AppRouter() {
           <ProtectedRoute>
             <DashboardLayout>
               <HomePage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path={ROUTES.POST_DETAIL(":id")}
+        element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <PostDetailPage />
             </DashboardLayout>
           </ProtectedRoute>
         }

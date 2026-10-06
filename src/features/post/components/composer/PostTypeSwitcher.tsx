@@ -14,7 +14,7 @@ export default function PostTypeSwitcher({ value, onChange }: PostTypeSwitcherPr
           key={type}
           type="button"
           onClick={() => onChange(type)}
-          className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-sm font-medium transition ${
+          className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-sm font-medium transition cursor-pointer ${
             value === type
               ? "bg-racing-red-50 text-racing-red-600 dark:bg-racing-red-950"
               : "text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-neutral-800"
