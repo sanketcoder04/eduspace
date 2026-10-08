@@ -29,6 +29,7 @@ import CredentialsStep from "@/features/profile/components/wizard/steps/Credenti
 import StudentCertificatesStep from "@/features/profile/components/wizard/steps/StudentCertificatesStep";
 import { MODAL_BODY_SCROLL_STYLE } from "@/constants/modal";
 import { useFollowStats } from "@/features/follow/hooks/useFollowStats";
+import ActivitySection from "@/features/profile/components/display/ActivitySection";
 
 type EditModal = "basic" | "education" | "subjects" | "credentials" | null;
 
@@ -112,6 +113,8 @@ export default function ProfilePage() {
           />
 
           <AboutCard about={profile.about} isOwner />
+
+          <ActivitySection userId={auth.user?.id} postedOpportunitiesEnabled />
 
           <EducationTimeline
             education={profile.education}
@@ -250,14 +253,12 @@ export default function ProfilePage() {
           </>
         }
         analytics={
-          <>
-            <ActivityStatsCard
-              followersCount={followStats?.followersCount}
-              followingCount={followStats?.followingCount}
-              interactive
-              userId={auth.user?.id}
-            />
-          </>
+          <ActivityStatsCard
+            followersCount={followStats?.followersCount}
+            followingCount={followStats?.followingCount}
+            interactive
+            userId={auth.user?.id}
+          />
         }
       >
         <ProfileHeader
@@ -283,6 +284,8 @@ export default function ProfilePage() {
         />
 
         <AboutCard about={profile.about} isOwner />
+
+        <ActivitySection userId={auth.user?.id} postedOpportunitiesEnabled />
 
         <EducationTimeline
           education={profile.education}

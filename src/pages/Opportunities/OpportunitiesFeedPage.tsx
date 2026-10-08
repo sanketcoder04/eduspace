@@ -52,6 +52,8 @@ export default function OpportunitiesFeedPage() {
 
   const createHref = isTeacher ? ROUTES.CREATE_TEACHING_OPENING : ROUTES.CREATE_TUITION_REQUIREMENT;
 
+  console.log("data", data);
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
       {/* Header — deliberately two independent rows on mobile (tabs, then

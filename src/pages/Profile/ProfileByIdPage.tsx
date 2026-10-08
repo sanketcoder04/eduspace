@@ -13,6 +13,7 @@ import BasicInfoCard from "@/features/profile/components/display/BasicInfoCard";
 import CredentialsCard from "@/features/profile/components/display/CredentialsCard";
 import { ROUTES } from "@/router/routes";
 import ActivityStatsCard from "@/features/profile/components/display/ActivityStatsCard";
+import ActivitySection from "@/features/profile/components/display/ActivitySection";
 
 export default function ProfileByIdPage() {
   const { userId } = useParams<{ userId: string }>();
@@ -53,13 +54,11 @@ export default function ProfileByIdPage() {
             lastLoginAt={lastLoginAt}
           />
         }
-        recommendations={
-          <>
-            <ActivityStatsCard
-              followersCount={followStats?.followersCount}
-              followingCount={followStats?.followingCount}
-            />
-          </>
+        analytics={
+          <ActivityStatsCard
+            followersCount={followStats?.followersCount}
+            followingCount={followStats?.followingCount}
+          />
         }
       >
         <ProfileHeader
@@ -74,11 +73,9 @@ export default function ProfileByIdPage() {
           userId={userId as string}
         />
 
-        {/* <div className="flex justify-end">
-          <FollowButton targetUserId={userId as string} />
-        </div> */}
-
         <AboutCard about={profile.about} isOwner={false} />
+
+        <ActivitySection userId={userId} postedOpportunitiesEnabled={!!role} />
 
         <EducationTimeline education={profile.education} isOwner={false} />
 
