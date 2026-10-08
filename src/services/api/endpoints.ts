@@ -86,6 +86,7 @@ export const API_ENDPOINTS = {
     BASE: "/posts",
     FEED: "/posts/feed",
     BY_USER: (userId: string) => `/posts/user/${userId}`,
+    COUNT_BY_USER: (userId: string) => `/posts/user/${userId}/count`,
     BY_ID: (id: string) => `/posts/${id}`,
     LIKE: (id: string) => `/posts/${id}/like`,
     VOTE: (id: string) => `/posts/${id}/vote`,

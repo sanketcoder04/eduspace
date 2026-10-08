@@ -9,6 +9,7 @@ export function useCreatePost() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts", "feed"] });
       queryClient.invalidateQueries({ queryKey: ["posts", "user"] });
+      queryClient.invalidateQueries({ queryKey: ["posts", "count"] });
     },
   });
 }

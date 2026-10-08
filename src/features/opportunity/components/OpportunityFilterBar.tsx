@@ -6,6 +6,7 @@ import {
   MODE_OPTIONS,
   CLASS_FORMAT_OPTIONS,
   DATE_POSTED_OPTIONS,
+  STATUS_OPTIONS,
 } from "../constants/opportunityOptions";
 import type { OpportunityFilterRequest } from "../types/opportunity.types";
 import { STICKY_CONTENT_TOP_CLASS } from "@/constants/layout";
@@ -22,6 +23,7 @@ function countActiveFilters(value: OpportunityFilterRequest): number {
   return [
     value.cities?.length,
     value.modes?.length,
+    value.statuses?.length,
     value.classFormats?.length,
     value.subjects?.length,
     value.minFee !== undefined || value.maxFee !== undefined ? 1 : 0,
@@ -75,6 +77,23 @@ function FilterControls({ value, onChange, cityOptions }: OpportunityFilterBarPr
           value={value.modes ?? []}
           onChange={(modes) => onChange({ ...value, modes: modes.length ? modes : undefined })}
           options={MODE_OPTIONS}
+        />
+      </div>
+
+      <div>
+        <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+          Status
+        </label>
+        <Select
+          mode="multiple"
+          allowClear
+          placeholder="Open or Closed"
+          className="w-full"
+          value={value.statuses ?? []}
+          onChange={(statuses) =>
+            onChange({ ...value, statuses: statuses.length ? statuses : undefined })
+          }
+          options={STATUS_OPTIONS}
         />
       </div>
 

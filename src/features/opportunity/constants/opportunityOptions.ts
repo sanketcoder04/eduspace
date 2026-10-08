@@ -60,6 +60,13 @@ export const OPPORTUNITY_STATUS_LABEL: Record<OpportunityStatus, string> = {
   EXPIRED: "Expired",
 };
 
+export const STATUS_OPTIONS: { label: string; value: OpportunityStatus }[] = [
+  { label: "Open", value: "OPEN" },
+  { label: "Partially Filled", value: "PARTIALLY_FILLED" },
+  { label: "Closed", value: "CLOSED" },
+  { label: "Expired", value: "EXPIRED" },
+];
+
 export const FEE_UNIT_LABEL: Record<FeeUnit, string> = {
   PER_HOUR: "/ hour",
   PER_SESSION: "/ session",

@@ -13,6 +13,8 @@ import BasicInfoCard from "@/features/profile/components/display/BasicInfoCard";
 import CredentialsCard from "@/features/profile/components/display/CredentialsCard";
 import { ROUTES } from "@/router/routes";
 import ActivityStatsCard from "@/features/profile/components/display/ActivityStatsCard";
+import ActivitySection from "@/features/profile/components/display/ActivitySection";
+import { useUserPostsCount } from "@/features/post/hooks/useUserPostsCount";
 
 export default function ProfileByIdPage() {
   const { userId } = useParams<{ userId: string }>();
@@ -20,6 +22,7 @@ export default function ProfileByIdPage() {
 
   const { profile, role, lastLoginAt, isLoading, isError } = useProfileByUserId(userId);
   const { data: followStats } = useFollowStats(userId);
+  const { data: postsCount } = useUserPostsCount(userId);
 
   // Visiting your own profile-by-id link should land you on the real,
   // editable /profile page instead of a read-only view of yourself.
@@ -53,13 +56,12 @@ export default function ProfileByIdPage() {
             lastLoginAt={lastLoginAt}
           />
         }
-        recommendations={
-          <>
-            <ActivityStatsCard
-              followersCount={followStats?.followersCount}
-              followingCount={followStats?.followingCount}
-            />
-          </>
+        analytics={
+          <ActivityStatsCard
+            postsCount={postsCount}
+            followersCount={followStats?.followersCount}
+            followingCount={followStats?.followingCount}
+          />
         }
       >
         <ProfileHeader
@@ -74,11 +76,9 @@ export default function ProfileByIdPage() {
           userId={userId as string}
         />
 
-        {/* <div className="flex justify-end">
-          <FollowButton targetUserId={userId as string} />
-        </div> */}
-
         <AboutCard about={profile.about} isOwner={false} />
+
+        <ActivitySection userId={userId} postedOpportunitiesEnabled={!!role} />
 
         <EducationTimeline education={profile.education} isOwner={false} />
 

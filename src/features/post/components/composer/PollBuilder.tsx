@@ -35,7 +35,7 @@ export default function PollBuilder({
             <Input
               value={option}
               onChange={(e) => updateOption(index, e.target.value)}
-              placeholder={`Option ${index + 1}`}
+              placeholder={`Option ${index + 1} (max 100 characters)`}
               maxLength={100}
               className="rounded-xl"
             />

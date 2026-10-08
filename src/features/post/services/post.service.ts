@@ -56,3 +56,8 @@ export async function voteOnPoll(id: string, payload: VoteRequest): Promise<Post
   const { data } = await api.post<ApiEnvelope<PostResponse>>(API_ENDPOINTS.POST.VOTE(id), payload);
   return data.data;
 }
+
+export async function getPostsCountByUser(userId: string): Promise<number> {
+  const { data } = await api.get<ApiEnvelope<number>>(API_ENDPOINTS.POST.COUNT_BY_USER(userId));
+  return data.data;
+}
