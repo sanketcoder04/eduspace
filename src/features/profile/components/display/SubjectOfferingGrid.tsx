@@ -43,7 +43,7 @@ export default function SubjectOfferingGrid({
               <div className="flex items-start justify-between">
                 <span className="flex items-center gap-2 font-semibold">
                   <BookOpen size={16} className="text-racing-red-500" />
-                  {offering.subjectName}
+                  <span className="truncate">{offering.subjectName}</span>
                 </span>
                 {isOwner && (
                   <button

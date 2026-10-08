@@ -115,6 +115,16 @@ export default function ProfilePage() {
             onEditProfile={() => setEditModal("basic")}
           />
 
+          <div className="flex flex-col gap-4 lg:hidden">
+            <ActivityStatsCard
+              postsCount={postsCount}
+              followersCount={followStats?.followersCount}
+              followingCount={followStats?.followingCount}
+              interactive
+              userId={auth.user?.id}
+            />
+          </div>
+
           <AboutCard about={profile.about} isOwner />
 
           <ActivitySection userId={auth.user?.id} postedOpportunitiesEnabled />
@@ -285,6 +295,16 @@ export default function ProfilePage() {
           }
           onEditProfile={() => setEditModal("basic")}
         />
+
+        <div className="flex flex-col gap-4 lg:hidden">
+          <ActivityStatsCard
+            postsCount={postsCount}
+            followersCount={followStats?.followersCount}
+            followingCount={followStats?.followingCount}
+            interactive
+            userId={auth.user?.id}
+          />
+        </div>
 
         <AboutCard about={profile.about} isOwner />
 

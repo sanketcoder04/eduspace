@@ -54,7 +54,7 @@ export default function UserMenu() {
         className="flex items-center gap-2 rounded-full p-1 transition hover:bg-gray-100 dark:hover:bg-neutral-800 cursor-pointer"
       >
         <Avatar size={32} src={avatarUrl} icon={!avatarUrl && <UserIcon size={16} />} />
-        <span className="hidden pr-1 text-sm font-medium text-gray-700 dark:text-gray-200 sm:inline">
+        <span className="hidden pr-1 text-sm font-medium text-gray-700 dark:text-gray-200 xl:inline">
           {profile?.name}
         </span>
       </button>
