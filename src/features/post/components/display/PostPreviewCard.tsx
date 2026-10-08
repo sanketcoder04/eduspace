@@ -1,13 +1,11 @@
 import { Link } from "react-router-dom";
-import { Heart, MessageCircle, FileText, ListChecks, Video } from "lucide-react";
+import { Heart, MessageCircle, Video } from "lucide-react";
 import { formatRelativeTime } from "@/utils/formatDate";
 import { ROUTES } from "@/router/routes";
 import type { PostResponse } from "../../types/post.types";
-
-function stripHtml(html?: string): string {
-  if (!html) return "";
-  return html.replace(/<[^>]*>/g, "").trim();
-}
+import DocumentPreview from "@/features/profile/components/display/DocumentPreview";
+import { Progress } from "antd";
+import { htmlToPlainText } from "@/utils/htmlToPlainText";
 
 interface PostPreviewCardProps {
   post: PostResponse;
@@ -31,22 +29,28 @@ export default function PostPreviewCard({ post }: PostPreviewCardProps) {
           </div>
         ) : post.type === "DOCUMENT" ? (
           <div className="flex h-full w-full flex-col items-center justify-center gap-1 text-racing-red-400">
-            <FileText size={28} />
-            <span className="px-2 text-center text-[11px] text-gray-400 line-clamp-1">
-              {post.documentFileName}
-            </span>
+            <DocumentPreview url={post.documentUrl as string} />
           </div>
         ) : post.type === "POLL" ? (
-          <div className="flex h-full w-full flex-col items-center justify-center gap-1 text-racing-red-400">
-            <ListChecks size={28} />
-            <span className="px-3 text-center text-xs text-gray-500 line-clamp-2">
-              {stripHtml(post.content) || "Poll"}
+          <div className="flex flex-col p-2 h-full w-full justify-center gap-1 text-racing-red-400">
+            <span className="flex gap-0.5 text-xs text-gray-500 line-clamp-2">
+              {htmlToPlainText(post.content) || "Poll"}
             </span>
+            {post.poll ? (
+              <span className="flex flex-col gap-1">
+                {post.poll.options.map((option) => (
+                  <span key={option.id} className="text-xs grid grid-cols-2 truncate">
+                    {option.text}
+                    <Progress percent={option.votePercentage} size="small" />
+                  </span>
+                ))}
+              </span>
+            ) : null}
           </div>
         ) : (
-          <div className="flex h-full w-full items-center p-3">
-            <p className="line-clamp-4 text-xs text-gray-600 dark:text-gray-300">
-              {stripHtml(post.content)}
+          <div className="flex h-full w-full p-2">
+            <p className="line-clamp-2 text-xs text-gray-600 dark:text-gray-300">
+              {htmlToPlainText(post.content)}
             </p>
           </div>
         )}

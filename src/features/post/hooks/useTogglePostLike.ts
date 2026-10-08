@@ -3,11 +3,14 @@ import { togglePostLike } from "../services/post.service";
 import type { Page } from "@/types/api.types";
 import type { PostResponse } from "../types/post.types";
 
-/**
- * Optimistic update — flips likedByViewer/likesCount immediately in every
- * cached page (feed + user-posts) that currently contains this post, rather
- * than waiting for a refetch. Reverts on failure via onError's rollback.
- */
+function flipLike(post: PostResponse): PostResponse {
+  return {
+    ...post,
+    likedByViewer: !post.likedByViewer,
+    likesCount: post.likesCount + (post.likedByViewer ? -1 : 1),
+  };
+}
+
 export function useTogglePostLike() {
   const queryClient = useQueryClient();
 
@@ -16,24 +19,27 @@ export function useTogglePostLike() {
     onMutate: async (postId: string) => {
       await queryClient.cancelQueries({ queryKey: ["posts"] });
 
-      const previous = queryClient.getQueriesData<Page<PostResponse>>({ queryKey: ["posts"] });
+      const previous = queryClient.getQueriesData<unknown>({ queryKey: ["posts"] });
 
-      const patch = (page: Page<PostResponse> | undefined) => {
-        if (!page) return page;
-        return {
-          ...page,
-          content: page.content.map((post) =>
-            post.id === postId
-              ? {
-                  ...post,
-                  likedByViewer: !post.likedByViewer,
-                  likesCount: post.likesCount + (post.likedByViewer ? -1 : 1),
-                }
-              : post
-          ),
-        };
-      };
-      queryClient.setQueriesData<Page<PostResponse>>({ queryKey: ["posts"] }, patch);
+      queryClient.setQueriesData<unknown>(
+        { queryKey: ["posts"] },
+        (cached: PostResponse | Page<PostResponse>) => {
+          if (!cached || typeof cached !== "object") return cached;
+
+          const asPage = cached as Page<PostResponse>;
+          if (Array.isArray(asPage.content)) {
+            return {
+              ...asPage,
+              content: asPage.content.map((post) => (post.id === postId ? flipLike(post) : post)),
+            };
+          }
+
+          const asPost = cached as PostResponse;
+          if (asPost.id === postId) return flipLike(asPost);
+
+          return cached;
+        }
+      );
 
       return { previous };
     },

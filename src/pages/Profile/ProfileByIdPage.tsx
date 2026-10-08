@@ -14,6 +14,7 @@ import CredentialsCard from "@/features/profile/components/display/CredentialsCa
 import { ROUTES } from "@/router/routes";
 import ActivityStatsCard from "@/features/profile/components/display/ActivityStatsCard";
 import ActivitySection from "@/features/profile/components/display/ActivitySection";
+import { useUserPostsCount } from "@/features/post/hooks/useUserPostsCount";
 
 export default function ProfileByIdPage() {
   const { userId } = useParams<{ userId: string }>();
@@ -21,6 +22,7 @@ export default function ProfileByIdPage() {
 
   const { profile, role, lastLoginAt, isLoading, isError } = useProfileByUserId(userId);
   const { data: followStats } = useFollowStats(userId);
+  const { data: postsCount } = useUserPostsCount(userId);
 
   // Visiting your own profile-by-id link should land you on the real,
   // editable /profile page instead of a read-only view of yourself.
@@ -56,6 +58,7 @@ export default function ProfileByIdPage() {
         }
         analytics={
           <ActivityStatsCard
+            postsCount={postsCount}
             followersCount={followStats?.followersCount}
             followingCount={followStats?.followingCount}
           />

@@ -30,6 +30,7 @@ import StudentCertificatesStep from "@/features/profile/components/wizard/steps/
 import { MODAL_BODY_SCROLL_STYLE } from "@/constants/modal";
 import { useFollowStats } from "@/features/follow/hooks/useFollowStats";
 import ActivitySection from "@/features/profile/components/display/ActivitySection";
+import { useUserPostsCount } from "@/features/post/hooks/useUserPostsCount";
 
 type EditModal = "basic" | "education" | "subjects" | "credentials" | null;
 
@@ -54,6 +55,7 @@ export default function ProfilePage() {
   const deleteSubjectOffering = useDeleteSubjectOffering();
 
   const { data: followStats } = useFollowStats(auth.user?.id);
+  const { data: postsCount } = useUserPostsCount(auth.user?.id);
 
   if (isTeacher) {
     const profile = teacherQuery.data;
@@ -83,6 +85,7 @@ export default function ProfilePage() {
           analytics={
             <>
               <ActivityStatsCard
+                postsCount={postsCount}
                 followersCount={followStats?.followersCount}
                 followingCount={followStats?.followingCount}
                 interactive
