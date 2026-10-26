@@ -102,4 +102,8 @@ export const API_ENDPOINTS = {
   USER: {
     SEARCH: "/users/search",
   },
+
+  FOLLOW: {
+    DISCOVER: "/follows/discover",
+  },
 } as const;

@@ -7,6 +7,7 @@ import { useMyStudentProfile } from "@/features/profile/hooks/useMyStudentProfil
 import { useMyTeacherProfile } from "@/features/profile/hooks/useMyTeacherProfile";
 import HomeLayout from "@/layouts/HomeLayout";
 import ProfileRecommendationsCard from "@/features/follow/components/ProfileRecommendationsCard";
+import UserSearchBar from "@/features/search/components/UserSearchBar";
 
 export default function HomePage() {
   const { auth } = useAuth();
@@ -35,9 +36,21 @@ export default function HomePage() {
           isOwner
         />
       }
-      recommendations={<ProfileRecommendationsCard />}
+      recommendations={
+        <div className="space-y-4">
+          {/* Desktop placement: above the recommended profiles */}
+          <div className="hidden lg:block">
+            <UserSearchBar />
+          </div>
+          <ProfileRecommendationsCard />
+        </div>
+      }
     >
       <div className="mx-auto max-w-2xl sm:pt-0 sm:py-8">
+        <div className="mb-4 lg:hidden">
+          <UserSearchBar />
+        </div>
+
         <div className="mb-4">
           <PostComposerTrigger />
         </div>

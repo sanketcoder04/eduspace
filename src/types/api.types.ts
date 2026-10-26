@@ -1,6 +1,3 @@
-// Mirrors Spring Data's Page<T> JSON shape, used by every paginated endpoint
-// across Opportunity, Application, Chat, and Notification.
-
 export interface Page<T> {
   content: T[];
   totalElements: number;
@@ -17,4 +14,11 @@ export interface PageableParams {
   page?: number;
   size?: number;
   sort?: string; // e.g. "createdAt, desc"
+}
+
+export interface SliceResponse<T> {
+  content: T[];
+  page: number;
+  size: number;
+  hasNext: boolean;
 }
