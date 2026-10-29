@@ -36,7 +36,7 @@ export default function ProfileRecommendationsCard() {
               <div className="min-w-0 flex-1">
                 <Link
                   to={ROUTES.PROFILE_BY_ID(profile.userId)}
-                  className="block truncate text-sm font-medium text-gray-900 hover:underline dark:text-white"
+                  className="block truncate text-sm font-medium text-gray-900 hover:text-racing-red-600 dark:text-white"
                 >
                   {profile.name}
                 </Link>

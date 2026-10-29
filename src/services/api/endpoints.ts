@@ -91,6 +91,7 @@ export const API_ENDPOINTS = {
     LIKE: (id: string) => `/posts/${id}/like`,
     VOTE: (id: string) => `/posts/${id}/vote`,
     COMMENTS: (postId: string) => `/posts/${postId}/comments`,
+    LIKES: (id: string) => `/posts/${id}/likes`,
   },
 
   COMMENT: {

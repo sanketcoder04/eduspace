@@ -1,6 +1,7 @@
 import { Heart, MessageCircle, Share2 } from "lucide-react";
 import { message } from "antd";
 import { useTogglePostLike } from "../../hooks/useTogglePostLike";
+import PostLikersMenu from "./PostLikersMenu";
 import { ROUTES } from "@/router/routes";
 import type { PostResponse } from "../../types/post.types";
 
@@ -16,6 +17,7 @@ export default function PostActionsBar({
   commentsOpen,
 }: PostActionsBarProps) {
   const toggleLikeMutation = useTogglePostLike();
+  const hasLikes = post.likesCount > 0;
 
   const handleShare = async () => {
     const url = `${window.location.origin}${ROUTES.POST_DETAIL(post.id)}`;
@@ -25,18 +27,24 @@ export default function PostActionsBar({
 
   return (
     <div className="flex items-center justify-between border-t border-gray-100 pt-2 dark:border-neutral-800">
-      <button
-        type="button"
-        onClick={() => toggleLikeMutation.mutate(post.id)}
-        className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition cursor-pointer ${
-          post.likedByViewer
-            ? "text-racing-red-600"
-            : "text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-neutral-800"
-        }`}
+      <div
+        className={`flex items-center ${post.likedByViewer ? "text-racing-red-600" : "text-gray-500 dark:text-gray-400"}`}
       >
-        <Heart size={16} fill={post.likedByViewer ? "currentColor" : "none"} />
-        {post.likesCount > 0 ? post.likesCount : "Like"}
-      </button>
+        <button
+          type="button"
+          aria-label={post.likedByViewer ? "Unlike" : "Like"}
+          aria-pressed={post.likedByViewer}
+          onClick={() => toggleLikeMutation.mutate(post.id)}
+          className={`flex items-center gap-1.5 rounded-lg py-1.5 text-sm font-medium transition hover:bg-gray-50 dark:hover:bg-neutral-800 cursor-pointer ${
+            hasLikes ? "pl-3 pr-1" : "px-3"
+          }`}
+        >
+          <Heart size={16} fill={post.likedByViewer ? "currentColor" : "none"} />
+          {!hasLikes && <span className="text-sm hidden md:block">Like</span>}
+        </button>
+
+        {hasLikes && <PostLikersMenu postId={post.id} likesCount={post.likesCount} />}
+      </div>
 
       <button
         type="button"
@@ -48,7 +56,11 @@ export default function PostActionsBar({
         }`}
       >
         <MessageCircle size={16} />
-        {post.commentsCount > 0 ? post.commentsCount : "Comment"}
+        {post.commentsCount > 0 ? (
+          post.commentsCount
+        ) : (
+          <span className="text-sm hidden md:block">Comment</span>
+        )}
       </button>
 
       <button
@@ -57,7 +69,7 @@ export default function PostActionsBar({
         className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-gray-500 transition hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-neutral-800 cursor-pointer"
       >
         <Share2 size={16} />
-        Share
+        <span className="text-sm hidden md:block">Share</span>
       </button>
     </div>
   );

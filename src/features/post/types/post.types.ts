@@ -94,3 +94,11 @@ export interface MentionCandidate {
   name: string;
   role: Role;
 }
+
+export interface PostLiker {
+  userId: string;
+  name: string;
+  avatarUrl?: string;
+  role: Role;
+  likedAt: string;
+}

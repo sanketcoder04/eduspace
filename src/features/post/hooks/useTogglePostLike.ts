@@ -48,5 +48,8 @@ export function useTogglePostLike() {
         queryClient.setQueryData(key, data);
       });
     },
+    onSettled: (_data, _error, postId) => {
+      queryClient.invalidateQueries({ queryKey: ["posts", "likers", postId] });
+    },
   });
 }

@@ -1,7 +1,7 @@
 import api from "@/services/api/axios";
 import { API_ENDPOINTS } from "@/services/api/endpoints";
-import type { Page, PageableParams } from "@/types/api.types";
-import type { PostResponse, CreatePostRequest, VoteRequest } from "../types/post.types";
+import type { Page, PageableParams, SliceResponse } from "@/types/api.types";
+import type { PostResponse, CreatePostRequest, VoteRequest, PostLiker } from "../types/post.types";
 
 interface ApiEnvelope<T> {
   success: boolean;
@@ -59,5 +59,21 @@ export async function voteOnPoll(id: string, payload: VoteRequest): Promise<Post
 
 export async function getPostsCountByUser(userId: string): Promise<number> {
   const { data } = await api.get<ApiEnvelope<number>>(API_ENDPOINTS.POST.COUNT_BY_USER(userId));
+  return data.data;
+}
+
+export async function getPostLikers(
+  postId: string,
+  query: string,
+  page: number,
+  signal?: AbortSignal
+): Promise<SliceResponse<PostLiker>> {
+  const { data } = await api.get<ApiEnvelope<SliceResponse<PostLiker>>>(
+    API_ENDPOINTS.POST.LIKES(postId),
+    {
+      params: { query: query || undefined, page },
+      signal,
+    }
+  );
   return data.data;
 }
