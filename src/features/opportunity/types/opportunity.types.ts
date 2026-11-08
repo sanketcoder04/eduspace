@@ -21,7 +21,7 @@ export interface FeeRange {
 
 export interface TimeSlot {
   day: WeekDay;
-  startTime: string; // "17:00", 24h
+  startTime: string;
   endTime: string;
 }
 
@@ -130,4 +130,5 @@ export interface OpportunityFilterRequest {
   postedAfter?: string; // ISO instant — e.g. now-7d for "date posted" filter
   statuses?: OpportunityStatus[]; // used by "my posts", not the public feed
   authorId?: string; // used by "my posts"
+  keyword?: string; // used by "search"
 }
