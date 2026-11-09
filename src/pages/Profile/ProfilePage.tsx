@@ -267,6 +267,7 @@ export default function ProfilePage() {
         }
         analytics={
           <ActivityStatsCard
+            postsCount={postsCount}
             followersCount={followStats?.followersCount}
             followingCount={followStats?.followingCount}
             interactive

@@ -68,6 +68,7 @@ export const API_ENDPOINTS = {
     REJECT: (id: string) => `/applications/${id}/reject`,
     WITHDRAW: (id: string) => `/applications/${id}/withdraw`,
     CONTACT_CONSENT: (id: string) => `/applications/${id}/contact-consent`,
+    SEARCH: "/applications/search",
   },
 
   CONVERSATION: {

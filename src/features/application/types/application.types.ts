@@ -10,7 +10,6 @@ export interface ContactShareConsent {
 
 export interface ApplicationResponse {
   id: string;
-
   opportunityId: string;
   opportunityTitle: string;
 
@@ -19,6 +18,7 @@ export interface ApplicationResponse {
   applicantAvatarUrl?: string;
 
   authorId: string;
+  authorName?: string;
 
   message?: string;
   status: ApplicationStatus;
@@ -42,4 +42,15 @@ export interface RejectApplicationRequest {
 export interface ContactShareConsentRequest {
   phoneShared: boolean;
   emailShared: boolean;
+}
+
+export type ApplicationBox = "SENT" | "RECEIVED";
+export type ApplicationSort = "NEWEST" | "OLDEST" | "RECENTLY_UPDATED";
+
+export interface ApplicationFilterRequest {
+  box: ApplicationBox;
+  statuses?: ApplicationStatus[];
+  keyword?: string; // posting title, other person's name, or the note
+  postedAfter?: string; // ISO instant, "applied within"
+  sort?: ApplicationSort;
 }
