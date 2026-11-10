@@ -16,6 +16,7 @@ import type {
 } from "@/features/opportunity/types/opportunity.types";
 import { ROUTES } from "@/router/routes";
 import { useDebouncedValue } from "@/utils/useDebouncedValue";
+import { STICKY_PAGE_HEADER_CLASS } from "@/constants/layout";
 
 const CITY_OPTIONS = [
   "Mumbai",
@@ -72,12 +73,9 @@ export default function OpportunitiesFeedPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
-      {/* Header — deliberately two independent rows on mobile (tabs, then
-          actions) rather than one row that overflows. The Segmented itself
-          sits in an overflow-x-auto wrapper as a last-resort escape hatch:
-          if labels are ever too wide for the viewport, THIS scrolls, not
-          the whole page. */}
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div
+        className={`${STICKY_PAGE_HEADER_CLASS} mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between`}
+      >
         <div className="overflow-x-auto">
           <Segmented
             value={postType}

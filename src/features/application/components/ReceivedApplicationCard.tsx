@@ -63,161 +63,157 @@ export default function ReceivedApplicationCard({ application }: ReceivedApplica
       <div className="flex items-start gap-3">
         <Avatar
           size={44}
+          className="shrink-0"
           src={application.applicantAvatarUrl}
           icon={!application.applicantAvatarUrl && <UserIcon size={20} />}
         />
 
         <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <div>
-              <p className="font-semibold text-gray-900 dark:text-white">
-                {application.applicantName}
-              </p>
-              <p className="text-xs text-gray-500">
-                Applied to{" "}
-                <Link
-                  to={ROUTES.OPPORTUNITY_DETAIL(application.opportunityId)}
-                  className="font-medium text-racing-red-600 hover:underline"
-                >
-                  {application.opportunityTitle}
-                </Link>{" "}
-                · {formatRelativeTime(application.createdAt)}
-              </p>
-            </div>
-            <ApplicationStatusTag status={application.status} />
-          </div>
+          <p className="font-semibold text-gray-900 dark:text-white">{application.applicantName}</p>
+          <p className="text-xs text-gray-500">
+            Applied to{" "}
+            <Link
+              to={ROUTES.OPPORTUNITY_DETAIL(application.opportunityId)}
+              className="font-medium text-racing-red-600 hover:underline"
+            >
+              {application.opportunityTitle}
+            </Link>{" "}
+            · {formatRelativeTime(application.createdAt)}
+          </p>
+        </div>
 
-          {application.message && (
-            <Paragraph className="mt-2 mb-0! text-xs! text-gray-600 dark:text-gray-300">
-              <span className="font-medium text-racing-red-600">Note:</span> {application.message}
-            </Paragraph>
-          )}
+        <div className="shrink-0">
+          <ApplicationStatusTag status={application.status} />
+        </div>
+      </div>
 
-          {application.status === "REJECTED" && application.decisionReason && (
-            <Text type="secondary" className="mt-2 block text-xs italic">
-              Reason: "{application.decisionReason}"
-            </Text>
-          )}
+      <div className="sm:pl-14">
+        {application.message && (
+          <Paragraph className="mt-2 mb-0! text-xs! text-gray-600 dark:text-gray-300">
+            <span className="font-medium text-racing-red-600">Note:</span> {application.message}
+          </Paragraph>
+        )}
 
-          {application.status === "PENDING" && (
-            <div className="mt-3">
-              {showRejectInput ? (
-                <div className="space-y-2">
-                  <Input.TextArea
-                    rows={2}
-                    value={rejectReason}
-                    onChange={(e) => setRejectReason(e.target.value)}
-                    placeholder="Optional reason for rejecting (shown to the applicant)"
-                    className="rounded-xl"
-                    maxLength={300}
-                  />
-                  <div className="flex gap-2">
-                    <Button
-                      danger
-                      size="small"
-                      loading={rejectMutation.isPending}
-                      onClick={handleReject}
-                      className="rounded-lg"
-                    >
-                      Confirm Reject
-                    </Button>
-                    <Button
-                      size="small"
-                      onClick={() => setShowRejectInput(false)}
-                      className="rounded-lg"
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                </div>
-              ) : (
+        {application.status === "REJECTED" && application.decisionReason && (
+          <Text type="secondary" className="mt-2 block text-xs italic">
+            Reason: "{application.decisionReason}"
+          </Text>
+        )}
+
+        {application.status === "PENDING" && (
+          <div className="mt-3">
+            {showRejectInput ? (
+              <div className="space-y-2">
+                <Input.TextArea
+                  rows={2}
+                  value={rejectReason}
+                  onChange={(e) => setRejectReason(e.target.value)}
+                  placeholder="Optional reason for rejecting (shown to the applicant)"
+                  className="rounded-xl"
+                  maxLength={300}
+                />
                 <div className="flex gap-2">
-                  <Button
-                    type="primary"
-                    size="small"
-                    icon={<Check size={14} />}
-                    loading={approveToChatMutation.isPending}
-                    onClick={handleApproveToChat}
-                    className="rounded-lg font-semibold"
-                  >
-                    Approve to Chat
-                  </Button>
                   <Button
                     danger
                     size="small"
-                    icon={<X size={14} />}
-                    onClick={() => setShowRejectInput(true)}
+                    loading={rejectMutation.isPending}
+                    onClick={handleReject}
                     className="rounded-lg"
                   >
-                    Reject
+                    Confirm Reject
+                  </Button>
+                  <Button
+                    size="small"
+                    onClick={() => setShowRejectInput(false)}
+                    className="rounded-lg"
+                  >
+                    Cancel
                   </Button>
                 </div>
-              )}
-            </div>
-          )}
-
-          {application.status === "IN_DISCUSSION" && (
-            <div className="mt-3 space-y-3">
+              </div>
+            ) : (
               <div className="flex flex-wrap gap-2">
-                <Link to={ROUTES.CONVERSATION_FOR_APPLICATION(application.id)}>
-                  <Button
-                    icon={<MessageCircle size={14} />}
-                    size="small"
-                    className="rounded-lg mb-2"
-                  >
-                    Open Chat
-                  </Button>
-                </Link>
                 <Button
                   type="primary"
                   size="small"
-                  loading={finalizeMutation.isPending}
-                  onClick={handleFinalize}
+                  icon={<Check size={14} />}
+                  loading={approveToChatMutation.isPending}
+                  onClick={handleApproveToChat}
                   className="rounded-lg font-semibold"
-                  icon={<CircleCheckBig size={14} />}
                 >
-                  Finalize Applicant
+                  Approve to Chat
                 </Button>
-              </div>
-
-              <ContactConsentPanel application={application} isAuthor />
-
-              <Popconfirm
-                title="Reject this applicant?"
-                description="This will close the chat. The applicant will be notified."
-                okText="Reject"
-                okButtonProps={{ danger: true }}
-                onConfirm={handleReject}
-              >
-                <Button danger size="small" className="rounded-lg">
+                <Button
+                  danger
+                  size="small"
+                  icon={<X size={14} />}
+                  onClick={() => setShowRejectInput(true)}
+                  className="rounded-lg"
+                >
                   Reject
                 </Button>
-              </Popconfirm>
-            </div>
-          )}
+              </div>
+            )}
+          </div>
+        )}
 
-          {application.status === "APPROVED" && (
-            <div className="mt-3 space-y-3">
+        {application.status === "IN_DISCUSSION" && (
+          <div className="mt-3 space-y-3">
+            <div className="flex flex-wrap gap-2">
               <Link to={ROUTES.CONVERSATION_FOR_APPLICATION(application.id)}>
                 <Button icon={<MessageCircle size={14} />} size="small" className="rounded-lg mb-2">
                   Open Chat
                 </Button>
               </Link>
-              <ContactConsentPanel application={application} isAuthor />
-              <Popconfirm
-                title="Reject this finalized application?"
-                description="This will re-open the seat and close the chat. The applicant will be notified."
-                okText="Reject"
-                okButtonProps={{ danger: true }}
-                onConfirm={handleReject}
+              <Button
+                type="primary"
+                size="small"
+                loading={finalizeMutation.isPending}
+                onClick={handleFinalize}
+                className="rounded-lg font-semibold"
+                icon={<CircleCheckBig size={14} />}
               >
-                <Button danger size="small" className="rounded-lg" icon={<CircleX size={14} />}>
-                  Undo Finalization
-                </Button>
-              </Popconfirm>
+                Finalize Applicant
+              </Button>
             </div>
-          )}
-        </div>
+
+            <ContactConsentPanel application={application} isAuthor />
+
+            <Popconfirm
+              title="Reject this applicant?"
+              description="This will close the chat. The applicant will be notified."
+              okText="Reject"
+              okButtonProps={{ danger: true }}
+              onConfirm={handleReject}
+            >
+              <Button danger size="small" className="rounded-lg">
+                Reject
+              </Button>
+            </Popconfirm>
+          </div>
+        )}
+
+        {application.status === "APPROVED" && (
+          <div className="mt-3 space-y-3">
+            <Link to={ROUTES.CONVERSATION_FOR_APPLICATION(application.id)}>
+              <Button icon={<MessageCircle size={14} />} size="small" className="rounded-lg mb-2">
+                Open Chat
+              </Button>
+            </Link>
+            <ContactConsentPanel application={application} isAuthor />
+            <Popconfirm
+              title="Reject this finalized application?"
+              description="This will re-open the seat and close the chat. The applicant will be notified."
+              okText="Reject"
+              okButtonProps={{ danger: true }}
+              onConfirm={handleReject}
+            >
+              <Button danger size="small" className="rounded-lg" icon={<CircleX size={14} />}>
+                Undo Finalization
+              </Button>
+            </Popconfirm>
+          </div>
+        )}
       </div>
     </Card>
   );
