@@ -110,7 +110,7 @@ export function ApplicationFilterMobileTrigger(props: ApplicationFilterBarProps)
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="lg:hidden">
+    <div className="shrink-0 lg:hidden">
       <Badge count={countActiveFilters(props.value)} size="small">
         <Button
           aria-label="Open filters"

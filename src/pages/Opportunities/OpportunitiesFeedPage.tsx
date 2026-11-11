@@ -72,7 +72,7 @@ export default function OpportunitiesFeedPage() {
   const createHref = isTeacher ? ROUTES.CREATE_TEACHING_OPENING : ROUTES.CREATE_TUITION_REQUIREMENT;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+    <div className="mx-auto max-w-6xl px-4 pb-6 pt-4 sm:px-6 sm:pb-8">
       <div
         className={`${STICKY_PAGE_HEADER_CLASS} mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between`}
       >

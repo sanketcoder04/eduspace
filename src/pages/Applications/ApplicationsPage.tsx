@@ -64,9 +64,9 @@ export default function ApplicationsPage() {
   const isStale = isFetching && !isLoading;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+    <div className="mx-auto max-w-6xl px-4 pb-6 pt-4 sm:px-6 sm:pb-8">
       <div
-        className={`${STICKY_PAGE_HEADER_CLASS} mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between`}
+        className={`${STICKY_PAGE_HEADER_CLASS} mb-3 flex flex-col gap-3 sm:items-stretch lg:flex-row lg:items-center lg:justify-between`}
       >
         <div className="flex items-center justify-between gap-3 sm:justify-start sm:gap-4">
           <div>
@@ -92,7 +92,7 @@ export default function ApplicationsPage() {
           />
         </div>
 
-        <div className="flex w-full items-center gap-3 sm:w-auto">
+        <div className="flex w-full min-w-0 items-center gap-3 lg:w-auto">
           <Input
             allowClear
             value={keyword}
@@ -108,7 +108,7 @@ export default function ApplicationsPage() {
             }
             aria-label="Search applications"
             maxLength={100}
-            className="min-w-0 flex-1 rounded-xl sm:w-72 sm:flex-none [&_input]:text-base sm:[&_input]:text-sm"
+            className="min-w-0 flex-1 rounded-xl lg:w-72 lg:flex-none [&_input]:text-base sm:[&_input]:text-sm"
           />
 
           <ApplicationFilterMobileTrigger
