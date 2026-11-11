@@ -10,7 +10,7 @@ export default function NotificationBellMobile() {
 
   useEffect(() => {
     if (open) panel.refetch();
-  }, [open]);
+  }, [open, panel]);
 
   return (
     <>
@@ -25,10 +25,6 @@ export default function NotificationBellMobile() {
         </Badge>
       </button>
 
-      {/* A bottom Drawer can't mis-position itself off-screen the way a
-          floating Dropdown panel can at narrow widths — it's always docked
-          to the viewport edge, which is exactly why this replaces Dropdown
-          here instead of trying to constrain its offset math. */}
       <Drawer
         title="Notifications"
         placement="bottom"
@@ -38,12 +34,16 @@ export default function NotificationBellMobile() {
         styles={{ body: { padding: 0 } }}
       >
         <NotificationList
-          page={panel.page}
+          notifications={panel.notifications}
           isLoading={panel.isLoading}
+          hasNextPage={panel.hasNextPage}
+          isFetchingNextPage={panel.isFetchingNextPage}
+          onLoadMore={panel.fetchNextPage}
           unreadCount={panel.unreadCount}
           onSelect={panel.handleSelect}
           onMarkAllRead={panel.markAllRead}
           markAllReadPending={panel.markAllReadPending}
+          scrollClassName="max-h-[calc(70vh-110px)]"
         />
       </Drawer>
     </>
