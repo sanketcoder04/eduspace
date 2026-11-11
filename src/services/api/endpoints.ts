@@ -68,6 +68,7 @@ export const API_ENDPOINTS = {
     REJECT: (id: string) => `/applications/${id}/reject`,
     WITHDRAW: (id: string) => `/applications/${id}/withdraw`,
     CONTACT_CONSENT: (id: string) => `/applications/${id}/contact-consent`,
+    SEARCH: "/applications/search",
   },
 
   CONVERSATION: {
@@ -91,6 +92,7 @@ export const API_ENDPOINTS = {
     LIKE: (id: string) => `/posts/${id}/like`,
     VOTE: (id: string) => `/posts/${id}/vote`,
     COMMENTS: (postId: string) => `/posts/${postId}/comments`,
+    LIKES: (id: string) => `/posts/${id}/likes`,
   },
 
   COMMENT: {
@@ -101,5 +103,9 @@ export const API_ENDPOINTS = {
 
   USER: {
     SEARCH: "/users/search",
+  },
+
+  FOLLOW: {
+    DISCOVER: "/follows/discover",
   },
 } as const;

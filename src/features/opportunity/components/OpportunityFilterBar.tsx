@@ -9,7 +9,7 @@ import {
   STATUS_OPTIONS,
 } from "../constants/opportunityOptions";
 import type { OpportunityFilterRequest } from "../types/opportunity.types";
-import { STICKY_CONTENT_TOP_CLASS } from "@/constants/layout";
+import { STICKY_BELOW_PAGE_HEADER_TOP_CLASS } from "@/constants/layout";
 
 interface OpportunityFilterBarProps {
   value: OpportunityFilterRequest;
@@ -31,12 +31,10 @@ function countActiveFilters(value: OpportunityFilterRequest): number {
   ].filter(Boolean).length;
 }
 
-/** The actual filter controls — rendered once, reused by both the desktop sidebar and the mobile drawer. */
 function FilterControls({ value, onChange, cityOptions }: OpportunityFilterBarProps) {
   const setDatePosted = (days: number) => {
     if (days === 0) {
-      const { postedAfter: _postedAfter, ...rest } = value;
-      onChange(rest);
+      onChange({ ...value, postedAfter: undefined });
       return;
     }
     const since = new Date();
@@ -179,11 +177,10 @@ function FilterControls({ value, onChange, cityOptions }: OpportunityFilterBarPr
   );
 }
 
-/** Desktop: sticky left sidebar. */
 export function OpportunityFilterSidebar(props: OpportunityFilterBarProps) {
   return (
     <aside
-      className={`hidden lg:block lg:h-fit lg:w-72 lg:shrink-0 lg:sticky ${STICKY_CONTENT_TOP_CLASS}`}
+      className={`hidden lg:block lg:h-fit lg:max-h-[calc(100vh-168px)] lg:w-72 lg:shrink-0 lg:overflow-y-auto scrollbar-none [&::-webkit-scrollbar]:hidden lg:sticky ${STICKY_BELOW_PAGE_HEADER_TOP_CLASS}`}
     >
       <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
         <h3 className="mb-4 text-sm font-semibold text-gray-900 dark:text-white">Filters</h3>
@@ -193,7 +190,6 @@ export function OpportunityFilterSidebar(props: OpportunityFilterBarProps) {
   );
 }
 
-/** Mobile: trigger button that opens a bottom drawer with the same controls. */
 export function OpportunityFilterMobileTrigger(props: OpportunityFilterBarProps) {
   const [open, setOpen] = useState(false);
   const activeFilterCount = countActiveFilters(props.value);

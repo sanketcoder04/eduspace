@@ -76,6 +76,16 @@ export default function ProfileByIdPage() {
           userId={userId as string}
         />
 
+        <div className="flex flex-col gap-4 lg:hidden">
+          <ActivityStatsCard
+            postsCount={postsCount}
+            followersCount={followStats?.followersCount}
+            followingCount={followStats?.followingCount}
+            interactive
+            userId={auth.user?.id}
+          />
+        </div>
+
         <AboutCard about={profile.about} isOwner={false} />
 
         <ActivitySection userId={userId} postedOpportunitiesEnabled={!!role} />

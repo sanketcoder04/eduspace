@@ -43,66 +43,67 @@ export default function SentApplicationCard({ application }: SentApplicationCard
             {application.opportunityTitle}
           </Link>
           <p className="text-xs text-gray-500">
+            {application.authorName && <>Posted by {application.authorName} · </>}
             Applied {formatRelativeTime(application.createdAt)}
           </p>
-
-          {application.message && (
-            <Paragraph className="mt-2 mb-0! text-xs! text-gray-600 dark:text-gray-300">
-              <span className="font-medium text-racing-red-600">Note:</span> {application.message}
-            </Paragraph>
-          )}
-
-          {application.status === "REJECTED" && application.decisionReason && (
-            <Text type="secondary" className="mt-2 block text-xs italic">
-              <span className="font-medium text-racing-red-600">Reason:</span>
-              {application.decisionReason}
-            </Text>
-          )}
-
-          {(application.status === "IN_DISCUSSION" || application.status === "APPROVED") && (
-            <div className="mt-3 space-y-3">
-              <Link to={ROUTES.CONVERSATION_FOR_APPLICATION(application.id)}>
-                <Button
-                  type="primary"
-                  size="small"
-                  icon={<MessageCircle size={14} />}
-                  className="rounded-lg font-semibold mb-2"
-                >
-                  Open Chat
-                </Button>
-              </Link>
-              <ContactConsentPanel application={application} isAuthor={false} />
-              {application.status === "APPROVED" && (
-                <p className="text-xs font-semibold text-green-600 flex gap-1 items-center">
-                  This application has been finalized. <CircleCheckBig size={16} />
-                </p>
-              )}
-            </div>
-          )}
-
-          {canWithdraw && (
-            <Popconfirm
-              title="Withdraw this application?"
-              description={
-                application.status === "APPROVED"
-                  ? "This will close the chat with the author."
-                  : undefined
-              }
-              okText="Withdraw"
-              okButtonProps={{ danger: true, loading: withdrawMutation.isPending }}
-              onConfirm={handleWithdraw}
-            >
-              <Button danger size="small" className="mt-3 rounded-lg" icon={<Trash2 size={14} />}>
-                Withdraw
-              </Button>
-            </Popconfirm>
-          )}
         </div>
 
-        <div className="flex flex-col items-end gap-2">
+        <div className="shrink-0">
           <ApplicationStatusTag status={application.status} />
         </div>
       </div>
+
+      {application.message && (
+        <Paragraph className="mt-2 mb-0! text-xs! text-gray-600 dark:text-gray-300">
+          <span className="font-medium text-racing-red-600">Note:</span> {application.message}
+        </Paragraph>
+      )}
+
+      {application.status === "REJECTED" && application.decisionReason && (
+        <Text type="secondary" className="mt-2 block text-xs italic">
+          <span className="font-medium text-racing-red-600">Reason:</span>{" "}
+          {application.decisionReason}
+        </Text>
+      )}
+
+      {(application.status === "IN_DISCUSSION" || application.status === "APPROVED") && (
+        <div className="mt-3 space-y-3">
+          <Link to={ROUTES.CONVERSATION_FOR_APPLICATION(application.id)}>
+            <Button
+              type="primary"
+              size="small"
+              icon={<MessageCircle size={14} />}
+              className="rounded-lg font-semibold mb-2"
+            >
+              Open Chat
+            </Button>
+          </Link>
+          <ContactConsentPanel application={application} isAuthor={false} />
+          {application.status === "APPROVED" && (
+            <p className="flex items-center gap-1 text-xs font-semibold text-green-600">
+              This application has been finalized. <CircleCheckBig size={16} />
+            </p>
+          )}
+        </div>
+      )}
+
+      {canWithdraw && (
+        <Popconfirm
+          title="Withdraw this application?"
+          description={
+            application.status === "APPROVED"
+              ? "This will close the chat with the author."
+              : undefined
+          }
+          okText="Withdraw"
+          okButtonProps={{ danger: true, loading: withdrawMutation.isPending }}
+          onConfirm={handleWithdraw}
+        >
+          <Button danger size="small" className="mt-3 rounded-lg" icon={<Trash2 size={14} />}>
+            Withdraw
+          </Button>
+        </Popconfirm>
+      )}
     </Card>
   );
 }

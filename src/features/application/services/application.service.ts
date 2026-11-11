@@ -6,6 +6,7 @@ import type {
   CreateApplicationRequest,
   RejectApplicationRequest,
   ContactShareConsentRequest,
+  ApplicationFilterRequest,
 } from "../types/application.types";
 
 interface ApiEnvelope<T> {
@@ -91,6 +92,18 @@ export async function updateContactConsent(
   const { data } = await api.patch<ApiEnvelope<ApplicationResponse>>(
     API_ENDPOINTS.APPLICATION.CONTACT_CONSENT(id),
     payload
+  );
+  return data.data;
+}
+
+export async function searchApplications(
+  filter: ApplicationFilterRequest,
+  pageable?: PageableParams
+): Promise<Page<ApplicationResponse>> {
+  const { data } = await api.post<ApiEnvelope<Page<ApplicationResponse>>>(
+    API_ENDPOINTS.APPLICATION.SEARCH,
+    filter,
+    { params: { page: pageable?.page ?? 0, size: pageable?.size ?? 10 } }
   );
   return data.data;
 }

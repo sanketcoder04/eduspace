@@ -9,6 +9,7 @@ import { useMyTeacherProfile } from "@/features/profile/hooks/useMyTeacherProfil
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import ProfileRecommendationsCard from "@/features/follow/components/ProfileRecommendationsCard";
 import { usePost } from "@/features/post/hooks/usePost";
+import UserSearchBar from "@/features/search/components/UserSearchBar";
 
 export default function PostDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -40,7 +41,14 @@ export default function PostDetailPage() {
           isOwner
         />
       }
-      recommendations={<ProfileRecommendationsCard />}
+      recommendations={
+        <div className="space-y-4">
+          <div className="hidden lg:block">
+            <UserSearchBar />
+          </div>
+          <ProfileRecommendationsCard />
+        </div>
+      }
     >
       {isLoading ? (
         <div className="rounded-2xl border border-gray-200 p-5 dark:border-neutral-800">

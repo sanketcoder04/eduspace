@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { Segmented } from "antd";
-import { Plus } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Input, Segmented } from "antd";
+import { Plus, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "antd";
 import {
@@ -15,6 +15,8 @@ import type {
   PostType,
 } from "@/features/opportunity/types/opportunity.types";
 import { ROUTES } from "@/router/routes";
+import { useDebouncedValue } from "@/utils/useDebouncedValue";
+import { STICKY_PAGE_HEADER_CLASS } from "@/constants/layout";
 
 const CITY_OPTIONS = [
   "Mumbai",
@@ -27,6 +29,8 @@ const CITY_OPTIONS = [
   "Ahmedabad",
 ];
 
+const MIN_KEYWORD_LENGTH = 2;
+
 export default function OpportunitiesFeedPage() {
   const { auth } = useAuth();
   const isTeacher = auth.user?.role === "TEACHER";
@@ -36,6 +40,16 @@ export default function OpportunitiesFeedPage() {
   );
   const [filters, setFilters] = useState<OpportunityFilterRequest>({ postType });
   const [page, setPage] = useState(0);
+
+  const [keyword, setKeyword] = useState("");
+  const debouncedKeyword = useDebouncedValue(keyword, 300).trim();
+  const activeKeyword =
+    debouncedKeyword.length >= MIN_KEYWORD_LENGTH ? debouncedKeyword : undefined;
+
+  const queryFilters = useMemo<OpportunityFilterRequest>(
+    () => ({ ...filters, keyword: activeKeyword }),
+    [filters, activeKeyword]
+  );
 
   const handleTabChange = (next: PostType) => {
     setPostType(next);
@@ -48,20 +62,20 @@ export default function OpportunitiesFeedPage() {
     setPage(0);
   };
 
-  const { data, isLoading, isFetching } = useOpportunitySearch(filters, { page, size: 10 });
+  const handleKeywordChange = (value: string) => {
+    setKeyword(value);
+    setPage(0);
+  };
+
+  const { data, isLoading, isFetching } = useOpportunitySearch(queryFilters, { page, size: 10 });
 
   const createHref = isTeacher ? ROUTES.CREATE_TEACHING_OPENING : ROUTES.CREATE_TUITION_REQUIREMENT;
 
-  console.log("data", data);
-
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
-      {/* Header — deliberately two independent rows on mobile (tabs, then
-          actions) rather than one row that overflows. The Segmented itself
-          sits in an overflow-x-auto wrapper as a last-resort escape hatch:
-          if labels are ever too wide for the viewport, THIS scrolls, not
-          the whole page. */}
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <div className="mx-auto max-w-6xl px-4 pb-6 pt-4 sm:px-6 sm:pb-8">
+      <div
+        className={`${STICKY_PAGE_HEADER_CLASS} mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between`}
+      >
         <div className="overflow-x-auto">
           <Segmented
             value={postType}
@@ -90,7 +104,18 @@ export default function OpportunitiesFeedPage() {
           />
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex w-full flex-wrap items-center gap-3 sm:w-auto sm:flex-nowrap">
+          <Input
+            allowClear
+            value={keyword}
+            onChange={(event) => handleKeywordChange(event.target.value)}
+            prefix={<Search size={16} className="text-gray-400" />}
+            placeholder="Search by keyword"
+            aria-label="Search postings by keyword"
+            maxLength={100}
+            className="order-first w-full rounded-xl sm:order-none sm:w-64 [&_input]:text-base sm:[&_input]:text-sm"
+          />
+
           <OpportunityFilterMobileTrigger
             value={filters}
             onChange={handleFilterChange}

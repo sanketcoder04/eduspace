@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { ReactNode } from "react";
-import { Typography, Tooltip } from "antd";
+import { Typography } from "antd";
 import { FileText, Star, Users, UserPlus } from "lucide-react";
 import FollowListDrawer from "@/features/follow/components/FollowListDrawer";
 
@@ -66,23 +66,23 @@ export default function ActivityStatsCard({
 
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
-      <Title level={5} className="mb-4!">
+      <Title level={5} className="mb-4! hidden lg:block">
         Analytics
       </Title>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex justify-between gap-2 lg:flex-col">
         {stats.map((stat) => {
           const row = (
-            <div className="flex items-center gap-2">
-              <div className="flex text-racing-red-500">{stat.icon}</div>
-              <Text type="secondary" className="text-xs">
+            <div className="flex lg:items-center gap-2 ">
+              <div className="text-racing-red-500 hidden lg:flex">{stat.icon}</div>
+              <Text type="secondary" className="text-[12px]! lg:text-xs">
                 {stat.label}
               </Text>
             </div>
           );
 
           const content = (
-            <div className="flex py-2 items-baseline justify-between">
+            <div className="flex flex-col-reverse justify-center items-center py-2 lg:flex-row lg:items-baseline lg:justify-between">
               {stat.clickable ? (
                 <button
                   type="button"
@@ -100,26 +100,20 @@ export default function ActivityStatsCard({
                   <button
                     type="button"
                     onClick={() => setOpenDrawer(stat.key as "followers" | "following")}
-                    className="text-sm font-semibold hover:text-racing-red-600 cursor-pointer"
+                    className="text-lg lg:text-sm font-semibold text-racing-red-500 lg:text-black hover:text-racing-red-600 cursor-pointer"
                   >
                     {stat.value}
                   </button>
                 ) : (
-                  <Text className="text-sm font-semibold">{stat.value}</Text>
+                  <Text className="text-lg! lg:text-sm! font-semibold text-racing-red-500! lg:text-black!">
+                    {stat.value}
+                  </Text>
                 )}
               </div>
             </div>
           );
 
-          // Posts/Reviews aren't wired up yet (still 0 everywhere) — keep the
-          // existing "Coming soon" tooltip for those two specifically.
-          return stat.clickable ? (
-            <div key={stat.key}>{content}</div>
-          ) : (
-            <Tooltip key={stat.key} title="Coming soon">
-              {content}
-            </Tooltip>
-          );
+          return <div key={stat.key}>{content}</div>;
         })}
       </div>
 
