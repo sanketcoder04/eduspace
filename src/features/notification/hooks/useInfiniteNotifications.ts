@@ -9,5 +9,6 @@ export function useInfiniteNotifications() {
     queryFn: ({ pageParam }) => getNotifications({ page: pageParam, size: PAGE_SIZE }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => (lastPage.last ? undefined : lastPage.number + 1),
+    staleTime: 1000 * 30,
   });
 }

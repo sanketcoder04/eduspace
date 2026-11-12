@@ -8,9 +8,11 @@ export default function NotificationBellMobile() {
   const [open, setOpen] = useState(false);
   const panel = useNotificationPanel(() => setOpen(false));
 
+  const { refetch } = panel;
+
   useEffect(() => {
-    if (open) panel.refetch();
-  }, [open, panel]);
+    if (open) void refetch();
+  }, [open, refetch]);
 
   return (
     <>

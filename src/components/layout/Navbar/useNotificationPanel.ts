@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUnreadNotificationCount } from "@/features/notification/hooks/useUnreadNotificationCount";
 import { useInfiniteNotifications } from "@/features/notification/hooks/useInfiniteNotifications";
@@ -17,11 +17,17 @@ function resolveNotificationRoute(notification: NotificationResponse): string | 
         : ROUTES.CONVERSATIONS;
     case "OPPORTUNITY":
       return notification.referenceId ? ROUTES.OPPORTUNITY_DETAIL(notification.referenceId) : null;
-    case "PROFILE": // backend sends "PROFILE" for NEW_FOLLOWER (was "FOLLOW")
+    case "PROFILE":
     case "FOLLOW":
       return notification.referenceId ? ROUTES.PROFILE_BY_ID(notification.referenceId) : null;
+    case "POST":
+      return notification.referenceId ? ROUTES.POST_DETAIL(notification.referenceId) : null;
+    case "COMMENT":
+      return notification.referenceId && notification.type != "POST_LIKED"
+        ? ROUTES.POST_DETAIL(notification.referenceId)
+        : null;
     default:
-      return null; // POST / COMMENT: no post detail route yet
+      return null;
   }
 }
 
@@ -29,7 +35,10 @@ export function useNotificationPanel(onAfterSelect?: () => void) {
   const navigate = useNavigate();
 
   const { data: unreadCount } = useUnreadNotificationCount();
+
   const query = useInfiniteNotifications();
+  const { fetchNextPage, refetch } = query;
+
   const markReadMutation = useMarkNotificationRead();
   const markAllReadMutation = useMarkAllNotificationsRead();
 
@@ -44,6 +53,10 @@ export function useNotificationPanel(onAfterSelect?: () => void) {
     });
   }, [query.data]);
 
+  const loadMore = useCallback(() => {
+    void fetchNextPage({ cancelRefetch: false });
+  }, [fetchNextPage]);
+
   const handleSelect = (notification: NotificationResponse) => {
     if (!notification.read) markReadMutation.mutate(notification.id);
     const route = resolveNotificationRoute(notification);
@@ -57,8 +70,8 @@ export function useNotificationPanel(onAfterSelect?: () => void) {
     isLoading: query.isLoading,
     hasNextPage: !!query.hasNextPage,
     isFetchingNextPage: query.isFetchingNextPage,
-    fetchNextPage: query.fetchNextPage,
-    refetch: query.refetch,
+    fetchNextPage: loadMore,
+    refetch,
     handleSelect,
     markAllRead: () => markAllReadMutation.mutate(),
     markAllReadPending: markAllReadMutation.isPending,

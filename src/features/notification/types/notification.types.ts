@@ -4,13 +4,13 @@ export type NotificationType =
   | "APPLICATION_APPROVED"
   | "APPLICATION_REJECTED"
   | "APPLICATION_WITHDRAWN"
-  | "NEW_MESSAGE"
   | "CONTACT_SHARED"
   | "NEW_FOLLOWER"
   | "POST_LIKED"
   | "POST_COMMENTED"
   | "POST_MENTION"
-  | "COMMENT_MENTION";
+  | "COMMENT_MENTION"
+  | "COMMENT_REPLY";
 
 export interface NotificationResponse {
   id: string;
